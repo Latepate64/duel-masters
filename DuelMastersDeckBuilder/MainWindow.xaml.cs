@@ -38,8 +38,9 @@ namespace DuelMastersDeckBuilder
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             //string path = Path.Combine(Directory.GetCurrentDirectory(), "DuelMastersCards.json");
-            string path = "C:\\duel-masters-json\\DuelMastersCards3.json"; //TODO: get from gui
+            string path = "C:\\duel-masters-json\\DuelMastersCards.json"; //TODO: get from gui
             Collection<JsonCard> jsonCards = JsonCardFactory.GetJsonCards(path);
+            //Collection<JsonCard> jsonCards = JsonCardFactory.GetJsonCardsFromUrl(new System.Uri("https://raw.githubusercontent.com/Latepate64/duel-masters-json/master/DuelMastersCards.json"));
             var cardViewModels = jsonCards.Select(c => new CardViewModel()
             {
                 Civilization = string.Join(" / ", c.Civilizations),
@@ -60,7 +61,11 @@ namespace DuelMastersDeckBuilder
             CollectionListView.ItemsSource = cardViewModels;
 
             var sets = cardViewModels.Select(c => c.Set).Distinct().ToList();
-            _filterWindow.Sets = sets;
+            //_filterWindow.Sets = new ObservableCollection<string>(sets);
+            (_filterWindow.DataContext as MyViewModel).Sets = new ObservableCollection<string>(sets);
+
+            //_filterWindow.Sets = new List<string>(sets);
+            //_filterWindow.Sets.AddRange(sets);
 
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(CollectionListView.ItemsSource);
             view.Filter = FilterByCardName;
@@ -75,8 +80,6 @@ namespace DuelMastersDeckBuilder
             }
             else
             {
-                //culture.CompareInfo.IndexOf(paragraph, word, CompareOptions.IgnoreCase) >= 0
-                //return (item as CardViewModel).Name.Contains(nameFilter);
                 return ((item as CardViewModel).Name.IndexOf(nameFilter, StringComparison.OrdinalIgnoreCase) >= 0);
             }
         }
