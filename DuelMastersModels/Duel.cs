@@ -93,7 +93,7 @@ namespace DuelMastersModels
         {
             get
             {
-                List<Creature> creatures = Player1.BattleZone.Creatures.ToList();
+                List<GameCreature> creatures = Player1.BattleZone.Creatures.ToList();
                 creatures.AddRange(Player2.BattleZone.Creatures);
                 return new ReadOnlyCreatureCollection(creatures);
             }
@@ -154,7 +154,7 @@ namespace DuelMastersModels
             }
         }
 
-        public Player GetOwner(Card card)
+        public Player GetOwner(GameCard card)
         {
             if (Player1.DeckBeforeDuel.Select(c => c.GameId).Contains(card.GameId))
             {
@@ -192,7 +192,7 @@ namespace DuelMastersModels
             Ended = true;
         }
 
-        public void PutFromHandIntoManaZone(Player player, Card card)
+        public void PutFromHandIntoManaZone(Player player, GameCard card)
         {
             if (player == null)
             {
@@ -209,7 +209,7 @@ namespace DuelMastersModels
         /// <summary>
         /// TODO: Handle destruction as a state-based action. 703.4d
         /// </summary>
-        public void Battle(Creature attackingCreature, Creature defendingCreature, Player attackingPlayer, Player defendingPlayer)
+        public void Battle(GameCreature attackingCreature, GameCreature defendingCreature, Player attackingPlayer, Player defendingPlayer)
         {
             if (attackingCreature == null)
             {
@@ -244,17 +244,17 @@ namespace DuelMastersModels
             }
         }
 
-        public void PlayCard(Card card, Player player)
+        public void PlayCard(GameCard card, Player player)
         {
-            if (card is Creature creature)
+            if (card is GameCreature creature)
             {
                 player.BattleZone.Add(creature, this);
             }
-            else if (card is Spell spell)
+            else if (card is GameSpell spell)
             {
                 SpellsBeingResolved.Add(spell);
 
-                foreach (Creature battleZoneCreature in CreaturesInTheBattleZone)
+                foreach (GameCreature battleZoneCreature in CreaturesInTheBattleZone)
                 {
                     foreach (TriggerAbility ability in battleZoneCreature.TriggerAbilities.Where(ability => ability.TriggerCondition is WheneverAPlayerCastsASpell))
                     {
@@ -277,7 +277,7 @@ namespace DuelMastersModels
             PendingAbilities.Add(ability.CreatePendingTriggerAbility(controller));
         }
 
-        public static void AddFromYourHandToYourShieldsFaceDown(Player player, Card card)
+        public static void AddFromYourHandToYourShieldsFaceDown(Player player, GameCard card)
         {
             player.Hand.Cards.Remove(card);
             player.ShieldZone.Cards.Add(card);
@@ -296,6 +296,19 @@ namespace DuelMastersModels
         public void AddContinuousEffect(ContinuousEffect continuousEffect)
         {
             ContinuousEffects.Add(continuousEffect);
+
+            //TODO:
+            if (continuousEffect is PowerEffect powerEffect)
+            {
+                foreach (GameCreature creature in GetAllCreatures().Where(creature => powerEffect.CreatureFilter.FilteredCreatures.Contains(creature)))
+                {
+                    creature.Power += powerEffect.Power;
+                }
+            }
+            else
+            {
+                throw new NotImplementedException(continuousEffect.ToString());
+            }  
         }
         #endregion void
 
@@ -303,27 +316,27 @@ namespace DuelMastersModels
         /// <summary>
         /// Checks if a card can be used.
         /// </summary>
-        public static bool CanBeUsed(Card card, ReadOnlyCardCollection manaCards)
+        public static bool CanBeUsed(GameCard card, ReadOnlyCardCollection manaCards)
         {
             //System.Collections.Generic.IEnumerable<Civilization> manaCivilizations = manaCards.SelectMany(manaCard => manaCard.Civilizations).Distinct();
             //return card.Cost <= manaCards.Count && card.Civilizations.Intersect(manaCivilizations).Count() == 1; //TODO: Add support for multicolored cards.
             return card.Cost <= manaCards.Count && HasCivilizations(manaCards, card.Civilizations);
         }
 
-        public bool CanAttackOpponent(Creature creature)
+        public bool CanAttackOpponent(GameCreature creature)
         {
             IEnumerable<CannotAttackPlayersEffect> cannotAttackPlayersEffects = GetContinuousEffects().Where(e => e is CannotAttackPlayersEffect).Cast<CannotAttackPlayersEffect>();
-            IEnumerable<Creature> creaturesThatCannotAttackPlayers = cannotAttackPlayersEffects.SelectMany(e => e.CreatureFilter.FilteredCreatures).Distinct();
+            IEnumerable<GameCreature> creaturesThatCannotAttackPlayers = cannotAttackPlayersEffects.SelectMany(e => e.CreatureFilter.FilteredCreatures).Distinct();
             return !creature.SummoningSickness && !creaturesThatCannotAttackPlayers.Contains(creature);
         }
 
-        public bool HasShieldTrigger(Card card)
+        public bool HasShieldTrigger(GameCard card)
         {
-            if (card is Creature creature)
+            if (card is GameCreature creature)
             {
                 return HasShieldTrigger(creature);
             }
-            else if (card is Spell spell)
+            else if (card is GameSpell spell)
             {
                 return HasShieldTrigger(spell);
             }
@@ -335,7 +348,7 @@ namespace DuelMastersModels
         #endregion bool
 
         #region ReadOnlyCreatureCollection
-        public ReadOnlyCreatureCollection GetCreaturesThatCanBlock(Creature attackingCreature)
+        public ReadOnlyCreatureCollection GetCreaturesThatCanBlock(GameCreature attackingCreature)
         {
             return new ReadOnlyCreatureCollection(GetAllBlockersPlayerHasInTheBattleZone(GetOpponent(GetOwner(attackingCreature))).Where(c => !c.Tapped).ToList());
             //TODO: consider situations where abilities of attacking creature matter etc.
@@ -344,10 +357,10 @@ namespace DuelMastersModels
         public ReadOnlyCreatureCollection GetCreaturesThatCanAttack(Player player)
         {
             IEnumerable<CannotAttackPlayersEffect> cannotAttackPlayersEffects = GetContinuousEffects().Where(e => e is CannotAttackPlayersEffect).Cast<CannotAttackPlayersEffect>();
-            List<Creature> creatures = player.BattleZone.UntappedCreatures.Where(creature => !creature.SummoningSickness).ToList();
+            List<GameCreature> creatures = player.BattleZone.UntappedCreatures.Where(creature => !creature.SummoningSickness).ToList();
 
-            IEnumerable<Creature> creaturesThatCannotAttackPlayers = cannotAttackPlayersEffects.SelectMany(e => e.CreatureFilter.FilteredCreatures).Distinct();
-            IEnumerable<Creature> creaturesThatCannotAttack = creaturesThatCannotAttackPlayers.Where(c => GetCreaturesThatCanBeAttacked(player, c).Count == 0);
+            IEnumerable<GameCreature> creaturesThatCannotAttackPlayers = cannotAttackPlayersEffects.SelectMany(e => e.CreatureFilter.FilteredCreatures).Distinct();
+            IEnumerable<GameCreature> creaturesThatCannotAttack = creaturesThatCannotAttackPlayers.Where(c => GetCreaturesThatCanBeAttacked(player, c).Count == 0);
             /*
             foreach (CreatureContinuousEffect creatureContinuousEffect in cannotAttackPlayersEffects)
             {
@@ -358,7 +371,7 @@ namespace DuelMastersModels
             return new ReadOnlyCreatureCollection(creatures);
         }
 
-        public ReadOnlyCreatureCollection GetCreaturesThatCanBeAttacked(Player player, Creature attackingCreature)
+        public ReadOnlyCreatureCollection GetCreaturesThatCanBeAttacked(Player player, GameCreature attackingCreature)
         {
             Player opponent = GetOpponent(player);
             return opponent.BattleZone.TappedCreatures;
@@ -422,7 +435,7 @@ namespace DuelMastersModels
             {
                 if (CurrentPlayerAction is OptionalCardSelection optionalCardSelection)
                 {
-                    Card card = null;
+                    GameCard card = null;
                     if (cardSelectionResponse.SelectedCards.Count == 1)
                     {
                         card = cardSelectionResponse.SelectedCards.First();
@@ -469,7 +482,7 @@ namespace DuelMastersModels
                 {
                     if (multipleCardSelection.Validate(cardSelectionResponse.SelectedCards))
                     {
-                        foreach (Card card in cardSelectionResponse.SelectedCards)
+                        foreach (GameCard card in cardSelectionResponse.SelectedCards)
                         {
                             multipleCardSelection.SelectedCards.Add(card);
                         }
@@ -481,7 +494,7 @@ namespace DuelMastersModels
                 {
                     if (cardSelectionResponse.SelectedCards.Count == 1)
                     {
-                        Card card = cardSelectionResponse.SelectedCards.First();
+                        GameCard card = cardSelectionResponse.SelectedCards.First();
                         if (mandatoryCardSelection.Validate(card))
                         {
                             mandatoryCardSelection.SelectedCard = card;
@@ -507,7 +520,7 @@ namespace DuelMastersModels
             {
                 if (CurrentPlayerAction is OptionalCreatureSelection optionalCreatureSelection)
                 {
-                    Creature creature = null;
+                    GameCreature creature = null;
                     if (creatureSelectionResponse.SelectedCreatures.Count == 1)
                     {
                         creature = creatureSelectionResponse.SelectedCreatures.First();
@@ -527,7 +540,7 @@ namespace DuelMastersModels
                 {
                     if (creatureSelectionResponse.SelectedCreatures.Count == 1)
                     {
-                        Creature creature = creatureSelectionResponse.SelectedCreatures.First();
+                        GameCreature creature = creatureSelectionResponse.SelectedCreatures.First();
                         if (mandatoryCreatureSelection.Validate(creature))
                         {
                             mandatoryCreatureSelection.SelectedCreature = creature;
@@ -583,7 +596,7 @@ namespace DuelMastersModels
             return playerAction == null ? SetCurrentPlayerAction(Progress()) : SetCurrentPlayerAction(TryToPerformAutomatically(playerAction));
         }
 
-        public PlayerAction PutFromShieldZoneToHand(Player player, Card card, bool canUseShieldTrigger)
+        public PlayerAction PutFromShieldZoneToHand(Player player, GameCard card, bool canUseShieldTrigger)
         {
             return PutFromShieldZoneToHand(player, new ReadOnlyCardCollection(card), canUseShieldTrigger);
         }
@@ -593,7 +606,7 @@ namespace DuelMastersModels
             CardCollection shieldTriggerCards = new CardCollection();
             for (int i = 0; i < cards.Count; ++i)
             {
-                Card card = cards[i];
+                GameCard card = cards[i];
                 PutFromShieldZoneToHand(player, card);
                 if (canUseShieldTrigger && HasShieldTrigger(card))
                 {
@@ -621,7 +634,7 @@ namespace DuelMastersModels
             return null;
         }
 
-        public PlayerAction ReturnFromBattleZoneToHand(Creature creature)
+        public PlayerAction ReturnFromBattleZoneToHand(GameCreature creature)
         {
             Player owner = GetOwner(creature);
             owner.BattleZone.Remove(creature, this);
@@ -629,7 +642,7 @@ namespace DuelMastersModels
             return null;
         }
 
-        public PlayerAction PutFromBattleZoneIntoOwnersManazone(Creature creature)
+        public PlayerAction PutFromBattleZoneIntoOwnersManazone(GameCreature creature)
         {
             Player owner = GetOwner(creature);
             owner.BattleZone.Remove(creature, this);
@@ -637,7 +650,7 @@ namespace DuelMastersModels
             return null;
         }
 
-        public PlayerAction PutFromManaZoneIntoTheBattleZone(Creature creature)
+        public PlayerAction PutFromManaZoneIntoTheBattleZone(GameCreature creature)
         {
             Player owner = GetOwner(creature);
             owner.ManaZone.Remove(creature, this);
@@ -646,12 +659,12 @@ namespace DuelMastersModels
         }
         #endregion PlayerAction
 
-        public int GetPower(Creature creature)
+        public int GetPower(GameCreature creature)
         {
             return creature.Power + GetContinuousEffects().Where(e => e is PowerEffect).Cast<PowerEffect>().Where(e => e.CreatureFilter.FilteredCreatures.Contains(creature)).Sum(e => e.Power);
         }
 
-        public Card GetCard(int gameId)
+        public GameCard GetCard(int gameId)
         {
             return GetAllCards().First(c => c.GameId == gameId);
         }
@@ -690,7 +703,7 @@ namespace DuelMastersModels
             checkDeckHasCards.Perform(this);
         }
 
-        private void PutFromBattleZoneIntoGraveyard(Player player, Creature creature)
+        private void PutFromBattleZoneIntoGraveyard(Player player, GameCreature creature)
         {
             if (player == null)
             {
@@ -704,7 +717,7 @@ namespace DuelMastersModels
             player.Graveyard.Add(creature, this);
         }
 
-        private void PutFromShieldZoneToHand(Player player, Card card)
+        private void PutFromShieldZoneToHand(Player player, GameCard card)
         {
             player.ShieldZone.Remove(card, this);
             player.Hand.Add(card, this);
@@ -771,7 +784,7 @@ namespace DuelMastersModels
                         {
                             if (AbilityBeingResolved is SpellAbility)
                             {
-                                Spell spell = SpellsBeingResolved.Last();
+                                GameSpell spell = SpellsBeingResolved.Last();
                                 SpellsBeingResolved.Remove(spell);
                                 GetOwner(spell).Graveyard.Add(spell, this);
                             }
@@ -782,7 +795,7 @@ namespace DuelMastersModels
 
                     if (SpellsBeingResolved.Count > 0)
                     {
-                        Spell spell = SpellsBeingResolved.Last();
+                        GameSpell spell = SpellsBeingResolved.Last();
                         if (spell.SpellAbilities.Count > 0)
                         {
                             //TODO: spell may have more than one spell ability.
@@ -870,7 +883,7 @@ namespace DuelMastersModels
             else
             {
                 List<List<Civilization>> civilizationGroups = new List<List<Civilization>>();
-                foreach (Card card in paymentCards)
+                foreach (GameCard card in paymentCards)
                 {
                     civilizationGroups.Add(card.Civilizations.ToList());
                 }
@@ -894,7 +907,7 @@ namespace DuelMastersModels
             }
         }
 
-        private bool HasShieldTrigger(Creature creature)
+        private bool HasShieldTrigger(GameCreature creature)
         {
             foreach (CreatureContinuousEffect creatureContinuousEffect in GetContinuousEffects().Where(e => e is CreatureShieldTriggerEffect).Cast<CreatureShieldTriggerEffect>())
             {
@@ -906,7 +919,7 @@ namespace DuelMastersModels
             return false;
         }
 
-        private bool HasShieldTrigger(Spell spell)
+        private bool HasShieldTrigger(GameSpell spell)
         {
             foreach (SpellContinuousEffect spellContinuousEffect in GetContinuousEffects().Where(e => e is SpellShieldTriggerEffect).Cast<SpellShieldTriggerEffect>())
             {
@@ -922,7 +935,7 @@ namespace DuelMastersModels
         /// <summary>
         /// Removes the top card from a player's deck and returns it.
         /// </summary>
-        private Card RemoveTheTopCardOfDeck(Player player)
+        private GameCard RemoveTheTopCardOfDeck(Player player)
         {
             return player.Deck.RemoveAndGetTopCard(this);
         }
@@ -955,22 +968,27 @@ namespace DuelMastersModels
 
         private ReadOnlyCardCollection GetAllCards()
         {
-            List<Card> cards = Player1.DeckBeforeDuel.ToList();
+            List<GameCard> cards = Player1.DeckBeforeDuel.ToList();
             cards.AddRange(Player2.DeckBeforeDuel);
             return new ReadOnlyCardCollection(cards);
+        }
+
+        private ReadOnlyCreatureCollection GetAllCreatures()
+        {
+            return new ReadOnlyCreatureCollection(GetAllCards().Where(card => card is GameCreature).Cast<GameCreature>());
         }
 
         private ReadOnlyContinuousEffectCollection GetContinuousEffects()
         {
             List<ContinuousEffect> continuousEffects = ContinuousEffects.ToList();
-            foreach (Card card in GetAllCards())
+            foreach (GameCard card in GetAllCards())
             {
                 continuousEffects.AddRange(GetContinuousEffectsGeneratedByCard(card));
             }
             return new ReadOnlyContinuousEffectCollection(continuousEffects);
         }
 
-        private List<ContinuousEffect> GetContinuousEffectsGeneratedByCard(Card card)
+        private List<ContinuousEffect> GetContinuousEffectsGeneratedByCard(GameCard card)
         {
             List<ContinuousEffect> continuousEffects = new List<ContinuousEffect>();
             foreach (StaticAbility staticAbility in card.StaticAbilities)
@@ -980,7 +998,7 @@ namespace DuelMastersModels
             return continuousEffects;
         }
 
-        private ReadOnlyContinuousEffectCollection GetContinuousEffectsGeneratedByStaticAbility(Card card, StaticAbility staticAbility)
+        private ReadOnlyContinuousEffectCollection GetContinuousEffectsGeneratedByStaticAbility(GameCard card, StaticAbility staticAbility)
         {
             if (staticAbility is StaticAbilityForCreature staticAbilityForCreature)
             {
@@ -1014,14 +1032,14 @@ namespace DuelMastersModels
 
         private ReadOnlyCreatureCollection GetAllBlockersPlayerHasInTheBattleZone(Player player)
         {
-            List<Creature> blockers = new List<Creature>();
+            List<GameCreature> blockers = new List<GameCreature>();
             IEnumerable<BlockerEffect> blockerEffects = GetContinuousEffects().Where(e => e is BlockerEffect).Cast<BlockerEffect>();
             /*foreach (CreatureContinuousEffect creatureContinuousEffect in blockerEffects)
             {
 
                 blockers.AddRange(player.BattleZone.Creatures.Where( creatureContinuousEffect.CreatureFilter.FilteredCreatures);
             }*/
-            foreach (Creature creature in player.BattleZone.Creatures)
+            foreach (GameCreature creature in player.BattleZone.Creatures)
             {
                 foreach (CreatureContinuousEffect creatureContinuousEffect in blockerEffects)
                 {

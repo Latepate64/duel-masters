@@ -13,7 +13,7 @@ namespace DuelMastersModels.PlayerActions.CardSelections
             Cost = cost;
         }
 
-        public static bool Validate(ReadOnlyCardCollection cards, Card cardToBeUsed)
+        public static bool Validate(ReadOnlyCardCollection cards, GameCard cardToBeUsed)
         {
             return Duel.CanBeUsed(cardToBeUsed, cards);
         }
@@ -30,7 +30,7 @@ namespace DuelMastersModels.PlayerActions.CardSelections
             }
             else if (duel.CurrentTurn.CurrentStep is MainStep mainStep)
             {
-                foreach (Card card in cards)
+                foreach (GameCard card in cards)
                 {
                     card.Tapped = true;
                 }

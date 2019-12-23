@@ -50,7 +50,7 @@ namespace DuelMastersModels.Factories
             }
         }
 
-        public static OneShotEffectForCreature ParseOneShotEffectForCreature(string text, Cards.Creature creature)
+        public static OneShotEffectForCreature ParseOneShotEffectForCreature(string text, Cards.GameCreature creature)
         {
             if (text == null)
             {

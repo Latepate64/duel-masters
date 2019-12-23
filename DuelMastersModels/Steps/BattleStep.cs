@@ -9,11 +9,11 @@ namespace DuelMastersModels.Steps
     /// </summary>
     public class BattleStep : Step
     {
-        public Creature AttackingCreature { get; private set; }
-        public Creature AttackedCreature { get; private set; }
-        public Creature BlockingCreature { get; private set; }
+        public GameCreature AttackingCreature { get; private set; }
+        public GameCreature AttackedCreature { get; private set; }
+        public GameCreature BlockingCreature { get; private set; }
 
-        public BattleStep(Player activePlayer, Creature attackingCreature, Creature attackedCreature, Creature blockingCreature) : base(activePlayer)
+        public BattleStep(Player activePlayer, GameCreature attackingCreature, GameCreature attackedCreature, GameCreature blockingCreature) : base(activePlayer)
         {
             AttackingCreature = attackingCreature;
             AttackedCreature = attackedCreature;

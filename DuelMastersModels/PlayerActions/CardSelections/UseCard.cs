@@ -9,7 +9,7 @@ namespace DuelMastersModels.PlayerActions.CardSelections
         public UseCard(Player player, ReadOnlyCardCollection cards) : base(player, cards)
         { }
 
-        public override PlayerAction Perform(Duel duel, Card card)
+        public override PlayerAction Perform(Duel duel, GameCard card)
         {
             if (duel == null)
             {

@@ -99,6 +99,10 @@
     <Compile Include="Cards\Creature.cs" />
     <Compile Include="Cards\CrossGear.cs" />
     <Compile Include="Cards\EvolutionCreature.cs" />
+    <Compile Include="Cards\GameCard.cs" />
+    <Compile Include="Cards\GameCreature.cs" />
+    <Compile Include="Cards\GameEvolutionCreature.cs" />
+    <Compile Include="Cards\GameSpell.cs" />
     <Compile Include="Cards\JsonCard.cs" />
     <Compile Include="Cards\ReadOnlyCivilizationCollection.cs" />
     <Compile Include="Cards\Spell.cs" />

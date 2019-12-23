@@ -49,12 +49,12 @@ namespace DuelMastersModels.Zones
         ///<summary>
         /// Adds a card to the zone.
         ///</summary>
-        public abstract void Add(Card card, Duel duel);
+        public abstract void Add(GameCard card, Duel duel);
 
         ///<summary>
         /// Removes a card from the zone.
         ///</summary>
-        public abstract void Remove(Card card, Duel duel);
+        public abstract void Remove(GameCard card, Duel duel);
 
         public ReadOnlyCardCollection UntappedCardsWithCivilizations(ReadOnlyCivilizationCollection civilizations)
         {
@@ -63,8 +63,7 @@ namespace DuelMastersModels.Zones
 
         public void UntapCards()
         {
-            foreach (Card card in TappedCards)
-            //foreach (Card card in TappedCards)
+            foreach (GameCard card in TappedCards)
             {
                 card.Tapped = false;
             }

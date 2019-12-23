@@ -4,9 +4,9 @@ namespace DuelMastersModels.CardFilters
 {
     public class TargetSpellFilter : SpellFilter
     {
-        public Spell Spell { get; private set; }
+        public GameSpell Spell { get; private set; }
 
-        public TargetSpellFilter(Spell spell)
+        public TargetSpellFilter(GameSpell spell)
         {
             Spell = spell;
         }

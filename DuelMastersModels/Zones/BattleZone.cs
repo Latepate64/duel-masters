@@ -12,9 +12,9 @@ namespace DuelMastersModels.Zones
         
         public BattleZone(Player owner) : base(owner) { }
 
-        public override void Add(Card card, Duel duel)
+        public override void Add(GameCard card, Duel duel)
         {
-            if (card is Creature creature)
+            if (card is GameCreature creature)
             {
                 creature.SummoningSickness = true;
             }
@@ -25,7 +25,7 @@ namespace DuelMastersModels.Zones
             {
                 duel.TriggerTriggerAbility(ability, Owner);
             }
-            foreach (Creature battleZoneCreature in duel.CreaturesInTheBattleZone.Except(new List<Card>() { card }))
+            foreach (GameCreature battleZoneCreature in duel.CreaturesInTheBattleZone.Except(new List<GameCard>() { card }))
             {
                 foreach (TriggerAbility ability in battleZoneCreature.TriggerAbilities.Where(ability => ability.TriggerCondition is WheneverAnotherCreatureIsPutIntoTheBattleZone))
                 {
@@ -34,11 +34,11 @@ namespace DuelMastersModels.Zones
             }
         }
 
-        public override void Remove(Card card, Duel duel)
+        public override void Remove(GameCard card, Duel duel)
         {
             Cards.Remove(card);
             card.Tapped = false;
-            if (card is Creature creature)
+            if (card is GameCreature creature)
             {
                 creature.SummoningSickness = true;
             }

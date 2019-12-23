@@ -7,7 +7,7 @@ namespace DuelMastersModels.PlayerActions.CardSelections
         protected MandatoryCardSelection(Player player, ReadOnlyCardCollection cards) : base(player, 1, 1, cards)
         { }
 
-        public Card SelectedCard { get; set; }
+        public GameCard SelectedCard { get; set; }
 
         public override PlayerAction TryToPerformAutomatically(Duel duel)
         {
@@ -23,11 +23,11 @@ namespace DuelMastersModels.PlayerActions.CardSelections
             }
         }
 
-        public bool Validate(Card card)
+        public bool Validate(GameCard card)
         {
             return Cards.Contains(card);
         }
 
-        public abstract PlayerAction Perform(Duel duel, Card card);
+        public abstract PlayerAction Perform(Duel duel, GameCard card);
     }
 }

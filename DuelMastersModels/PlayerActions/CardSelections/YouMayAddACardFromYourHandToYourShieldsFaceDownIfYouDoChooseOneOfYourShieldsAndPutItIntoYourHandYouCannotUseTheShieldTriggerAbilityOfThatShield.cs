@@ -8,7 +8,7 @@ namespace DuelMastersModels.PlayerActions.CardSelections
         public YouMayAddACardFromYourHandToYourShieldsFaceDownIfYouDoChooseOneOfYourShieldsAndPutItIntoYourHandYouCannotUseTheShieldTriggerAbilityOfThatShield(Player player) : base(player, new ReadOnlyCardCollection(player.Hand.Cards))
         { }
 
-        public override PlayerAction Perform(Duel duel, Card card)
+        public override PlayerAction Perform(Duel duel, GameCard card)
         {
             if (duel == null)
             {

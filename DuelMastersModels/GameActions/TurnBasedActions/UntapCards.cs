@@ -8,7 +8,7 @@
             {
                 throw new System.ArgumentNullException("duel");
             }
-            foreach (Cards.Creature creature in duel.CurrentTurn.ActivePlayer.BattleZone.Creatures)
+            foreach (Cards.GameCreature creature in duel.CurrentTurn.ActivePlayer.BattleZone.Creatures)
             {
                 creature.SummoningSickness = false;
             }

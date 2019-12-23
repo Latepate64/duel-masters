@@ -32,7 +32,7 @@ namespace DuelMastersModels.Factories
             { "Shield trigger (When this spell is put into your hand from your shield zone, you may cast it for no cost.)", typeof(SpellShieldTrigger) },
         });
 
-        public static StaticAbility ParseStaticAbilityForCreature(string text, Creature creature)
+        public static StaticAbility ParseStaticAbilityForCreature(string text, GameCreature creature)
         {
             if (text == null)
             {
@@ -44,7 +44,7 @@ namespace DuelMastersModels.Factories
                 : null;
         }
 
-        public static StaticAbility ParseStaticAbilityForSpell(string text, Spell spell)
+        public static StaticAbility ParseStaticAbilityForSpell(string text, GameSpell spell)
         {
             if (text == null)
             {

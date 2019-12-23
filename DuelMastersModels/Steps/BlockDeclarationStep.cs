@@ -6,10 +6,10 @@ namespace DuelMastersModels.Steps
 {
     public class BlockDeclarationStep : Step
     {
-        public Creature AttackingCreature { get; private set; }
-        public Creature BlockingCreature { get; set; }
+        public GameCreature AttackingCreature { get; private set; }
+        public GameCreature BlockingCreature { get; set; }
 
-        public BlockDeclarationStep(Player activePlayer, Creature attackingCreature) : base(activePlayer)
+        public BlockDeclarationStep(Player activePlayer, GameCreature attackingCreature) : base(activePlayer)
         {
             AttackingCreature = attackingCreature;
         }

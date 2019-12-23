@@ -8,7 +8,7 @@ namespace DuelMastersModels.PlayerActions.CreatureSelections
         public YouMayChooseACreatureInTheBattleZoneAndReturnItToItsOwnersHand(Player player, ReadOnlyCreatureCollection creatures) : base(player, creatures)
         { }
 
-        public override PlayerAction Perform(Duel duel, Creature creature)
+        public override PlayerAction Perform(Duel duel, GameCreature creature)
         {
             if (duel == null)
             {

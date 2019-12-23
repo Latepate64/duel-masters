@@ -6,7 +6,7 @@ namespace DuelMastersModels.PlayerActions.CardSelections
     {
         public UseShieldTrigger(Player player, ReadOnlyCardCollection cards) : base(player, cards) { }
 
-        public override PlayerAction Perform(Duel duel, Card card)
+        public override PlayerAction Perform(Duel duel, GameCard card)
         {
             Player.Hand.Remove(card, duel);
             duel.PlayCard(card, Player);

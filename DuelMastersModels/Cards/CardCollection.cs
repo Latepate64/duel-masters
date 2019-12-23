@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace DuelMastersModels.Cards
 {
-    public class ObservableCardCollection : ObservableCollection<Card>
+    public class ObservableCardCollection : ObservableCollection<GameCard>
     {
         public ObservableCardCollection() { }
 
@@ -23,66 +23,66 @@ namespace DuelMastersModels.Cards
         #endregion ReadOnlyCardCollection
 
         #region ReadOnlyCreatureCollection
-        public ReadOnlyCreatureCollection Creatures => new ReadOnlyCreatureCollection(Items.Where(card => card is Creature).Cast<Creature>());
+        public ReadOnlyCreatureCollection Creatures => new ReadOnlyCreatureCollection(Items.Where(card => card is GameCreature).Cast<GameCreature>());
         public ReadOnlyCreatureCollection TappedCreatures => new ReadOnlyCreatureCollection(Creatures.TappedCreatures);
         public ReadOnlyCreatureCollection UntappedCreatures => new ReadOnlyCreatureCollection(Creatures.Where(creature => !creature.Tapped));
-        public ReadOnlyCreatureCollection NonEvolutionCreatures => new ReadOnlyCreatureCollection(Creatures.Where(c => !(c is EvolutionCreature)));
+        public ReadOnlyCreatureCollection NonEvolutionCreatures => new ReadOnlyCreatureCollection(Creatures.Where(c => !(c is GameEvolutionCreature)));
         public ReadOnlyCreatureCollection NonEvolutionCreaturesThatCostTheSameAsOrLessThanTheNumberOfCardsInTheZone => new ReadOnlyCreatureCollection(NonEvolutionCreatures.Where(c => c.Cost <= Items.Count));
         #endregion ReadOnlyCreatureCollection
     }
 
     public class CardCollection : ReadOnlyCardCollection
     {
-        public CardCollection() : base(new List<Card>())
+        public CardCollection() : base(new List<GameCard>())
         {
         }
 
-        public void Add(Card card)
+        public void Add(GameCard card)
         {
             Items.Add(card);
         }
 
-        public void Remove(Card card)
+        public void Remove(GameCard card)
         {
             Items.Remove(card);
         }
     }
 
-    public class ReadOnlyCardCollection : ReadOnlyCollection<Card>
+    public class ReadOnlyCardCollection : ReadOnlyCollection<GameCard>
     {
-        public ReadOnlyCardCollection(IEnumerable<Card> cards) : base(cards.ToList()) { }
+        public ReadOnlyCardCollection(IEnumerable<GameCard> cards) : base(cards.ToList()) { }
 
-        public ReadOnlyCardCollection(Card card) : base(new List<Card>() { card }) { }
+        public ReadOnlyCardCollection(GameCard card) : base(new List<GameCard>() { card }) { }
     }
 
-    public class ReadOnlyCreatureCollection : ReadOnlyCollection<Creature>
+    public class ReadOnlyCreatureCollection : ReadOnlyCollection<GameCreature>
     {
-        public ReadOnlyCreatureCollection(IEnumerable<Creature> creatures) : base(creatures.ToList()) { }
+        public ReadOnlyCreatureCollection(IEnumerable<GameCreature> creatures) : base(creatures.ToList()) { }
 
-        public ReadOnlyCreatureCollection(Creature creature) : base(new List<Creature>() { creature }) { }
+        public ReadOnlyCreatureCollection(GameCreature creature) : base(new List<GameCreature>() { creature }) { }
 
         public ReadOnlyCreatureCollection TappedCreatures => new ReadOnlyCreatureCollection(Items.Where(creature => creature.Tapped));
     }
 
-    public class ReadOnlySpellCollection : ReadOnlyCollection<Spell>
+    public class ReadOnlySpellCollection : ReadOnlyCollection<GameSpell>
     {
-        public ReadOnlySpellCollection(IEnumerable<Spell> spells) : base(spells.ToList()) { }
+        public ReadOnlySpellCollection(IEnumerable<GameSpell> spells) : base(spells.ToList()) { }
 
-        public ReadOnlySpellCollection(Spell spell) : base(new List<Spell>() { spell }) { }
+        public ReadOnlySpellCollection(GameSpell spell) : base(new List<GameSpell>() { spell }) { }
     }
 
     public class SpellCollection : ReadOnlySpellCollection
     {
-        public SpellCollection() : base(new List<Spell>())
+        public SpellCollection() : base(new List<GameSpell>())
         {
         }
 
-        public void Add(Spell spell)
+        public void Add(GameSpell spell)
         {
             Items.Add(spell);
         }
 
-        public void Remove(Spell spell)
+        public void Remove(GameSpell spell)
         {
             Items.Remove(spell);
         }

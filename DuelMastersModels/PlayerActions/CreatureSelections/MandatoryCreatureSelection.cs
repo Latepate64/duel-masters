@@ -7,7 +7,7 @@ namespace DuelMastersModels.PlayerActions.CreatureSelections
         protected MandatoryCreatureSelection(Player player, ReadOnlyCreatureCollection creatures) : base(player, 1, 1, creatures)
         { }
 
-        public Creature SelectedCreature { get; set; }
+        public GameCreature SelectedCreature { get; set; }
 
         public override PlayerAction TryToPerformAutomatically(Duel duel)
         {
@@ -23,11 +23,11 @@ namespace DuelMastersModels.PlayerActions.CreatureSelections
             }
         }
 
-        public bool Validate(Creature creature)
+        public bool Validate(GameCreature creature)
         {
             return Creatures.Contains(creature);
         }
 
-        public abstract PlayerAction Perform(Duel duel, Creature creature);
+        public abstract PlayerAction Perform(Duel duel, GameCreature creature);
     }
 }

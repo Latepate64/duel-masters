@@ -5,9 +5,9 @@ namespace DuelMastersModels.PlayerActions.CardSelections
 {
     public class BreakShields : MandatoryMultipleCardSelection
     {
-        public Creature ShieldBreakingCreature { get; private set; }
+        public GameCreature ShieldBreakingCreature { get; private set; }
 
-        public BreakShields(Player player, int amount, ReadOnlyCardCollection cards, Creature shieldBreakingCreature) : base(player, amount, cards)
+        public BreakShields(Player player, int amount, ReadOnlyCardCollection cards, GameCreature shieldBreakingCreature) : base(player, amount, cards)
         {
             ShieldBreakingCreature = shieldBreakingCreature;
         }

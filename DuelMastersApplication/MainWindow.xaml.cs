@@ -111,8 +111,8 @@ namespace DuelMastersApplication
 
         CardCanvas _zoomCardCanvas = new CardCanvas() { Width = ZoomCardCanvasMaximumWidth, Height = ZoomCardCanvasMaximumHeight, Opacity = 0, Visibility = Visibility.Hidden };
 
-        Card _zoomCard;
-        public Card ZoomCard
+        GameCard _zoomCard;
+        public GameCard ZoomCard
         {
             get { return _zoomCard; }
             set
@@ -441,12 +441,12 @@ namespace DuelMastersApplication
                     cardsOwner = _duel.Player2.DeckBeforeDuel;
                     cardsOpponent = _duel.Player1.DeckBeforeDuel;
                 }
-                foreach (Card card in cardsOwner)
+                foreach (GameCard card in cardsOwner)
                 {
                     card.KnownToPlayerWithPriority = card.KnownToOwner;
                     card.KnownToPlayerWithoutPriority = card.KnownToOpponent;
                 }
-                foreach (Card card in cardsOpponent)
+                foreach (GameCard card in cardsOpponent)
                 {
                     card.KnownToPlayerWithPriority = card.KnownToOpponent;
                     card.KnownToPlayerWithoutPriority = card.KnownToOwner;
@@ -853,7 +853,6 @@ namespace DuelMastersApplication
 
             cardCanvasFactory.SetBinding(RectangleCardCanvas.CardNameProperty, new Binding("Name"));
 
-            //TODO: Think how to fetch power dynamically.
             cardCanvasFactory.SetBinding(RectangleCardCanvas.PowerProperty, new Binding("Power"));
 
             cardCanvasFactory.SetBinding(AbstractCardCanvas.GameIdProperty, new Binding("GameId"));
@@ -929,11 +928,11 @@ namespace DuelMastersApplication
                     {
                         if (useCard.SelectedCard != null)
                         {
-                            if (useCard.SelectedCard is Creature creature)
+                            if (useCard.SelectedCard is GameCreature creature)
                             {
                                 LogMessages.Add(string.Format("{0} summoned {1}.", useCard.Player.Name, creature.Name));
                             }
-                            else if (useCard.SelectedCard is Spell spell)
+                            else if (useCard.SelectedCard is GameSpell spell)
                             {
                                 LogMessages.Add(string.Format("{0} cast {1}.", useCard.Player.Name, spell.Name));
                             }
@@ -1226,7 +1225,7 @@ namespace DuelMastersApplication
 
         private void UpdateSelectedCards(AbstractCardCanvas cardCanvas, ReadOnlyCardCollection cards)
         {
-            Card card = cards.First(c => c.GameId == cardCanvas.GameId);
+            GameCard card = cards.First(c => c.GameId == cardCanvas.GameId);
             if (!SelectedCards.Contains(card))
             {
                 SelectedCards = new ObservableCardCollection(SelectedCards) { card };
@@ -1420,7 +1419,7 @@ namespace DuelMastersApplication
             }
             else if (_duel.CurrentPlayerAction is OptionalCreatureSelection)
             {
-                UpdateViewToShowPlayerAction(_duel.Progress(new CreatureSelectionResponse(new ReadOnlyCreatureCollection(SelectedCards.Cast<Creature>().ToList()))));
+                UpdateViewToShowPlayerAction(_duel.Progress(new CreatureSelectionResponse(new ReadOnlyCreatureCollection(SelectedCards.Cast<GameCreature>().ToList()))));
                 SelectedCards = new ObservableCardCollection();
             }
             else if (_duel.CurrentPlayerAction is OptionalAction optionalAction)
@@ -1512,22 +1511,22 @@ namespace DuelMastersApplication
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             Type type = value.GetType();
-            if (type == typeof(EvolutionCreature))
+            if (type == typeof(GameEvolutionCreature))
             {
                 return "Evolution Creature";
             }
-            else if (type == typeof(Creature))
+            else if (type == typeof(GameCreature))
             {
                 return "Creature";
             }
-            else if (type == typeof(Spell))
+            else if (type == typeof(GameSpell))
             {
                 return "Spell";
             }
-            else if (type == typeof(CrossGear))
+            /*else if (type == typeof(GameCrossGear))
             {
                 return "Cross Gear";
-            }
+            }*/
             else
             {
                 throw new Exception("Unknown card type.");

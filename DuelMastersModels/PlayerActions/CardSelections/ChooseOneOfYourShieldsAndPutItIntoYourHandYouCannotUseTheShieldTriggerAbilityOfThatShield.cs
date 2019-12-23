@@ -7,7 +7,7 @@ namespace DuelMastersModels.PlayerActions.CardSelections
     {
         public ChooseOneOfYourShieldsAndPutItIntoYourHandYouCannotUseTheShieldTriggerAbilityOfThatShield(Player player) : base(player, new ReadOnlyCardCollection(player.ShieldZone.Cards)) { }
 
-        public override PlayerAction Perform(Duel duel, Card card)
+        public override PlayerAction Perform(Duel duel, GameCard card)
         {
             if (duel == null)
             {

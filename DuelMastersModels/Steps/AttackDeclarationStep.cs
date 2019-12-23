@@ -6,8 +6,8 @@ namespace DuelMastersModels.Steps
 {
     public class AttackDeclarationStep : Step
     {
-        public Creature AttackingCreature { get; set; }
-        public Creature AttackedCreature { get; set; }
+        public GameCreature AttackingCreature { get; set; }
+        public GameCreature AttackedCreature { get; set; }
         public Player NonactivePlayer { get; private set; }
         public bool TargetOfAttackDeclared { get; set; }
 

@@ -14,7 +14,7 @@ namespace DuelMastersModels.Cards
     /// <summary>
     /// Represent a Duel Masters card.
     /// </summary>
-    public abstract class Card : System.ComponentModel.INotifyPropertyChanged
+    public abstract class Card
     {
         #region Constants
         private const string LightText = "Light";
@@ -32,10 +32,6 @@ namespace DuelMastersModels.Cards
         #endregion Constants
 
         #region Properties
-        /// <summary>
-        /// Unique identifier during a game.
-        /// </summary>
-        public int GameId { get; private set; }
         public string Name { get; private set; }
         public string Set { get; private set; }
         public string Id { get; private set; }
@@ -45,53 +41,10 @@ namespace DuelMastersModels.Cards
         public string Text { get; private set; }
         public string Flavor { get; private set; }
         public string Illustrator { get; private set; }
-        private bool _tapped;
-        public bool Tapped
-        {
-            get => _tapped;
-            set
-            {
-                if (value != _tapped)
-                {
-                    _tapped = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
-        protected void NotifyPropertyChanged([System.Runtime.CompilerServices.CallerMemberName]string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-        }
 
         public AbilityCollection Abilities { get; } = new AbilityCollection();
         public ReadOnlyStaticAbilityCollection StaticAbilities => new ReadOnlyStaticAbilityCollection(Abilities.Where(a => a is StaticAbility).Cast<StaticAbility>());
         public ReadOnlyTriggerAbilityCollection TriggerAbilities => new ReadOnlyTriggerAbilityCollection(Abilities.Where(a => a is TriggerAbility).Cast<TriggerAbility>());
-
-        public bool KnownToOwner { get; set; }
-        public bool KnownToOpponent { get; set; }
-
-        private bool _knownToPlayerWithPriority;
-        public bool KnownToPlayerWithPriority
-        {
-            get => _knownToPlayerWithPriority;
-            set
-            {
-                _knownToPlayerWithPriority = value;
-                NotifyPropertyChanged();
-            }
-        }
-
-        private bool _knownToPlayerWithoutPriority;
-        public bool KnownToPlayerWithoutPriority
-        {
-            get => _knownToPlayerWithoutPriority;
-            set
-            {
-                _knownToPlayerWithoutPriority = value;
-                NotifyPropertyChanged();
-            }
-        }
         #endregion Properties
 
         #region Fields
@@ -106,16 +59,13 @@ namespace DuelMastersModels.Cards
         };
         #endregion Fields
 
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-
         protected Card() { }
 
         /// <summary>
         /// Creates a card.
         /// </summary>
-        protected Card(string name, string set, string id, Collection<string> civilizations, string rarity, int cost, string text, string flavor, string illustrator, int gameId)
+        protected Card(string name, string set, string id, Collection<string> civilizations, string rarity, int cost, string text, string flavor, string illustrator)
         {
-            Tapped = false;
             Name = name;
             Set = set;
             Id = id;
@@ -125,7 +75,6 @@ namespace DuelMastersModels.Cards
             Flavor = flavor;
             Illustrator = illustrator;
             Text = text;
-            GameId = gameId;
         }
 
         #region Private methods

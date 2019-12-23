@@ -4,9 +4,9 @@ namespace DuelMastersModels.CardFilters
 {
     public class TargetCreatureFilter : CreatureFilter
     {
-        public Creature Creature { get; private set; }
+        public GameCreature Creature { get; private set; }
 
-        public TargetCreatureFilter(Creature creature)
+        public TargetCreatureFilter(GameCreature creature)
         {
             Creature = creature;
         }

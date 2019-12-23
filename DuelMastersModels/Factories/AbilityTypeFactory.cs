@@ -155,14 +155,14 @@ namespace DuelMastersModels.Factories
             return parameters.ToArray();
         }*/
 
-        public static object[] GetInstanceParameters(Creature creature, Collection<object> parsedObjects)
+        public static object[] GetInstanceParameters(GameCreature creature, Collection<object> parsedObjects)
         {
             List<object> parameters = new List<object>() { creature };
             parameters.AddRange(parsedObjects);
             return parameters.ToArray();
         }
 
-        public static object[] GetInstanceParameters(Spell spell, Collection<object> parsedObjects)
+        public static object[] GetInstanceParameters(GameSpell spell, Collection<object> parsedObjects)
         {
             List<object> parameters = new List<object>() { spell };
             parameters.AddRange(parsedObjects);

@@ -23,7 +23,7 @@ namespace DuelMastersModels.Factories
             {
                 throw new ArgumentNullException("jsonCards");
             }
-            List<Card> cards = new List<Card>();
+            List<GameCard> cards = new List<GameCard>();
             foreach (JsonCard jsonCard in jsonCards)
             {
                 cards.Add(GetCardFromJsonCard(jsonCard, gameId++, owner));
@@ -34,18 +34,18 @@ namespace DuelMastersModels.Factories
         /// <summary>
         /// Returns a card for card template.
         /// </summary>
-        private static Card GetCardFromJsonCard(JsonCard jsonCard, int gameId, Player owner)
+        private static GameCard GetCardFromJsonCard(JsonCard jsonCard, int gameId, Player owner)
         {
             switch (jsonCard.CardType)
             {
                 case CreatureText:
-                    return new Creature(jsonCard.Name, jsonCard.Set, jsonCard.Id, jsonCard.Civilizations, jsonCard.Rarity, jsonCard.Cost, jsonCard.Text, jsonCard.Flavor, jsonCard.Illustrator, gameId, jsonCard.Power, jsonCard.Races, owner);
+                    return new GameCreature(new Creature(jsonCard.Name, jsonCard.Set, jsonCard.Id, jsonCard.Civilizations, jsonCard.Rarity, jsonCard.Cost, jsonCard.Text, jsonCard.Flavor, jsonCard.Illustrator, jsonCard.Power, jsonCard.Races), gameId, owner);
                 case SpellText:
-                    return new Spell(jsonCard.Name, jsonCard.Set, jsonCard.Id, jsonCard.Civilizations, jsonCard.Rarity, jsonCard.Cost, jsonCard.Text, jsonCard.Flavor, jsonCard.Illustrator, gameId, owner);
+                    return new GameSpell(new Spell(jsonCard.Name, jsonCard.Set, jsonCard.Id, jsonCard.Civilizations, jsonCard.Rarity, jsonCard.Cost, jsonCard.Text, jsonCard.Flavor, jsonCard.Illustrator), gameId, owner);
                 case EvolutionCreatureText:
-                    return new EvolutionCreature(jsonCard.Name, jsonCard.Set, jsonCard.Id, jsonCard.Civilizations, jsonCard.Rarity, jsonCard.Cost, jsonCard.Text, jsonCard.Flavor, jsonCard.Illustrator, gameId, jsonCard.Power, jsonCard.Races, owner);
-                case CrossGearText:
-                    return new CrossGear(jsonCard.Name, jsonCard.Set, jsonCard.Id, jsonCard.Civilizations, jsonCard.Rarity, jsonCard.Cost, jsonCard.Text, jsonCard.Flavor, jsonCard.Illustrator, gameId);
+                    return new GameEvolutionCreature(new EvolutionCreature(jsonCard.Name, jsonCard.Set, jsonCard.Id, jsonCard.Civilizations, jsonCard.Rarity, jsonCard.Cost, jsonCard.Text, jsonCard.Flavor, jsonCard.Illustrator, jsonCard.Power, jsonCard.Races), gameId, owner);
+                //case CrossGearText:
+                //    return new GameCrossGear(jsonCard.Name, jsonCard.Set, jsonCard.Id, jsonCard.Civilizations, jsonCard.Rarity, jsonCard.Cost, jsonCard.Text, jsonCard.Flavor, jsonCard.Illustrator, gameId);
                 default:
                     throw new ArgumentException("Unknown card type: " + jsonCard.CardType);
             }

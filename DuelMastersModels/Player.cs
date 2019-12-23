@@ -57,7 +57,7 @@ namespace DuelMastersModels
             {
                 throw new ArgumentNullException("cards");
             }
-            foreach (Card card in cards)
+            foreach (GameCard card in cards)
             {
                 DeckBeforeDuel.Add(card);
             }
@@ -68,7 +68,7 @@ namespace DuelMastersModels
         /// </summary>
         public void SetupDeck(Duel duel)
         {
-            foreach (Card card in DeckBeforeDuel)
+            foreach (GameCard card in DeckBeforeDuel)
             {
                 Deck.Add(card, duel);
             }

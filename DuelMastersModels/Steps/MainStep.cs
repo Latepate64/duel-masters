@@ -19,7 +19,7 @@ namespace DuelMastersModels.Steps
     {
         public MainStepState State { get; set; } = MainStepState.Use;
 
-        public Card CardToBeUsed { get; set; }
+        public GameCard CardToBeUsed { get; set; }
 
         public MainStep(Player player) : base(player)
         {

@@ -26,12 +26,12 @@ namespace DuelMastersModels
                 PlayerAction newAction;
                 if (creatureSelection is OptionalCreatureSelection optionalCreatureSelection)
                 {
-                    Creature creature = null;
+                    GameCreature creature = null;
                     if (optionalCreatureSelection is DeclareTargetOfAttack declareTargetOfAttack)
                     {
                         List<int> listOfPoints = new List<int>();
-                        Creature attacker = (duel.CurrentTurn.CurrentStep as Steps.AttackDeclarationStep).AttackingCreature;
-                        foreach (Creature targetOfAttack in declareTargetOfAttack.Creatures)
+                        GameCreature attacker = (duel.CurrentTurn.CurrentStep as Steps.AttackDeclarationStep).AttackingCreature;
+                        foreach (GameCreature targetOfAttack in declareTargetOfAttack.Creatures)
                         {
                             int points = 0;
                             int attackerPower = duel.GetPower(attacker);
@@ -65,7 +65,7 @@ namespace DuelMastersModels
                 }
                 else if (creatureSelection is MandatoryCreatureSelection mandatoryCreatureSelection)
                 {
-                    Creature creature = mandatoryCreatureSelection.Creatures.First();
+                    GameCreature creature = mandatoryCreatureSelection.Creatures.First();
                     mandatoryCreatureSelection.SelectedCreature = creature;
                     newAction = mandatoryCreatureSelection.Perform(duel, creature);
                     duel.CurrentTurn.CurrentStep.PlayerActions.Add(mandatoryCreatureSelection);
@@ -100,7 +100,7 @@ namespace DuelMastersModels
             {
                 if (optionalCardSelection is ChargeMana chargeMana)
                 {
-                    Card card = null;
+                    GameCard card = null;
                     if (Hand.Cards.Sum(c => c.Cost) > ManaZone.UntappedCards.Count)
                     {
                         card = chargeMana.Cards.First();
@@ -110,7 +110,7 @@ namespace DuelMastersModels
                 }
                 else
                 {
-                    Card card = null;
+                    GameCard card = null;
                     if (optionalCardSelection.Cards.Count > 0)
                     {
                         card = optionalCardSelection.Cards.First();
@@ -123,8 +123,8 @@ namespace DuelMastersModels
             {
                 if (cardSelection is PayCost payCost)
                 {
-                    Card civCard = payCost.Player.ManaZone.Cards.First(c => !c.Tapped && c.Civilizations.Intersect((duel.CurrentTurn.CurrentStep as Steps.MainStep).CardToBeUsed.Civilizations).Any());
-                    List<Card> manaCards = payCost.Player.ManaZone.Cards.Where(c => !c.Tapped && c != civCard).Take(payCost.Cost - 1).ToList();
+                    GameCard civCard = payCost.Player.ManaZone.Cards.First(c => !c.Tapped && c.Civilizations.Intersect((duel.CurrentTurn.CurrentStep as Steps.MainStep).CardToBeUsed.Civilizations).Any());
+                    List<GameCard> manaCards = payCost.Player.ManaZone.Cards.Where(c => !c.Tapped && c != civCard).Take(payCost.Cost - 1).ToList();
                     manaCards.Add(civCard);
                     newAction = payCost.Perform(duel, new ReadOnlyCardCollection(manaCards));
                 }
@@ -135,7 +135,7 @@ namespace DuelMastersModels
             }
             else if (cardSelection is MultipleCardSelection multipleCardSelection)
             {
-                foreach (Card card in multipleCardSelection.Cards)
+                foreach (GameCard card in multipleCardSelection.Cards)
                 {
                     multipleCardSelection.SelectedCards.Add(card);
                 }
@@ -143,7 +143,7 @@ namespace DuelMastersModels
             }
             else if (cardSelection is MandatoryCardSelection mandatoryCardSelection)
             {
-                Card card = mandatoryCardSelection.Cards.First();
+                GameCard card = mandatoryCardSelection.Cards.First();
                 mandatoryCardSelection.SelectedCard = card;
                 newAction = mandatoryCardSelection.Perform(duel, card);
             }

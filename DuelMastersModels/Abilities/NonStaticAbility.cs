@@ -15,11 +15,11 @@ namespace DuelMastersModels.Abilities
         /// <summary>
         /// The source of an ability is the object that generated it. The source of an activated ability on the stack is the object whose ability was activated. The source of a triggered ability (other than a delayed triggered ability) on the stack, or one that has triggered and is waiting to be put on the stack, is the object whose ability triggered.
         /// </summary>
-        public Cards.Card Source { get; private set; }
+        public Cards.GameCard Source { get; private set; }
 
         private int _effectIndex = 0;
 
-        protected NonStaticAbility(ReadOnlyOneShotEffectCollection effects, Player controller, Cards.Card source)
+        protected NonStaticAbility(ReadOnlyOneShotEffectCollection effects, Player controller, Cards.GameCard source)
         {
             Effects = effects;
             Controller = controller;

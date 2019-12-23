@@ -6,7 +6,7 @@ namespace DuelMastersModels.Effects.OneShotEffects
     {
         public int Power { get; private set; }
 
-        public ThisCreatureGetsXPowerUntilTheEndOfTheTurn(Cards.Creature creature, int power) : base(creature)
+        public ThisCreatureGetsXPowerUntilTheEndOfTheTurn(Cards.GameCreature creature, int power) : base(creature)
         {
             Power = power;
         }

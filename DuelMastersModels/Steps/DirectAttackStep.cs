@@ -7,12 +7,12 @@ namespace DuelMastersModels.Steps
 {
     public class DirectAttackStep : Step
     {
-        public Creature AttackingCreature { get; private set; }
+        public GameCreature AttackingCreature { get; private set; }
         public bool DirectAttack { get; private set; }
         private bool _breakingDone;
         //public ReadOnlyCardCollection BrokenShields { get; private set; }
 
-        public DirectAttackStep(Player activePlayer, Creature attackingCreature, bool directAttack) : base(activePlayer)
+        public DirectAttackStep(Player activePlayer, GameCreature attackingCreature, bool directAttack) : base(activePlayer)
         {
             AttackingCreature = attackingCreature;
             DirectAttack = directAttack;
