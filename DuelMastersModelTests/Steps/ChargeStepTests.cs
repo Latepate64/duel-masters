@@ -6,7 +6,7 @@ using DuelMastersModels.Zones;
 using Moq;
 using Xunit;
 
-namespace UnitTests.Steps
+namespace DuelMastersModelTests.Steps
 {
     public class ChargeStepTests
     {

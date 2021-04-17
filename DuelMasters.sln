@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuelMastersModels", "DuelMastersModels\DuelMastersModels.csproj", "{8959A481-6D73-445E-B137-F1837D674D39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuelMastersModelsTests", "UnitTests\DuelMastersModelsTests.csproj", "{D705B82E-8397-458F-BAFD-416174591A4E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuelMastersModelTests", "DuelMastersModelTests\DuelMastersModelTests.csproj", "{D705B82E-8397-458F-BAFD-416174591A4E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuelMastersServer", "DuelMastersServer\DuelMastersServer.csproj", "{B6811480-1238-4676-9CFC-B397C360C5B3}"
 EndProject

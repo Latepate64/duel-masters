@@ -4,7 +4,7 @@ using Moq;
 using System;
 using Xunit;
 
-namespace UnitTests
+namespace DuelMastersModelTests
 {
     public class PlayerTests
     {
