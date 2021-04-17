@@ -4,6 +4,7 @@ using DuelMastersModels.Effects.ContinuousEffects;
 using DuelMastersInterfaceModels.Choices;
 using DuelMastersModels.Zones;
 using System.Collections.Generic;
+using DuelMastersModels.Managers;
 
 namespace DuelMastersModels
 {
@@ -49,6 +50,8 @@ namespace DuelMastersModels
         IEnumerable<IHandCard> ShieldTriggersToUse { get; }
 
         IPlayer Opponent { get; set; }
+
+        EventManager EventManager { get; set; }
 
         void AddShieldTriggerToUse(IHandCard card);
         void DrawCards(int amount);

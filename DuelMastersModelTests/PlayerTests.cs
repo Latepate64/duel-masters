@@ -1,4 +1,6 @@
-﻿using DuelMastersModels;
+﻿using DuelMastersInterfaceModels.Events;
+using DuelMastersModels;
+using DuelMastersModels.Managers;
 using DuelMastersModels.Zones;
 using Moq;
 using System;
@@ -17,8 +19,9 @@ namespace DuelMastersModelTests
         [Fact]
         public void ShuffleDeck_DeckNotNull_ShuffleCalledOnce()
         {
-            Mock<IDeck> deck = new Mock<IDeck>();
-            new Player { Deck = deck.Object }.ShuffleDeck();
+            Mock<IDeck> deck = new();
+            Player player = new() { Deck = deck.Object };
+            player.ShuffleDeck();
             deck.Verify(x => x.Shuffle(), Times.Once);
         }
     }

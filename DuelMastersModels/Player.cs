@@ -8,6 +8,7 @@ using DuelMastersModels.Zones;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DuelMastersInterfaceModels.Events;
 
 namespace DuelMastersModels
 {
@@ -66,12 +67,15 @@ namespace DuelMastersModels
 
         public IPlayer Opponent { get; set; }
 
+        public EventManager EventManager { get; set; }
+
         /// <summary>
         /// Player shuffles their deck.
         /// </summary>
         public void ShuffleDeck()
         {
             Deck.Shuffle();
+            EventManager?.Raise(new ShuffleDeckEvent(ID));
         }
 
         public void AddShieldTriggerToUse(IHandCard card)
