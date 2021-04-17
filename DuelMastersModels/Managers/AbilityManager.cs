@@ -2,12 +2,12 @@
 using DuelMastersModels.Abilities.StaticAbilities;
 using DuelMastersModels.Abilities.TriggeredAbilities;
 using DuelMastersModels.Cards;
-using DuelMastersModels.Effects.ContinuousEffects;
 using DuelMastersModels.Choices;
+using DuelMastersModels.Effects.ContinuousEffects;
+using DuelMastersModels.Zones;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using DuelMastersModels.Zones;
 
 namespace DuelMastersModels.Managers
 {

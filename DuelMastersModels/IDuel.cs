@@ -1,9 +1,9 @@
 ﻿using DuelMastersModels.Abilities;
 using DuelMastersModels.Cards;
-using DuelMastersModels.Effects.ContinuousEffects;
 using DuelMastersModels.Choices;
-using System.Collections.Generic;
+using DuelMastersModels.Effects.ContinuousEffects;
 using DuelMastersModels.Zones;
+using System.Collections.Generic;
 
 namespace DuelMastersModels
 {
