@@ -7,6 +7,11 @@ namespace DuelMastersModels.Cards
     /// </summary>
     public interface ICard
     {
+        /// <summary>
+        /// An unique identifier for the card during a duel.
+        /// </summary>
+        int ID { get; }
+
         IPlayer Owner { get; set; }
 
         /// <summary>

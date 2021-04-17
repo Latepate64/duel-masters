@@ -1,7 +1,7 @@
 ﻿using DuelMastersModels.Abilities.StaticAbilities;
 using DuelMastersModels.Cards;
 using DuelMastersModels.Effects.ContinuousEffects;
-using DuelMastersModels.Choices;
+using DuelMastersInterfaceModels.Choices;
 using DuelMastersModels.Zones;
 using System.Collections.Generic;
 
@@ -12,6 +12,8 @@ namespace DuelMastersModels
     /// </summary>
     public interface IPlayer
     {
+        int ID { get; }
+
         /// <summary>
         /// The name of the player.
         /// </summary>

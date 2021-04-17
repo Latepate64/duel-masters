@@ -1,4 +1,4 @@
-﻿using DuelMastersModels.Choices;
+﻿using DuelMastersInterfaceModels.Choices;
 using DuelMastersModels.Steps;
 using DuelMastersModels.Zones;
 

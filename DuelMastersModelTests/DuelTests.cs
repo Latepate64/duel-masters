@@ -1,5 +1,5 @@
-﻿using DuelMastersModels;
-using DuelMastersModels.Choices;
+﻿using DuelMastersInterfaceModels.Choices;
+using DuelMastersModels;
 using DuelMastersModels.Zones;
 using Moq;
 using System;

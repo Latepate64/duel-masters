@@ -3,7 +3,7 @@ using DuelMastersModels.Cards;
 using DuelMastersModels.Effects.ContinuousEffects;
 using DuelMastersModels.Factories;
 using DuelMastersModels.Managers;
-using DuelMastersModels.Choices;
+using DuelMastersInterfaceModels.Choices;
 using DuelMastersModels.Zones;
 using System;
 using System.Collections.Generic;
@@ -16,6 +16,8 @@ namespace DuelMastersModels
     /// </summary>
     public class Player : IPlayer
     {
+        public int ID { get; }
+
         /// <summary>
         /// The name of the player.
         /// </summary>

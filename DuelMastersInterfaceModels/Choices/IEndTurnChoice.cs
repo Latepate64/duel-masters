@@ -1,4 +1,4 @@
-﻿namespace DuelMastersModels.Choices
+﻿namespace DuelMastersInterfaceModels.Choices
 {
     public interface IEndTurnChoice
     {

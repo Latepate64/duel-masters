@@ -16,12 +16,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuelMastersModels", "DuelMastersModels\DuelMastersModels.csproj", "{7AC6FBA1-B1B9-4275-B99F-64E9B414BCFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DuelMastersModels", "DuelMastersModels\DuelMastersModels.csproj", "{7AC6FBA1-B1B9-4275-B99F-64E9B414BCFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuelMastersModelTests", "DuelMastersModelTests\DuelMastersModelTests.csproj", "{E93D2CC0-FA32-40BA-A151-B5AFB0B95E47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DuelMastersModelTests", "DuelMastersModelTests\DuelMastersModelTests.csproj", "{E93D2CC0-FA32-40BA-A151-B5AFB0B95E47}"
 	ProjectSection(ProjectDependencies) = postProject
 		{7AC6FBA1-B1B9-4275-B99F-64E9B414BCFE} = {7AC6FBA1-B1B9-4275-B99F-64E9B414BCFE}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuelMastersInterfaceModels", "DuelMastersInterfaceModels\DuelMastersInterfaceModels.csproj", "{438C4598-8F75-4A19-B980-4EB1F151709A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +55,10 @@ Global
 		{E93D2CC0-FA32-40BA-A151-B5AFB0B95E47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E93D2CC0-FA32-40BA-A151-B5AFB0B95E47}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E93D2CC0-FA32-40BA-A151-B5AFB0B95E47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{438C4598-8F75-4A19-B980-4EB1F151709A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{438C4598-8F75-4A19-B980-4EB1F151709A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{438C4598-8F75-4A19-B980-4EB1F151709A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{438C4598-8F75-4A19-B980-4EB1F151709A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

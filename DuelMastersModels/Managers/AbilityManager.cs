@@ -1,8 +1,8 @@
-﻿using DuelMastersModels.Abilities;
+﻿using DuelMastersInterfaceModels.Choices;
+using DuelMastersModels.Abilities;
 using DuelMastersModels.Abilities.StaticAbilities;
 using DuelMastersModels.Abilities.TriggeredAbilities;
 using DuelMastersModels.Cards;
-using DuelMastersModels.Choices;
 using DuelMastersModels.Effects.ContinuousEffects;
 using DuelMastersModels.Zones;
 using System.Collections.Generic;
@@ -73,7 +73,7 @@ namespace DuelMastersModels.Managers
         public SelectAbilityToResolve TryGetSelectAbilityToResolve(IPlayer player)
         {
             ReadOnlyCollection<INonStaticAbility> pendingAbilities = GetPendingAbilitiesForPlayer(player);
-            return pendingAbilities.Count > 0 ? new SelectAbilityToResolve(player, pendingAbilities) : null;
+            return pendingAbilities.Count > 0 ? new SelectAbilityToResolve(player.ID/*, pendingAbilities*/) : null;
         }
         #endregion Public
 

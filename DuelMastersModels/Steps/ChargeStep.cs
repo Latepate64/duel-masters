@@ -1,6 +1,7 @@
 ﻿using DuelMastersModels.Cards;
-using DuelMastersModels.Choices;
+using DuelMastersInterfaceModels.Choices;
 using System;
+using System.Linq;
 
 namespace DuelMastersModels.Steps
 {
@@ -44,7 +45,7 @@ namespace DuelMastersModels.Steps
             }
             else
             {
-                return new ChargeChoice(ActivePlayer);
+                return new ChargeChoice(ActivePlayer.ID, ActivePlayer.Hand.Cards.Select(c => c.ID));
             }
         }
     }

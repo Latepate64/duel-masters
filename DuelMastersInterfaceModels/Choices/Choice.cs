@@ -1,4 +1,4 @@
-﻿namespace DuelMastersModels.Choices
+﻿namespace DuelMastersInterfaceModels.Choices
 {
     /// <summary>
     /// Represents a choice a player can make.
@@ -8,11 +8,11 @@
         /// <summary>
         /// Player who makes the choice.
         /// </summary>
-        public IPlayer Player { get; private set; }
+        public int PlayerID { get; private set; }
 
-        protected Choice(IPlayer player)
+        protected Choice(int playerID)
         {
-            Player = player;
+            PlayerID = playerID;
         }
     }
 }

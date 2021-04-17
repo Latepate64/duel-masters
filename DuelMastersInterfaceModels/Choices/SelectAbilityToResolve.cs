@@ -1,7 +1,6 @@
-﻿using DuelMastersModels.Abilities;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
-namespace DuelMastersModels.Choices
+namespace DuelMastersInterfaceModels.Choices
 {
     /// <summary>
     /// If there are pending abilities, the active player chooses which one to resolve first among their pending abilities in any order. It does not matter in which order the abilities became pending abilities.
@@ -11,13 +10,13 @@ namespace DuelMastersModels.Choices
         /// <summary>
         /// If there are pending abilities, the active player chooses which one to resolve first among their pending abilities in any order. It does not matter in which order the abilities became pending abilities.
         /// </summary>
-        public ReadOnlyCollection<INonStaticAbility> Abilities { get; private set; }
+        //public ReadOnlyCollection<INonStaticAbility> Abilities { get; private set; }
 
-        internal INonStaticAbility SelectedAbility { get; set; }
+        //internal INonStaticAbility SelectedAbility { get; set; }
 
-        internal SelectAbilityToResolve(IPlayer player, ReadOnlyCollection<INonStaticAbility> abilities) : base(player)
+        public SelectAbilityToResolve(int player/*, ReadOnlyCollection<INonStaticAbility> abilities*/) : base(player)
         {
-            Abilities = abilities;
+            //Abilities = abilities;
         }
     }
 }

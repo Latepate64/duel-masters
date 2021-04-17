@@ -1,5 +1,5 @@
 ﻿using DuelMastersModels.Cards;
-using DuelMastersModels.Choices;
+using DuelMastersInterfaceModels.Choices;
 
 namespace DuelMastersModels.Steps
 {
@@ -18,7 +18,7 @@ namespace DuelMastersModels.Steps
             bool possibleToAttack = true;
             if (possibleToAttack)
             {
-                return new AttackerChoice(ActivePlayer);
+                return new AttackerChoice(ActivePlayer.ID);
             }
             else
             {

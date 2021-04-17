@@ -1,5 +1,5 @@
 ﻿using DuelMastersModels.Cards;
-using DuelMastersModels.Choices;
+using DuelMastersInterfaceModels.Choices;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -30,7 +30,7 @@ namespace DuelMastersModels.Steps
             bool cardsCanBeUsed = true;
             if (cardsCanBeUsed)
             {
-                return new CardUsageChoice(ActivePlayer);
+                return new CardUsageChoice(ActivePlayer.ID);
             }
             else
             {

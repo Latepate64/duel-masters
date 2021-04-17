@@ -1,5 +1,5 @@
 ﻿using DuelMastersModels.Cards;
-using DuelMastersModels.Choices;
+using DuelMastersInterfaceModels.Choices;
 
 namespace DuelMastersModels.Steps
 {
@@ -21,7 +21,7 @@ namespace DuelMastersModels.Steps
             bool possibleToBlock = false;
             if (possibleToBlock)
             {
-                return new BlockerChoice(ActivePlayer);
+                return new BlockerChoice(ActivePlayer.ID);
             }
             else
             {

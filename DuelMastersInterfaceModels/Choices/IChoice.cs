@@ -1,4 +1,4 @@
-﻿namespace DuelMastersModels.Choices
+﻿namespace DuelMastersInterfaceModels.Choices
 {
     /// <summary>
     /// Represents a choice a player can make.
@@ -8,6 +8,6 @@
         /// <summary>
         /// Player who makes the choice.
         /// </summary>
-        IPlayer Player { get; }
+        int PlayerID { get; }
     }
 }

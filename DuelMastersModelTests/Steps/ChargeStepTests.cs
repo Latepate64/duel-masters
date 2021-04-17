@@ -1,6 +1,6 @@
-﻿using DuelMastersModels;
+﻿using DuelMastersInterfaceModels.Choices;
+using DuelMastersModels;
 using DuelMastersModels.Cards;
-using DuelMastersModels.Choices;
 using DuelMastersModels.Steps;
 using DuelMastersModels.Zones;
 using Moq;

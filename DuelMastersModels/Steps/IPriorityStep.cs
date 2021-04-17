@@ -1,4 +1,4 @@
-﻿using DuelMastersModels.Choices;
+﻿using DuelMastersInterfaceModels.Choices;
 
 namespace DuelMastersModels.Steps
 {
