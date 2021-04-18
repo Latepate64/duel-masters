@@ -7,5 +7,8 @@
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DuelMastersInterfaceModels\DuelMastersInterfaceModels.csproj" />
+  </ItemGroup>
 
 </Project>

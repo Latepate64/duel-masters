@@ -1,16 +1,26 @@
-﻿using System.Net.Sockets;
+﻿using DuelMastersInterfaceModels;
+using System.Net.Sockets;
 using System;
 using System.Net;
 using System.Threading.Tasks;
 using System.Text;
 using System.Collections.Generic;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace DuelMastersServer
 {
     internal class Client
     {
+        internal DuelStartMode DuelStartMode { get; set; }
         internal TcpClient TCPClient { get; set; }
         internal string Name { get; set; }
+
+        internal void Send(string msg)
+        {
+            byte[] bytes = Encoding.ASCII.GetBytes(msg);
+            TCPClient.GetStream().Write(bytes);
+        }
     }
 
     class Server
@@ -51,28 +61,118 @@ namespace DuelMastersServer
             while (client.TCPClient.Connected)
             {
                 byte[] buffer = new byte[1024];
-                int received;
+                int byteCount;
                 try
                 {
-                    received = client.TCPClient.GetStream().Read(buffer);
+                    byteCount = client.TCPClient.GetStream().Read(buffer);
                 }
-                catch (System.IO.IOException ex)
+                catch (IOException ex)
                 {
                     Console.WriteLine(ex.Message);
                     break;
                 }
-                if (received > 0)
+                if (byteCount > 0)
                 {
-                    string msg = $"{client.Name}: {Encoding.ASCII.GetString(buffer, 0, received)}";
-                    Console.WriteLine(msg);
-                    byte[] bytes = Encoding.ASCII.GetBytes(msg);
-                    foreach (Client activeClient in GetActiveClients())
-                    {
-                        activeClient.TCPClient.GetStream().Write(bytes);
-                    }
+                    ProcessMessage(client, new MemoryStream(buffer, 0, byteCount));
+                    
                 }
             }
             Console.WriteLine($"{client.Name} disconnected.");
+        }
+
+        private static void Broadcast(string msg)
+        {
+            Console.WriteLine(msg);
+            byte[] bytes = Encoding.ASCII.GetBytes(msg);
+            foreach (Client activeClient in GetActiveClients())
+            {
+                activeClient.TCPClient.GetStream().Write(bytes);
+            }
+        }
+
+        static void ProcessMessage(Client client, MemoryStream stream)
+        {
+            XmlSerializer xmlSerializer = new(typeof(InterfaceDataWrapper));
+            InterfaceDataWrapper wrapper;
+            try
+            {
+                wrapper = (InterfaceDataWrapper)xmlSerializer.Deserialize(stream);
+            }
+            catch (Exception e)
+            {
+                WriteLineAndSendToClient(client, $"Could not process data: {e.Message}");
+                return;
+            }
+            if (wrapper.Other != null)
+            {
+                ProcessWrapperOther(client, wrapper.Other);
+            }
+            else
+            {
+                WriteLineAndSendToClient(client, "Data contained no valid data.");
+            }
+        }
+
+        private static void ProcessWrapperOther(Client client, OtherWrapper wrapper)
+        {
+            if (!string.IsNullOrEmpty(wrapper.ChatMessage))
+            {
+                Broadcast($"{client.Name}: {wrapper.ChatMessage}");
+            }
+            else if (!string.IsNullOrEmpty(wrapper.ChangeName))
+            {
+                string oldName = client.Name;
+                client.Name = wrapper.ChangeName;
+                Broadcast($"{oldName} changed their name to {client.Name}.");
+            }
+            else if (wrapper.DuelStartMode != client.DuelStartMode)
+            {
+                client.DuelStartMode = wrapper.DuelStartMode;
+                switch (client.DuelStartMode)
+                {
+                    case DuelStartMode.Wait:
+                        Broadcast($"{client.Name} is not ready to start a duel.");
+                        break;
+                    case DuelStartMode.First:
+                        Broadcast($"{client.Name} is ready to start a duel and would like to go first.");
+                        break;
+                    case DuelStartMode.Second:
+                        Broadcast($"{client.Name} is ready to start a duel and would like to go second.");
+                        break;
+                    case DuelStartMode.Random:
+                        Broadcast($"{client.Name} is ready to start a duel and would like to decide at random who goes first.");
+                        break;
+                    default:
+                        WriteLineAndSendToClient(client, "Invalid DuelStartMode.");
+                        break;
+                }
+            }
+            else
+            {
+                WriteLineAndSendToClient(client, "Data.Other contained no valid data.");
+            }
+        }
+
+        static void WriteLineAndSendToClient(Client client, string msg)
+        {
+            Console.WriteLine($"{client.Name} -> {msg}");
+            client.Send(msg);
+        }
+
+        static Client GetOther(Client client)
+        {
+            if (client == _client1)
+            {
+                return _client2;
+            }
+            else if (client == _client2)
+            {
+                return _client1;
+            }
+            else
+            {
+                throw new InvalidOperationException("Cannot get other client.");
+            }
         }
 
         static IEnumerable<Client> GetActiveClients()
