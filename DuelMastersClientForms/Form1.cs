@@ -1,9 +1,12 @@
-﻿using System;
+﻿using DuelMastersInterfaceModels;
+using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace DuelMastersClientForms
 {
@@ -25,7 +28,10 @@ namespace DuelMastersClientForms
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            TryDisconnect();
+            if (_tcpClient != null)
+            {
+                TryDisconnect();
+            }
         }
 
         private void TryDisconnect()
@@ -46,7 +52,6 @@ namespace DuelMastersClientForms
                 WriteNewLine("Connecting to the server...");
                 Task task = _tcpClient.ConnectAsync(address, Port);
                 task.Wait();
-                WriteNewLine("Connected to the server.");
                 Task receive = new Task(() => ReceiveMessages());
                 receive.Start();
             }
@@ -73,7 +78,7 @@ namespace DuelMastersClientForms
                 }
                 if (received > 0)
                 {
-                    WriteNewLine(Encoding.ASCII.GetString(buffer, 0, received));
+                    WriteNewLine(Encoding.UTF8.GetString(buffer, 0, received));
                 }
             }
             WriteNewLine("You have been disconnected from the server.");
@@ -95,7 +100,10 @@ namespace DuelMastersClientForms
         {
             try
             {
-                byte[] bytes = Encoding.ASCII.GetBytes(InputTextBox.Text);
+                InterfaceDataWrapper wrapper = new() { Other = new() { ChatMessage = InputTextBox.Text } };
+                byte[] bytes = Serialize(wrapper);
+
+                //byte[] bytes = Encoding.UTF8.GetBytes(InputTextBox.Text);
                 ValueTask write = _tcpClient.GetStream().WriteAsync(bytes);
                 InputTextBox.Clear();
             }
@@ -105,18 +113,16 @@ namespace DuelMastersClientForms
             }
         }
 
-        private void DisconnectButton_Click(object sender, EventArgs e)
+        private byte[] Serialize(InterfaceDataWrapper wrapper)
         {
-            try
-            {
-                TryDisconnect();
-                _tcpClient = null;
-                WriteNewLine("Disconnected from the server.");
-            }
-            catch (Exception ex)
-            {
-                WriteNewLine(ex.Message);
-            }
-        }   
+            //byte[] buffer = new byte[1024];
+            MemoryStream stream = new();
+
+            XmlSerializer xmlSerializer = new(typeof(InterfaceDataWrapper));
+            xmlSerializer.Serialize(stream, wrapper);
+
+            return stream.GetBuffer();
+            //ValueTask write = _tcpClient.GetStream().WriteAsync(bytes);
+        }
     }
 }

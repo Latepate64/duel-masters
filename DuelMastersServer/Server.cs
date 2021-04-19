@@ -18,7 +18,7 @@ namespace DuelMastersServer
 
         internal void Send(string msg)
         {
-            byte[] bytes = Encoding.ASCII.GetBytes(msg);
+            byte[] bytes = Encoding.UTF8.GetBytes(msg);
             TCPClient.GetStream().Write(bytes);
         }
     }
@@ -39,11 +39,14 @@ namespace DuelMastersServer
             Console.WriteLine($"Waiting for {_client1.Name} to connect...");
             _client1.TCPClient = _tcpListener.AcceptTcpClient();
             Console.WriteLine($"{_client1.Name} connected.");
+            _client1.Send($"You have been connected to the server as {_client1.Name}.{Environment.NewLine}Your opponent has not connected yet.{Environment.NewLine}You can change your name by typing changename NAME");
             Task task1 = new(() => ReceiveMessages(_client1));
             task1.Start();
             Console.WriteLine($"Waiting for {_client2.Name} to connect...");
             _client2.TCPClient = _tcpListener.AcceptTcpClient();
             Console.WriteLine($"{_client2.Name} connected.");
+            _client2.Send($"You have been connected to the server as {_client2.Name}.{Environment.NewLine}Your opponent {_client1.Name} has already connected.{Environment.NewLine}You can change your name by typing changename NAME");
+            _client1.Send($"Your opponent {_client2.Name} connected to the server.");
             Task task2 = new(() => ReceiveMessages(_client2));
             task2.Start();
             List<Task> tasks = new()
@@ -83,7 +86,7 @@ namespace DuelMastersServer
         private static void Broadcast(string msg)
         {
             Console.WriteLine(msg);
-            byte[] bytes = Encoding.ASCII.GetBytes(msg);
+            byte[] bytes = Encoding.UTF8.GetBytes(msg);
             foreach (Client activeClient in GetActiveClients())
             {
                 activeClient.TCPClient.GetStream().Write(bytes);
