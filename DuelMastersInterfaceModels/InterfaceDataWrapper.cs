@@ -1,13 +1,13 @@
-﻿using System.Xml.Serialization;
+﻿using DuelMastersInterfaceModels.Events;
 
 namespace DuelMastersInterfaceModels
 {
-    [XmlRoot(ElementName = "Data")]
     public class InterfaceDataWrapper
     {
         //TODO: ChoiceWrapper
-        //TODO: EventWrapper
-        [XmlElement("Other")]
+
+        public EventWrapper Event { get; set; }
+
         public OtherWrapper Other { get; set; }
     }
 

@@ -32,22 +32,22 @@ namespace DuelMastersModels
         /// <summary>
         /// A player’s graveyard is their discard pile. Discarded cards, destroyed creatures and spells cast are put in their owner's graveyard.
         /// </summary>
-        public IGraveyard Graveyard { get; private set; }
+        public IGraveyard Graveyard { get; private set; } = new Graveyard();
 
         /// <summary>
         /// The hand is where a player holds cards that have been drawn. Cards can be put into a player’s hand by other effects as well. At the beginning of the game, each player draws five cards.
         /// </summary>
-        public IHand Hand { get; private set; }
+        public IHand Hand { get; private set; } = new Hand();
 
         /// <summary>
         /// The mana zone is where cards are put in order to produce mana for using other cards. All cards are put into the mana zone upside down. However, multicolored cards are put into the mana zone tapped.
         /// </summary>
-        public IManaZone ManaZone { get; private set; }
+        public IManaZone ManaZone { get; private set; } = new ManaZone();
 
         /// <summary>
         /// At the beginning of the game, each player puts five shields into their shield zone. Castles are put into the shield zone to fortify a shield.
         /// </summary>
-        public IShieldZone ShieldZone { get; private set; }
+        public IShieldZone ShieldZone { get; private set; } = new ShieldZone();
 
         public IEnumerable<IHandCard> ShieldTriggersToUse => _shieldTriggerManager.ShieldTriggersToUse;
 

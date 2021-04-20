@@ -9,6 +9,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\DuelMastersInterfaceModels\DuelMastersInterfaceModels.csproj" />
+    <ProjectReference Include="..\DuelMastersModels\DuelMastersModels.csproj" />
   </ItemGroup>
 
 </Project>

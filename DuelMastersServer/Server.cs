@@ -1,4 +1,6 @@
 ﻿using DuelMastersInterfaceModels;
+using DuelMastersInterfaceModels.Events;
+using DuelMastersModels;
 using System.Net.Sockets;
 using System;
 using System.Net;
@@ -7,6 +9,10 @@ using System.Text;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.IO;
+using DuelMastersModels.Zones;
+using DuelMastersModels.Cards.Creatures;
+using DuelMastersModels.Cards;
+using DuelMastersModels.Managers;
 
 namespace DuelMastersServer
 {
@@ -28,6 +34,7 @@ namespace DuelMastersServer
         static TcpListener _tcpListener;
         static readonly Client _client1 = new() { Name = "Player1" };
         static readonly Client _client2 = new() { Name = "Player2" };
+        static Duel _duel;
 
         static void Main(string[] args)
         {
@@ -77,7 +84,6 @@ namespace DuelMastersServer
                 if (byteCount > 0)
                 {
                     ProcessMessage(client, new MemoryStream(buffer, 0, byteCount));
-                    
                 }
             }
             Console.WriteLine($"{client.Name} disconnected.");
@@ -86,7 +92,11 @@ namespace DuelMastersServer
         private static void Broadcast(string msg)
         {
             Console.WriteLine(msg);
-            byte[] bytes = Encoding.UTF8.GetBytes(msg);
+            Broadcast(Encoding.UTF8.GetBytes(msg));
+        }
+
+        private static void Broadcast(byte[] bytes)
+        {
             foreach (Client activeClient in GetActiveClients())
             {
                 activeClient.TCPClient.GetStream().Write(bytes);
@@ -95,11 +105,10 @@ namespace DuelMastersServer
 
         static void ProcessMessage(Client client, MemoryStream stream)
         {
-            XmlSerializer xmlSerializer = new(typeof(InterfaceDataWrapper));
             InterfaceDataWrapper wrapper;
             try
             {
-                wrapper = (InterfaceDataWrapper)xmlSerializer.Deserialize(stream);
+                wrapper = (InterfaceDataWrapper)new XmlSerializer(typeof(InterfaceDataWrapper)).Deserialize(stream);
             }
             catch (Exception e)
             {
@@ -137,7 +146,8 @@ namespace DuelMastersServer
                         Broadcast($"{client.Name} is not ready to start a duel.");
                         break;
                     case DuelStartMode.First:
-                        Broadcast($"{client.Name} is ready to start a duel and would like to go first.");
+                        StartDuel();
+                        //Broadcast($"{client.Name} is ready to start a duel and would like to go first.");
                         break;
                     case DuelStartMode.Second:
                         Broadcast($"{client.Name} is ready to start a duel and would like to go second.");
@@ -190,6 +200,49 @@ namespace DuelMastersServer
                 clients.Add(_client2);
             }
             return clients;
+        }
+
+        static void StartDuel()
+        {
+            EventManager eventManager = new();
+            eventManager.EventRaised += EventManager_EventRaised;
+            _duel = new Duel
+            {
+                Player1 = new Player { EventManager = eventManager },
+                Player2 = new Player { EventManager = eventManager },
+            };
+            List<ICard> cards1 = new();
+            List<ICard> cards2 = new();
+            for (int i = 0; i < 40; ++i)
+            {
+                cards1.Add(new AquaHulcus());
+                cards2.Add(new AquaHulcus());
+            }
+            _duel.Player1.Deck = new Deck(cards1);
+            _duel.Player2.Deck = new Deck(cards2);
+            _duel.StartingPlayer = _duel.Player1;
+            DuelMastersInterfaceModels.Choices.IChoice choice = _duel.Start();
+        }
+
+        private static void EventManager_EventRaised(object sender, DuelEvent e)
+        {
+            InterfaceDataWrapper wrapper = new() { Event = new() };
+            if (e is ShuffleDeckEvent shuffle)
+            {
+                wrapper.Event.ShuffleDeckEvent = shuffle;
+            }
+            else
+            {
+                throw new InvalidOperationException();
+            }
+            Broadcast(Serialize(wrapper));
+        }
+
+        private static byte[] Serialize(InterfaceDataWrapper wrapper)
+        {
+            MemoryStream stream = new();
+            new XmlSerializer(typeof(InterfaceDataWrapper)).Serialize(stream, wrapper);
+            return stream.GetBuffer();
         }
     }
 }

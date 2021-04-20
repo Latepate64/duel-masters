@@ -14,7 +14,7 @@ namespace DuelMastersModels.Zones
         internal override bool Public { get; } = false;
         internal override bool Ordered { get; } = true;
 
-        internal Deck(IEnumerable<ICard> cards)
+        public Deck(IEnumerable<ICard> cards)
         {
             foreach (ICard card in cards)
             {

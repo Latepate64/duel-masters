@@ -1,4 +1,5 @@
 ﻿using DuelMastersInterfaceModels;
+using DuelMastersInterfaceModels.Events;
 using System;
 using System.IO;
 using System.Net;
@@ -66,22 +67,60 @@ namespace DuelMastersClientForms
             while (_tcpClient.Connected)
             {
                 byte[] buffer = new byte[1024];
-                int received;
+                int byteCount;
                 try
                 {
-                    received = _tcpClient.GetStream().Read(buffer);
+                    byteCount = _tcpClient.GetStream().Read(buffer);
                 }
-                catch (System.IO.IOException ex)
+                catch (IOException ex)
                 {
                     WriteNewLine(ex.Message);
                     break;
                 }
-                if (received > 0)
+                if (byteCount > 0)
                 {
-                    WriteNewLine(Encoding.UTF8.GetString(buffer, 0, received));
+                    ProcessMessage(new MemoryStream(buffer, 0, byteCount));
                 }
             }
             WriteNewLine("You have been disconnected from the server.");
+        }
+
+        void ProcessMessage(MemoryStream stream)
+        {
+            InterfaceDataWrapper wrapper;
+            try
+            {
+                wrapper = (InterfaceDataWrapper)new XmlSerializer(typeof(InterfaceDataWrapper)).Deserialize(stream);
+            }
+            catch (Exception e)
+            {
+                WriteNewLine($"Could not process data received from server: {e.Message}");
+                return;
+            }
+            //if (wrapper.Other != null)
+            //{
+            //    ProcessWrapperOther(client, wrapper.Other);
+            //}
+            if (wrapper.Event != null)
+            {
+                ProcessEvent(wrapper.Event);
+            }
+            else
+            {
+                WriteNewLine("Data returned from server contained no valid data.");
+            }
+        }
+
+        private void ProcessEvent(EventWrapper wrapper)
+        {
+            if (wrapper.ShuffleDeckEvent != null)
+            {
+                WriteNewLine($"{wrapper.ShuffleDeckEvent.PlayerID} shuffled their deck.");
+            }
+            else
+            {
+                WriteNewLine("Server did not return event.");
+            }
         }
 
         private void WriteNewLine(string text)
@@ -102,8 +141,6 @@ namespace DuelMastersClientForms
             {
                 InterfaceDataWrapper wrapper = new() { Other = new() { ChatMessage = InputTextBox.Text } };
                 byte[] bytes = Serialize(wrapper);
-
-                //byte[] bytes = Encoding.UTF8.GetBytes(InputTextBox.Text);
                 ValueTask write = _tcpClient.GetStream().WriteAsync(bytes);
                 InputTextBox.Clear();
             }
@@ -113,16 +150,17 @@ namespace DuelMastersClientForms
             }
         }
 
-        private byte[] Serialize(InterfaceDataWrapper wrapper)
+        private static byte[] Serialize(InterfaceDataWrapper wrapper)
         {
-            //byte[] buffer = new byte[1024];
             MemoryStream stream = new();
-
-            XmlSerializer xmlSerializer = new(typeof(InterfaceDataWrapper));
-            xmlSerializer.Serialize(stream, wrapper);
-
+            new XmlSerializer(typeof(InterfaceDataWrapper)).Serialize(stream, wrapper);
             return stream.GetBuffer();
-            //ValueTask write = _tcpClient.GetStream().WriteAsync(bytes);
+        }
+
+        private void DuelButton_Click(object sender, EventArgs e)
+        {
+            DuelForm duelForm = new();
+            duelForm.Show();
         }
     }
 }
