@@ -37,7 +37,9 @@ namespace DuelMastersClientForms
             this.CreateHandCardButton = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.Log = new System.Windows.Forms.TextBox();
+            this.OutputTextBox = new System.Windows.Forms.TextBox();
+            this.InputTextBox = new System.Windows.Forms.TextBox();
+            this.SendButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.OpponentPictureBox)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -63,7 +65,6 @@ namespace DuelMastersClientForms
             this.PlayerHand.Name = "PlayerHand";
             this.PlayerHand.Size = new System.Drawing.Size(673, 127);
             this.PlayerHand.TabIndex = 2;
-            this.PlayerHand.Paint += new System.Windows.Forms.PaintEventHandler(this.PlayerHand_Paint);
             // 
             // OpponentHand
             // 
@@ -85,7 +86,6 @@ namespace DuelMastersClientForms
             this.PlayerBattleZone.Name = "PlayerBattleZone";
             this.PlayerBattleZone.Size = new System.Drawing.Size(673, 127);
             this.PlayerBattleZone.TabIndex = 3;
-            this.PlayerBattleZone.Paint += new System.Windows.Forms.PaintEventHandler(this.PlayerBattleZone_Paint);
             // 
             // OpponentBattleZone
             // 
@@ -133,21 +133,41 @@ namespace DuelMastersClientForms
             this.pictureBox1.TabIndex = 5;
             this.pictureBox1.TabStop = false;
             // 
-            // Log
+            // OutputTextBox
             // 
-            this.Log.Location = new System.Drawing.Point(978, 12);
-            this.Log.Multiline = true;
-            this.Log.Name = "Log";
-            this.Log.ReadOnly = true;
-            this.Log.Size = new System.Drawing.Size(274, 509);
-            this.Log.TabIndex = 7;
+            this.OutputTextBox.Location = new System.Drawing.Point(978, 12);
+            this.OutputTextBox.Multiline = true;
+            this.OutputTextBox.Name = "OutputTextBox";
+            this.OutputTextBox.ReadOnly = true;
+            this.OutputTextBox.Size = new System.Drawing.Size(274, 303);
+            this.OutputTextBox.TabIndex = 7;
+            // 
+            // InputTextBox
+            // 
+            this.InputTextBox.Location = new System.Drawing.Point(978, 321);
+            this.InputTextBox.Multiline = true;
+            this.InputTextBox.Name = "InputTextBox";
+            this.InputTextBox.Size = new System.Drawing.Size(274, 149);
+            this.InputTextBox.TabIndex = 8;
+            // 
+            // SendButton
+            // 
+            this.SendButton.Location = new System.Drawing.Point(978, 476);
+            this.SendButton.Name = "SendButton";
+            this.SendButton.Size = new System.Drawing.Size(274, 43);
+            this.SendButton.TabIndex = 0;
+            this.SendButton.Text = "Send";
+            this.SendButton.UseVisualStyleBackColor = true;
+            this.SendButton.Click += new System.EventHandler(this.SendButton_Click);
             // 
             // DuelForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 681);
-            this.Controls.Add(this.Log);
+            this.Controls.Add(this.SendButton);
+            this.Controls.Add(this.InputTextBox);
+            this.Controls.Add(this.OutputTextBox);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.CreateHandCardButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -170,6 +190,8 @@ namespace DuelMastersClientForms
         private System.Windows.Forms.Button CreateHandCardButton;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.TextBox Log;
+        private System.Windows.Forms.TextBox OutputTextBox;
+        private System.Windows.Forms.TextBox InputTextBox;
+        private System.Windows.Forms.Button SendButton;
     }
 }

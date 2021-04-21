@@ -25,6 +25,7 @@ namespace DuelMastersInterfaceModels
         public string ChangeName { get; set; }
         public DuelStartMode DuelStartMode { get; set; }
         public ConnectionInfo ConnectionInfo { get; set; }
+        public PlayerInfo PlayerInfo { get; set; }
     }
 
     public class ConnectionInfo
@@ -32,5 +33,12 @@ namespace DuelMastersInterfaceModels
         public string Name { get; set; }
         public string OpponentName { get; set; }
         public DuelStartMode OpponentDuelStartMode { get; set; }
+    }
+
+    public class PlayerInfo
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public bool Local { get; set; }
     }
 }

@@ -20,20 +20,41 @@ namespace DuelMastersServer
     {
         internal DuelStartMode DuelStartMode { get; set; }
         internal TcpClient TCPClient { get; set; }
-        internal string Name { get; set; }
+        internal IPlayer Player { get; set; }
+        internal string Name => Player.Name;
 
         internal void Send(string msg)
         {
-            byte[] bytes = Encoding.UTF8.GetBytes(msg);
-            TCPClient.GetStream().Write(bytes);
+            Send(new InterfaceDataWrapper() { Other = new() { ChatMessage = msg } });
+        }
+
+        internal void Send(InterfaceDataWrapper wrapper)
+        {
+            Send(Server.Serialize(wrapper));
+        }
+
+        internal void Send(byte[] bytes)
+        {
+            //TCPClient.GetStream().Write(bytes);
+            var stream = TCPClient.GetStream();
+            stream.WriteTimeout = 1000;
+            //stream.Write(bytes);
+            stream.Write(bytes, 0, bytes.Length);
+            //using (var stream = TCPClient.GetStream())
+            //{
+            //    stream.Write(bytes);
+            //    stream.Flush();
+            //}
+            ////_ = TCPClient.GetStream().WriteAsync(bytes);
+            //TCPClient.GetStream().Flush();
         }
     }
 
     class Server
     {
         static TcpListener _tcpListener;
-        static readonly Client _client1 = new() { Name = "Player1" };
-        static readonly Client _client2 = new() { Name = "Player2" };
+        static readonly Client _client1 = new() { Player = new Player { ID = 0, Name = "Player1" } };
+        static readonly Client _client2 = new() { Player = new Player { ID = 1, Name = "Player2" } };
         static Duel _duel;
 
         static void Main(string[] args)
@@ -43,17 +64,24 @@ namespace DuelMastersServer
             IPAddress address = IPAddress.Parse(IP);
             _tcpListener = new(address, Port);
             _tcpListener.Start();
+
             Console.WriteLine($"Waiting for {_client1.Name} to connect...");
             _client1.TCPClient = _tcpListener.AcceptTcpClient();
+            //System.Threading.Thread.Sleep(1000);
             Console.WriteLine($"{_client1.Name} connected.");
-            _client1.Send($"You have been connected to the server as {_client1.Name}.{Environment.NewLine}Your opponent has not connected yet.{Environment.NewLine}You can change your name by typing changename NAME");
+            _client1.Send(new InterfaceDataWrapper { Other = new() { PlayerInfo = new() { ID = _client1.Player.ID, Local = true, Name = _client1.Name } } });
+            _client1.Send("Your opponent has not connected yet.");
+            //_client1.Send("You can change your name by typing changename NAME");
             Task task1 = new(() => ReceiveMessages(_client1));
             task1.Start();
+
             Console.WriteLine($"Waiting for {_client2.Name} to connect...");
             _client2.TCPClient = _tcpListener.AcceptTcpClient();
             Console.WriteLine($"{_client2.Name} connected.");
-            _client2.Send($"You have been connected to the server as {_client2.Name}.{Environment.NewLine}Your opponent {_client1.Name} has already connected.{Environment.NewLine}You can change your name by typing changename NAME");
-            _client1.Send($"Your opponent {_client2.Name} connected to the server.");
+            _client2.Send(new InterfaceDataWrapper { Other = new() { PlayerInfo = new() { ID = _client2.Player.ID, Local = true, Name = _client2.Name } } });
+            _client1.Send(new InterfaceDataWrapper { Other = new() { PlayerInfo = new() { ID = _client2.Player.ID, Local = false, Name = _client2.Name } } });
+            _client2.Send(new InterfaceDataWrapper { Other = new() { PlayerInfo = new() { ID = _client1.Player.ID, Local = false, Name = _client1.Name } } });
+            //_client2.Send("You can change your name by typing changename NAME");
             Task task2 = new(() => ReceiveMessages(_client2));
             task2.Start();
             List<Task> tasks = new()
@@ -92,14 +120,14 @@ namespace DuelMastersServer
         private static void Broadcast(string msg)
         {
             Console.WriteLine(msg);
-            Broadcast(Encoding.UTF8.GetBytes(msg));
+            Broadcast(Serialize(new InterfaceDataWrapper() { Other = new() { ChatMessage = msg } }));
         }
 
         private static void Broadcast(byte[] bytes)
         {
             foreach (Client activeClient in GetActiveClients())
             {
-                activeClient.TCPClient.GetStream().Write(bytes);
+                activeClient.Send(bytes);
             }
         }
 
@@ -134,7 +162,7 @@ namespace DuelMastersServer
             else if (!string.IsNullOrEmpty(wrapper.ChangeName))
             {
                 string oldName = client.Name;
-                client.Name = wrapper.ChangeName;
+                client.Player.Name = wrapper.ChangeName;
                 Broadcast($"{oldName} changed their name to {client.Name}.");
             }
             else if (wrapper.DuelStartMode != client.DuelStartMode)
@@ -208,15 +236,19 @@ namespace DuelMastersServer
             eventManager.EventRaised += EventManager_EventRaised;
             _duel = new Duel
             {
-                Player1 = new Player { EventManager = eventManager },
-                Player2 = new Player { EventManager = eventManager },
+                Player1 = _client1.Player,
+                Player2 = _client2.Player,
             };
+            _duel.Player1.EventManager = eventManager;
+            _duel.Player2.EventManager = eventManager;
+            _duel.Player1.Opponent = _duel.Player2;
+            _duel.Player2.Opponent = _duel.Player1;
             List<ICard> cards1 = new();
             List<ICard> cards2 = new();
             for (int i = 0; i < 40; ++i)
             {
-                cards1.Add(new AquaHulcus());
-                cards2.Add(new AquaHulcus());
+                cards1.Add(new BurningMane());
+                cards2.Add(new BurningMane());
             }
             _duel.Player1.Deck = new Deck(cards1);
             _duel.Player2.Deck = new Deck(cards2);
@@ -238,7 +270,7 @@ namespace DuelMastersServer
             Broadcast(Serialize(wrapper));
         }
 
-        private static byte[] Serialize(InterfaceDataWrapper wrapper)
+        internal static byte[] Serialize(InterfaceDataWrapper wrapper)
         {
             MemoryStream stream = new();
             new XmlSerializer(typeof(InterfaceDataWrapper)).Serialize(stream, wrapper);

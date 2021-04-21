@@ -17,12 +17,12 @@ namespace DuelMastersModels
     /// </summary>
     public class Player : IPlayer
     {
-        public int ID { get; }
+        public int ID { get; set; }
 
         /// <summary>
         /// The name of the player.
         /// </summary>
-        public string Name { get; private set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// When a game begins, each player’s deck becomes their deck.
@@ -75,7 +75,7 @@ namespace DuelMastersModels
         public void ShuffleDeck()
         {
             Deck.Shuffle();
-            EventManager?.Raise(new ShuffleDeckEvent(ID));
+            EventManager?.Raise(new ShuffleDeckEvent { PlayerID = ID });
         }
 
         public void AddShieldTriggerToUse(IHandCard card)

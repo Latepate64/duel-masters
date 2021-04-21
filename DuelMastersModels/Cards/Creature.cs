@@ -7,6 +7,7 @@ namespace DuelMastersModels.Cards
     public enum Race
     {
         LiquidPeople,
+        BeastFolk,
     }
 
     /// <summary>

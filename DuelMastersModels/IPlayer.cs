@@ -13,12 +13,12 @@ namespace DuelMastersModels
     /// </summary>
     public interface IPlayer
     {
-        int ID { get; }
+        int ID { get; set; }
 
         /// <summary>
         /// The name of the player.
         /// </summary>
-        string Name { get; }
+        string Name { get; set; }
 
         /// <summary>
         /// When a game begins, each player’s deck becomes their deck.
