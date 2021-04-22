@@ -1,4 +1,5 @@
 ﻿using DuelMastersInterfaceModels.Choices;
+using DuelMastersModels.Managers;
 using DuelMastersModels.Steps;
 using DuelMastersModels.Zones;
 
@@ -22,6 +23,6 @@ namespace DuelMastersModels
         IStep CurrentStep { get; }
 
         IChoice ChangeAndStartStep();
-        IChoice Start(IBattleZone battleZone);
+        IChoice Start(IBattleZone battleZone, EventManager eventManager);
     }
 }

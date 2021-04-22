@@ -1,6 +1,6 @@
 ﻿namespace DuelMastersInterfaceModels.Events
 {
-    public class ShuffleDeckEvent : PlayerEvent
+    public class DeckTopCardToShieldEvent : PlayerEvent
     {
     }
 }

@@ -1,15 +1,17 @@
 ﻿using DuelMastersInterfaceModels.Events;
-using System;
+using System.Collections.Generic;
 
 namespace DuelMastersModels.Managers
 {
     public class EventManager : IEventManager
     {
-        public event EventHandler<DuelEvent> EventRaised;
+        public Queue<DuelEvent> Events { get; set; } = new Queue<DuelEvent>();
+        public Queue<DuelEvent> NewEvents { get; set; } = new Queue<DuelEvent>();
 
         internal void Raise(DuelEvent duelEvent)
         {
-            EventRaised(this, duelEvent);
+            Events.Enqueue(duelEvent);
+            NewEvents.Enqueue(duelEvent);
         }
     }
 }

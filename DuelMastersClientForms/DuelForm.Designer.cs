@@ -139,22 +139,22 @@ namespace DuelMastersClientForms
             this.OutputTextBox.Multiline = true;
             this.OutputTextBox.Name = "OutputTextBox";
             this.OutputTextBox.ReadOnly = true;
-            this.OutputTextBox.Size = new System.Drawing.Size(274, 303);
+            this.OutputTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.OutputTextBox.Size = new System.Drawing.Size(274, 624);
             this.OutputTextBox.TabIndex = 7;
             // 
             // InputTextBox
             // 
-            this.InputTextBox.Location = new System.Drawing.Point(978, 321);
-            this.InputTextBox.Multiline = true;
+            this.InputTextBox.Location = new System.Drawing.Point(1028, 642);
             this.InputTextBox.Name = "InputTextBox";
-            this.InputTextBox.Size = new System.Drawing.Size(274, 149);
+            this.InputTextBox.Size = new System.Drawing.Size(224, 23);
             this.InputTextBox.TabIndex = 8;
             // 
             // SendButton
             // 
-            this.SendButton.Location = new System.Drawing.Point(978, 476);
+            this.SendButton.Location = new System.Drawing.Point(978, 642);
             this.SendButton.Name = "SendButton";
-            this.SendButton.Size = new System.Drawing.Size(274, 43);
+            this.SendButton.Size = new System.Drawing.Size(44, 23);
             this.SendButton.TabIndex = 0;
             this.SendButton.Text = "Send";
             this.SendButton.UseVisualStyleBackColor = true;

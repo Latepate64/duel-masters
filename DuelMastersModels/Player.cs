@@ -148,6 +148,7 @@ namespace DuelMastersModels
             for (int i = 0; i < amount; ++i)
             {
                 ShieldZone.Add(CardFactory.GenerateShieldZoneCard(RemoveTopCardOfDeck(), false));
+                EventManager?.Raise(new DeckTopCardToShieldEvent { PlayerID = ID });
             }
         }
 
@@ -169,6 +170,7 @@ namespace DuelMastersModels
                 ICard drawnCard = RemoveTopCardOfDeck();
                 IHandCard handCard = CardFactory.GenerateHandCard(drawnCard);
                 Hand.Add(handCard);
+                EventManager?.Raise(new DrawCardEvent { PlayerID = ID });
 
                 //TODO: Uncomment
                 //DuelEventOccurred?.Invoke(this, new DuelEventArgs(new DrawCardEvent(this, handCard)));

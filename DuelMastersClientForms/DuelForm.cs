@@ -67,7 +67,9 @@ namespace DuelMastersClientForms
         private static byte[] Serialize(InterfaceDataWrapper wrapper)
         {
             MemoryStream stream = new();
-            new XmlSerializer(typeof(InterfaceDataWrapper)).Serialize(stream, wrapper);
+            XmlSerializerNamespaces ns = new();
+            ns.Add("", "");
+            new XmlSerializer(typeof(InterfaceDataWrapper)).Serialize(stream, wrapper, ns);
             return stream.GetBuffer();
         }
 
@@ -81,23 +83,29 @@ namespace DuelMastersClientForms
         {
             while (_tcpClient.Connected)
             {
-                byte[] buffer = new byte[1024];
-                int byteCount;
                 try
                 {
                     NetworkStream stream = _tcpClient.GetStream();
-                    //stream.ReadTimeout = 1000;
-                    byteCount = stream.Read(buffer);
-                    //stream.Flush();
+                    MemoryStream ms = new();
+                    byte[] buffer = new byte[1024];
+                    int numBytesRead;
+
+                    bool process = false;
+                    while (stream.DataAvailable)
+                    {
+                        process = true;
+                        numBytesRead = stream.Read(buffer);
+                        ms.Write(buffer, 0, numBytesRead);
+                    }
+                    if (process)
+                    {
+                        ProcessMessage(ms);
+                    }
                 }
                 catch (IOException ex)
                 {
                     WriteNewLine(ex.Message);
                     break;
-                }
-                if (byteCount > 0)
-                {
-                    ProcessMessage(new MemoryStream(buffer, 0, byteCount));
                 }
             }
             WriteNewLine("You have been disconnected from the server.");
@@ -108,13 +116,8 @@ namespace DuelMastersClientForms
             InterfaceDataWrapper wrapper;
             try
             {
-                var whatisthis = Encoding.ASCII.GetString(stream.ToArray());
-                WriteNewLine(whatisthis);
-
-                XmlReader reader = XmlReader.Create(stream);
-                wrapper = (InterfaceDataWrapper)new XmlSerializer(typeof(InterfaceDataWrapper)).Deserialize(reader);
-
-                //wrapper = (InterfaceDataWrapper)new XmlSerializer(typeof(InterfaceDataWrapper)).Deserialize(stream);
+                stream.Position = 0;
+                wrapper = (InterfaceDataWrapper)new XmlSerializer(typeof(InterfaceDataWrapper)).Deserialize(stream);
             }
             catch (Exception e)
             {
@@ -125,10 +128,14 @@ namespace DuelMastersClientForms
             {
                 ProcessWrapperOther(wrapper.Other);
             }
-            else if (wrapper.Event != null)
+            else if (wrapper.Events != null)
             {
-                ProcessEvent(wrapper.Event);
+                foreach (EventWrapper eventWrapper in wrapper.Events)
+                {
+                    ProcessEvent(eventWrapper);
+                }
             }
+            //TODO: Choice
             else
             {
                 WriteNewLine("Data returned from server contained no valid data.");
@@ -141,16 +148,16 @@ namespace DuelMastersClientForms
             {
                 WriteNewLine(other.ChatMessage);
             }
-            else if (other.PlayerInfo != null)
+            else if (other.PlayerWrapper != null)
             {
-                if (other.PlayerInfo.Local)
+                if (other.PlayerWrapper.Player != null)
                 {
-                    _player = new Player(other.PlayerInfo.ID, other.PlayerInfo.Name);
+                    _player = new Player(other.PlayerWrapper.Player.ID, other.PlayerWrapper.Player.Name);
                     WriteNewLine($"You have been connected to the server as {_player.Name}.");
                 }
-                else
+                if (other.PlayerWrapper.Opponent != null)
                 {
-                    _opponent = new Player(other.PlayerInfo.ID, other.PlayerInfo.Name);
+                    _opponent = new Player(other.PlayerWrapper.Opponent.ID, other.PlayerWrapper.Opponent.Name);
                     WriteNewLine($"Your opponent has connected to the server as {_opponent.Name}.");
                 }
             }
@@ -166,6 +173,19 @@ namespace DuelMastersClientForms
             {
                 WriteNewLine($"{GetPlayer(wrapper.ShuffleDeckEvent.PlayerID).Name} shuffled their deck.");
             }
+            else if (wrapper.DeckTopCardToShieldEvent != null)
+            {
+                WriteNewLine($"{GetPlayer(wrapper.DeckTopCardToShieldEvent.PlayerID).Name} put the top card of their deck to their shields face down.");
+            }
+            else if (wrapper.DrawCardEvent != null)
+            {
+                WriteNewLine($"{GetPlayer(wrapper.DrawCardEvent.PlayerID).Name} drew a card.");
+            }
+            else if (wrapper.TurnStartEvent != null)
+            {
+                WriteNewLine($"{GetPlayer(wrapper.TurnStartEvent.PlayerID).Name} started turn {wrapper.TurnStartEvent.Number}.");
+            }
+            //TODO: Add more events
             else
             {
                 WriteNewLine("Server returned invalid event wrapper.");

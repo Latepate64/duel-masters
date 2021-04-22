@@ -120,7 +120,7 @@ namespace DuelMastersModels
         {
             ITurn turn = new Turn(activePlayer, _turns.Count + 1);
             _turns.Add(turn);
-            return turn.Start(BattleZone);
+            return turn.Start(BattleZone, activePlayer.EventManager);
         }
         #endregion Public methods
 

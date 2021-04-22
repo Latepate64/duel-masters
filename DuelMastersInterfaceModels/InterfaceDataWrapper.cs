@@ -1,4 +1,5 @@
 ﻿using DuelMastersInterfaceModels.Events;
+using System.Collections.Generic;
 
 namespace DuelMastersInterfaceModels
 {
@@ -6,7 +7,7 @@ namespace DuelMastersInterfaceModels
     {
         //TODO: ChoiceWrapper
 
-        public EventWrapper Event { get; set; }
+        public List<EventWrapper> Events { get; set; }
 
         public OtherWrapper Other { get; set; }
     }
@@ -25,7 +26,7 @@ namespace DuelMastersInterfaceModels
         public string ChangeName { get; set; }
         public DuelStartMode DuelStartMode { get; set; }
         public ConnectionInfo ConnectionInfo { get; set; }
-        public PlayerInfo PlayerInfo { get; set; }
+        public PlayerWrapper PlayerWrapper { get; set; }
     }
 
     public class ConnectionInfo
@@ -39,6 +40,11 @@ namespace DuelMastersInterfaceModels
     {
         public int ID { get; set; }
         public string Name { get; set; }
-        public bool Local { get; set; }
+    }
+
+    public class PlayerWrapper
+    {
+        public PlayerInfo Player { get; set; }
+        public PlayerInfo Opponent { get; set; }
     }
 }

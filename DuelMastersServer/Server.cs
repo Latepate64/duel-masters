@@ -35,18 +35,7 @@ namespace DuelMastersServer
 
         internal void Send(byte[] bytes)
         {
-            //TCPClient.GetStream().Write(bytes);
-            var stream = TCPClient.GetStream();
-            stream.WriteTimeout = 1000;
-            //stream.Write(bytes);
-            stream.Write(bytes, 0, bytes.Length);
-            //using (var stream = TCPClient.GetStream())
-            //{
-            //    stream.Write(bytes);
-            //    stream.Flush();
-            //}
-            ////_ = TCPClient.GetStream().WriteAsync(bytes);
-            //TCPClient.GetStream().Flush();
+            TCPClient.GetStream().Write(bytes);
         }
     }
 
@@ -67,21 +56,16 @@ namespace DuelMastersServer
 
             Console.WriteLine($"Waiting for {_client1.Name} to connect...");
             _client1.TCPClient = _tcpListener.AcceptTcpClient();
-            //System.Threading.Thread.Sleep(1000);
             Console.WriteLine($"{_client1.Name} connected.");
-            _client1.Send(new InterfaceDataWrapper { Other = new() { PlayerInfo = new() { ID = _client1.Player.ID, Local = true, Name = _client1.Name } } });
-            _client1.Send("Your opponent has not connected yet.");
-            //_client1.Send("You can change your name by typing changename NAME");
+            _client1.Send(new InterfaceDataWrapper { Other = new() { PlayerWrapper = new() { Player = new() { ID = _client1.Player.ID, Name = _client1.Name } } } });
             Task task1 = new(() => ReceiveMessages(_client1));
             task1.Start();
 
             Console.WriteLine($"Waiting for {_client2.Name} to connect...");
             _client2.TCPClient = _tcpListener.AcceptTcpClient();
             Console.WriteLine($"{_client2.Name} connected.");
-            _client2.Send(new InterfaceDataWrapper { Other = new() { PlayerInfo = new() { ID = _client2.Player.ID, Local = true, Name = _client2.Name } } });
-            _client1.Send(new InterfaceDataWrapper { Other = new() { PlayerInfo = new() { ID = _client2.Player.ID, Local = false, Name = _client2.Name } } });
-            _client2.Send(new InterfaceDataWrapper { Other = new() { PlayerInfo = new() { ID = _client1.Player.ID, Local = false, Name = _client1.Name } } });
-            //_client2.Send("You can change your name by typing changename NAME");
+            _client2.Send(new InterfaceDataWrapper { Other = new() { PlayerWrapper = new() { Player = new() { ID = _client2.Player.ID, Name = _client2.Name }, Opponent = new() { ID = _client1.Player.ID, Name = _client1.Name } } } });
+            _client1.Send(new InterfaceDataWrapper { Other = new() { PlayerWrapper = new() { Opponent = new() { ID = _client2.Player.ID, Name = _client2.Name } } } });
             Task task2 = new(() => ReceiveMessages(_client2));
             task2.Start();
             List<Task> tasks = new()
@@ -233,7 +217,6 @@ namespace DuelMastersServer
         static void StartDuel()
         {
             EventManager eventManager = new();
-            eventManager.EventRaised += EventManager_EventRaised;
             _duel = new Duel
             {
                 Player1 = _client1.Player,
@@ -254,26 +237,49 @@ namespace DuelMastersServer
             _duel.Player2.Deck = new Deck(cards2);
             _duel.StartingPlayer = _duel.Player1;
             DuelMastersInterfaceModels.Choices.IChoice choice = _duel.Start();
+
+            InterfaceDataWrapper wrapper = new() { Events = new() };
+            while (eventManager.NewEvents.TryDequeue(out DuelEvent duelEvent))
+            {
+                wrapper.Events.Add(GetEventWrapper(duelEvent));
+            }
+            //TODO: include choice in wrapper
+            Broadcast(Serialize(wrapper));
         }
 
-        private static void EventManager_EventRaised(object sender, DuelEvent e)
+        private static EventWrapper GetEventWrapper(DuelEvent duelEvent)
         {
-            InterfaceDataWrapper wrapper = new() { Event = new() };
-            if (e is ShuffleDeckEvent shuffle)
+            EventWrapper wrapper = new();
+            if (duelEvent is ShuffleDeckEvent shuffle)
             {
-                wrapper.Event.ShuffleDeckEvent = shuffle;
+                wrapper.ShuffleDeckEvent = shuffle;
             }
+            else if (duelEvent is DeckTopCardToShieldEvent shieldEvent)
+            {
+                wrapper.DeckTopCardToShieldEvent = shieldEvent;
+            }
+            else if (duelEvent is DrawCardEvent drawCard)
+            {
+                wrapper.DrawCardEvent = drawCard;
+            }
+            else if (duelEvent is TurnStartEvent turnStart)
+            {
+                wrapper.TurnStartEvent = turnStart;
+            }
+            //TODO: Add more events
             else
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException($"Unknown duel event: {duelEvent}");
             }
-            Broadcast(Serialize(wrapper));
+            return wrapper;
         }
 
         internal static byte[] Serialize(InterfaceDataWrapper wrapper)
         {
             MemoryStream stream = new();
-            new XmlSerializer(typeof(InterfaceDataWrapper)).Serialize(stream, wrapper);
+            XmlSerializerNamespaces ns = new();
+            ns.Add("", "");
+            new XmlSerializer(typeof(InterfaceDataWrapper)).Serialize(stream, wrapper, ns);
             return stream.GetBuffer();
         }
     }

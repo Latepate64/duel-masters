@@ -7,5 +7,5 @@ namespace DuelMastersInterfaceModels.Events
     /// </summary>
     public abstract class DuelEvent : EventArgs
     {
-	}
+    }
 }

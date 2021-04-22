@@ -1,4 +1,6 @@
 ﻿using DuelMastersInterfaceModels.Choices;
+using DuelMastersInterfaceModels.Events;
+using DuelMastersModels.Managers;
 using DuelMastersModels.Steps;
 using DuelMastersModels.Zones;
 using System.Collections.Generic;
@@ -43,11 +45,12 @@ namespace DuelMastersModels
             Number = number;
         }
 
-        public IChoice Start(IBattleZone battleZone)
+        public IChoice Start(IBattleZone battleZone, EventManager eventManager)
         {
             if (!Steps.Any())
             {
                 Steps.Add(new StartOfTurnStep(ActivePlayer, Number == 1, battleZone));
+                eventManager?.Raise(new TurnStartEvent { PlayerID = ActivePlayer.ID, Number = Number });
                 return StartCurrentStep();
             }
             else
