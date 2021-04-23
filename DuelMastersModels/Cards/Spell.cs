@@ -1,4 +1,6 @@
-﻿namespace DuelMastersModels.Cards
+﻿using DuelMastersInterfaceModels.Cards;
+
+namespace DuelMastersModels.Cards
 {
     /// <summary>
     /// Spell is a card type.
@@ -8,6 +10,6 @@
         /// <summary>
         /// Creates a spell.
         /// </summary>
-        protected Spell(int cost, Civilization civilization) : base(cost, civilization) { }
+        protected Spell(CardIdentifier cardID, int cost, Civilization civilization) : base(cardID, cost, civilization) { }
     }
 }

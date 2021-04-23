@@ -2,7 +2,7 @@
 {
     internal abstract class HandCard : Card, IHandCard
     {
-        protected internal HandCard(ICard card) : base(card.Cost, card.Civilizations)
+        protected internal HandCard(ICard card) : base(card.CardID, card.Cost, card.Civilizations)
         {
         }
 

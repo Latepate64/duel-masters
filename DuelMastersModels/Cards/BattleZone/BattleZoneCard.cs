@@ -9,7 +9,7 @@
         /// Creates a battle zone card.
         /// </summary>
         /// <param name="card"></param>
-        protected BattleZoneCard(ICard card) : base(card.Cost, card.Civilizations)
+        protected BattleZoneCard(ICard card) : base(card.CardID, card.Cost, card.Civilizations)
         {
         }
 

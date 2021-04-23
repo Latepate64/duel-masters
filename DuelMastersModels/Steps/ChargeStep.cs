@@ -45,7 +45,7 @@ namespace DuelMastersModels.Steps
             }
             else
             {
-                return new ChargeChoice(ActivePlayer.ID, ActivePlayer.Hand.Cards.Select(c => c.ID));
+                return new ChargeChoice(ActivePlayer.ID, ActivePlayer.Hand.Cards.Select(c => c.GameID));
             }
         }
     }

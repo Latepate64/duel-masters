@@ -1,15 +1,10 @@
-﻿using DuelMastersModels.Abilities.TriggeredAbilities;
+﻿using DuelMastersInterfaceModels.Cards;
+using DuelMastersModels.Abilities.TriggeredAbilities;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace DuelMastersModels.Cards
 {
-    public enum Race
-    {
-        LiquidPeople,
-        BeastFolk,
-    }
-
     /// <summary>
     /// Creature is a card type.
     /// </summary>
@@ -23,14 +18,14 @@ namespace DuelMastersModels.Cards
         /// <summary>
         /// Race is a characteristic of a creature.
         /// </summary>
-        public ICollection<Race> Races { get; }
+        public IEnumerable<Race> Races { get; } = new Collection<Race>();
 
         public ICollection<ITriggeredAbility> TriggerAbilities { get; }
 
         /// <summary>
         /// Creates a creature.
         /// </summary>
-        protected Creature(int cost, Civilization civilization, int power, Race race) : base(cost, civilization)
+        protected Creature(CardIdentifier cardID, int cost, Civilization civilization, int power, Race race) : base(cardID, cost, civilization)
         {
             Power = power;
             Races = new Collection<Race> { race };

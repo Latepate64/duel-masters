@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Cards\Civilization.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DuelMastersInterfaceModels\DuelMastersInterfaceModels.csproj" />
   </ItemGroup>
 

@@ -4,7 +4,7 @@ namespace DuelMastersModels.Cards
 {
     internal abstract class ManaZoneCard : Card, IManaZoneCard
     {
-        protected internal ManaZoneCard(ICard card) : base(card.Cost, card.Civilizations)
+        protected internal ManaZoneCard(ICard card) : base(card.CardID, card.Cost, card.Civilizations)
         {
             Tapped = Civilizations.Count() > 1;
         }

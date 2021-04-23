@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DuelMastersInterfaceModels.Cards;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace DuelMastersModels.Cards
@@ -11,7 +12,7 @@ namespace DuelMastersModels.Cards
         /// <summary>
         /// An unique identifier for the card during a duel.
         /// </summary>
-        public int ID { get; }
+        public int GameID { get; }
 
         public IPlayer Owner { get; set; }
 
@@ -19,6 +20,8 @@ namespace DuelMastersModels.Cards
         /// Civilizations of the card.
         /// </summary>
         public IEnumerable<Civilization> Civilizations { get; }
+
+        public CardIdentifier CardID { get; }
 
         /// <summary>
         /// Mana cost of the card.
@@ -28,8 +31,10 @@ namespace DuelMastersModels.Cards
         /// <summary>
         /// Creates a card.
         /// </summary>
-        protected Card(int cost, IEnumerable<Civilization> civilizations)
+        protected Card(CardIdentifier cardID, int cost, IEnumerable<Civilization> civilizations)
         {
+            GameID = _gameID++;
+            CardID = cardID;
             Civilizations = civilizations;
             Cost = cost;
         }
@@ -37,6 +42,8 @@ namespace DuelMastersModels.Cards
         /// <summary>
         /// Creates a card.
         /// </summary>
-        protected Card(int cost, Civilization civilization) : this(cost, new Collection<Civilization> { civilization }) { }
+        protected Card(CardIdentifier cardID, int cost, Civilization civilization) : this(cardID, cost, new Collection<Civilization> { civilization }) { }
+
+        private static int _gameID = 0;
     }
 }

@@ -2,7 +2,7 @@
 {
     internal abstract class ShieldZoneCard : Card, IShieldZoneCard
     {
-        protected internal ShieldZoneCard(ICard card) : base(card.Cost, card.Civilizations)
+        protected internal ShieldZoneCard(ICard card) : base(card.CardID, card.Cost, card.Civilizations)
         {
         }
 

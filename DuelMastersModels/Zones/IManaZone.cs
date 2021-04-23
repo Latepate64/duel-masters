@@ -7,7 +7,6 @@ namespace DuelMastersModels.Zones
     {
         IEnumerable<ITappable> TappedCards { get; }
         IEnumerable<IManaZoneCard> UntappedCards { get; }
-        IEnumerable<IManaZoneCreature> NonEvolutionCreaturesThatCostTheSameAsOrLessThanTheNumberOfCardsInTheZone { get; }
 
         void UntapCards();
     }

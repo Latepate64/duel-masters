@@ -1,6 +1,7 @@
-﻿using DuelMastersModels.Abilities;
-using DuelMastersModels.Cards;
+﻿using DuelMastersInterfaceModels.Cards;
 using DuelMastersInterfaceModels.Choices;
+using DuelMastersModels.Abilities;
+using DuelMastersModels.Cards;
 using DuelMastersModels.Effects.ContinuousEffects;
 using DuelMastersModels.Factories;
 using DuelMastersModels.Managers;

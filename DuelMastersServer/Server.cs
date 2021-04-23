@@ -238,16 +238,19 @@ namespace DuelMastersServer
             _duel.StartingPlayer = _duel.Player1;
             DuelMastersInterfaceModels.Choices.IChoice choice = _duel.Start();
 
-            InterfaceDataWrapper wrapper = new() { Events = new() };
+            InterfaceDataWrapper wrapper1 = new() { Events = new() };
+            InterfaceDataWrapper wrapper2 = new() { Events = new() };
             while (eventManager.NewEvents.TryDequeue(out DuelEvent duelEvent))
             {
-                wrapper.Events.Add(GetEventWrapper(duelEvent));
+                wrapper1.Events.Add(GetEventWrapper(duelEvent, _client1.Player.ID));
+                wrapper2.Events.Add(GetEventWrapper(duelEvent, _client2.Player.ID));
             }
             //TODO: include choice in wrapper
-            Broadcast(Serialize(wrapper));
+            _client1.Send(wrapper1);
+            _client2.Send(wrapper2);
         }
 
-        private static EventWrapper GetEventWrapper(DuelEvent duelEvent)
+        private static EventWrapper GetEventWrapper(DuelEvent duelEvent, int playerID)
         {
             EventWrapper wrapper = new();
             if (duelEvent is ShuffleDeckEvent shuffle)
@@ -260,7 +263,13 @@ namespace DuelMastersServer
             }
             else if (duelEvent is DrawCardEvent drawCard)
             {
-                wrapper.DrawCardEvent = drawCard;
+                DrawCardEvent copy = new() { PlayerID = drawCard.PlayerID };
+                // Show card information if receiver is the player who drew the card.
+                if (drawCard.PlayerID == playerID)
+                {
+                    copy.Card = drawCard.Card;
+                }
+                wrapper.DrawCardEvent = copy;
             }
             else if (duelEvent is TurnStartEvent turnStart)
             {

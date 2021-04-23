@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DuelMastersInterfaceModels.Cards;
+using System.Collections.Generic;
 
 namespace DuelMastersModels.Cards
 {
@@ -10,7 +11,7 @@ namespace DuelMastersModels.Cards
         /// <summary>
         /// An unique identifier for the card during a duel.
         /// </summary>
-        int ID { get; }
+        int GameID { get; }
 
         IPlayer Owner { get; set; }
 
@@ -23,5 +24,7 @@ namespace DuelMastersModels.Cards
         /// Mana cost of the card.
         /// </summary>
         int Cost { get; }
+
+        CardIdentifier CardID { get; }
     }
 }

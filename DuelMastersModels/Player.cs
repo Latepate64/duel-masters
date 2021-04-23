@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DuelMastersInterfaceModels.Events;
+using DuelMastersInterfaceModels.Cards;
 
 namespace DuelMastersModels
 {
@@ -170,7 +171,16 @@ namespace DuelMastersModels
                 ICard drawnCard = RemoveTopCardOfDeck();
                 IHandCard handCard = CardFactory.GenerateHandCard(drawnCard);
                 Hand.Add(handCard);
-                EventManager?.Raise(new DrawCardEvent { PlayerID = ID });
+
+                if (handCard is IHandCreature creature)
+                {
+                    EventManager?.Raise(new DrawCardEvent { PlayerID = ID, Card = new CreatureWrapper { Civilizations = creature.Civilizations.ToList(), Cost = creature.Cost, GameID = creature.GameID, CardID = creature.CardID, Power = creature.Power, Races = creature.Races.ToList() } });
+                }
+                else
+                {
+                    throw new NotImplementedException("Consider other card types than creature");
+                }
+                
 
                 //TODO: Uncomment
                 //DuelEventOccurred?.Invoke(this, new DuelEventArgs(new DrawCardEvent(this, handCard)));

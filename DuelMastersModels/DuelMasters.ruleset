@@ -347,7 +347,7 @@
     <Rule Id="CS2029" Action="Error" />
     <Rule Id="CS2038" Action="Error" />
     <Rule Id="CS3000" Action="Error" />
-    <Rule Id="CS3001" Action="Error" />
+    <Rule Id="CS3001" Action="Hidden" />
     <Rule Id="CS3002" Action="Error" />
     <Rule Id="CS3003" Action="Error" />
     <Rule Id="CS3005" Action="Error" />

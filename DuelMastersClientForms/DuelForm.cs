@@ -1,6 +1,9 @@
 ﻿using DuelMastersInterfaceModels;
+using DuelMastersInterfaceModels.Cards;
 using DuelMastersInterfaceModels.Events;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
 using System.Net;
@@ -179,7 +182,14 @@ namespace DuelMastersClientForms
             }
             else if (wrapper.DrawCardEvent != null)
             {
-                WriteNewLine($"{GetPlayer(wrapper.DrawCardEvent.PlayerID).Name} drew a card.");
+                string cardName = wrapper.DrawCardEvent.Card != null ? _cardNames[wrapper.DrawCardEvent.Card.CardID] : "a card";
+                WriteNewLine($"{GetPlayer(wrapper.DrawCardEvent.PlayerID).Name} drew {cardName}.");
+                //if (wrapper.DrawCardEvent.Card != null)
+                //{
+                //    //TODO: Consider card may not be creature.
+                //    CreatureWrapper creature = wrapper.DrawCardEvent.Card as CreatureWrapper;
+                //    WriteNewLine($"The card drawn is {creature.CardID} {creature.Civilizations} {creature.Cost} {creature.Power} {creature.Races} {creature.GameID}");
+                //}
             }
             else if (wrapper.TurnStartEvent != null)
             {
@@ -264,5 +274,11 @@ namespace DuelMastersClientForms
             Task receive = new(() => ReceiveMessages());
             receive.Start();
         }
+
+        private static readonly Dictionary<CardIdentifier, string> _cardNames = new()
+        {
+            { CardIdentifier.AquaHulcus, "Aqua Hulcus" },
+            { CardIdentifier.BurningMane, "Burning Mane" },
+        };
     }
 }

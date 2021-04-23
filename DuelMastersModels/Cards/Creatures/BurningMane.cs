@@ -1,8 +1,10 @@
-﻿namespace DuelMastersModels.Cards.Creatures
+﻿using DuelMastersInterfaceModels.Cards;
+
+namespace DuelMastersModels.Cards.Creatures
 {
     public class BurningMane : Creature
     {
-        public BurningMane() : base(2, Civilization.Nature, 2000, Race.BeastFolk)
+        public BurningMane() : base(CardIdentifier.BurningMane, 2, Civilization.Nature, 2000, Race.BeastFolk)
         {
         }
     }

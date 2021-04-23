@@ -1,4 +1,5 @@
-﻿using DuelMastersModels.Abilities.TriggeredAbilities;
+﻿using DuelMastersInterfaceModels.Cards;
+using DuelMastersModels.Abilities.TriggeredAbilities;
 using System.Collections.Generic;
 
 namespace DuelMastersModels.Cards
@@ -16,7 +17,7 @@ namespace DuelMastersModels.Cards
         /// <summary>
         /// Races the creature has.
         /// </summary>
-        public ICollection<Race> Races { get; }
+        public IEnumerable<Race> Races { get; }
 
         /// <summary>
         /// Determines whether the creature has summoning sickess.
