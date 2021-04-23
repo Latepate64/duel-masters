@@ -3,15 +3,13 @@ using DuelMastersInterfaceModels.Cards;
 using DuelMastersInterfaceModels.Events;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml;
 using System.Xml.Serialization;
 
 namespace DuelMastersClientForms
@@ -28,8 +26,12 @@ namespace DuelMastersClientForms
 
         private const int DefaultPort = 80;
         private const string DefaultHost = "127.0.0.1";
+        private const int CardWidth = 222;
+        private const int CardHeight = 307;
+        private const double CardScale = 0.395;
 
         private delegate void SafeCallDelegate(string text);
+        private delegate void ControlDelegate(Control control, Control parent);
         private TcpClient _tcpClient;
         private Player _player;
         private Player _opponent;
@@ -50,21 +52,34 @@ namespace DuelMastersClientForms
             }
         }
 
-        private static FlowLayoutPanel CreateCreature()
+        private static FlowLayoutPanel CreateCreature(CreatureWrapper creature)
         {
-            const int Width = 222;
-            const int Height = 307;
-            double scale = 0.395;
-            Label cost = new() { Text = "2" };
-            Label name = new() { Text = "Burning Mane" };
-            Label race = new() { Text = "Beast Folk" };
-            Label power = new() { Text = "2000" };
-            FlowLayoutPanel card = new() { BackColor = Color.Green, Height = (int)(scale * Height), Width = (int)(scale * Width) };
+            Label cost = new() { Text = creature.Cost.ToString() };
+            Label name = new() { Text = _cardNames[creature.CardID] };
+            Label race = new() { Text = GetRaceText(creature.Races) };
+            Label power = new() { Text = creature.Power.ToString() };
+            //TODO: Consider multiple civilizations
+            FlowLayoutPanel card = new() { BackColor = GetCivilizationColor(creature.Civilizations[0]), Height = (int)(CardScale * CardHeight), Width = (int)(CardScale * CardWidth) };
             card.Controls.Add(cost);
             card.Controls.Add(name);
             card.Controls.Add(race);
             card.Controls.Add(power);
             return card;
+        }
+
+        private static FlowLayoutPanel CreateCardBack()
+        {
+            return new FlowLayoutPanel() { BackColor = Color.DarkBlue, Height = (int)(CardScale * CardHeight), Width = (int)(CardScale * CardWidth) };
+        }
+
+        private static string GetRaceText(IEnumerable<Race> races)
+        {
+            return string.Join(" / ", races.Select(r => _races[r]));
+        }
+
+        private static Color GetCivilizationColor(Civilization civilization)
+        {
+            return _civilizationColors[civilization];
         }
 
         private static byte[] Serialize(InterfaceDataWrapper wrapper)
@@ -184,12 +199,15 @@ namespace DuelMastersClientForms
             {
                 string cardName = wrapper.DrawCardEvent.Card != null ? _cardNames[wrapper.DrawCardEvent.Card.CardID] : "a card";
                 WriteNewLine($"{GetPlayer(wrapper.DrawCardEvent.PlayerID).Name} drew {cardName}.");
-                //if (wrapper.DrawCardEvent.Card != null)
-                //{
-                //    //TODO: Consider card may not be creature.
-                //    CreatureWrapper creature = wrapper.DrawCardEvent.Card as CreatureWrapper;
-                //    WriteNewLine($"The card drawn is {creature.CardID} {creature.Civilizations} {creature.Cost} {creature.Power} {creature.Races} {creature.GameID}");
-                //}
+                if (wrapper.DrawCardEvent.Card != null)
+                {
+                    //TODO: Consider card may not be creature.
+                    AddControl(PlayerHand, CreateCreature(wrapper.DrawCardEvent.Card as CreatureWrapper));
+                }
+                else
+                {
+                    AddControl(OpponentHand, CreateCardBack());
+                }
             }
             else if (wrapper.TurnStartEvent != null)
             {
@@ -199,6 +217,18 @@ namespace DuelMastersClientForms
             else
             {
                 WriteNewLine("Server returned invalid event wrapper.");
+            }
+        }
+
+        private void AddControl(Control parent, Control child)
+        {
+            if (parent.InvokeRequired)
+            {
+                parent.Invoke(new ControlDelegate(AddControl), new object[] { parent, child });
+            }
+            else
+            {
+                parent.Controls.Add(child);
             }
         }
 
@@ -215,12 +245,6 @@ namespace DuelMastersClientForms
         }
 
         #region Events
-        private void CreateHandCardButton_Click(object sender, System.EventArgs e)
-        {
-            FlowLayoutPanel card = CreateCreature();
-            PlayerHand.Controls.Add(card);
-        }
-
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             if (_tcpClient != null)
@@ -238,7 +262,7 @@ namespace DuelMastersClientForms
                     //TODO: Consider host and port given as arguments
                     ConnectToServer(DefaultHost, DefaultPort);
                 }
-                else if (InputTextBox.Text == "startduel")
+                else if (InputTextBox.Text == "s")
                 {
                     SendMessage(new() { Other = new() { DuelStartMode = DuelStartMode.First } });
                 }
@@ -279,6 +303,21 @@ namespace DuelMastersClientForms
         {
             { CardIdentifier.AquaHulcus, "Aqua Hulcus" },
             { CardIdentifier.BurningMane, "Burning Mane" },
+        };
+
+        private static readonly Dictionary<Race, string> _races = new()
+        {
+            { Race.BeastFolk, "Beast Folk" },
+            { Race.LiquidPeople, "Liquid People" },
+        };
+
+        private static readonly Dictionary<Civilization, Color> _civilizationColors = new()
+        {
+            { Civilization.Light, Color.LightYellow },
+            { Civilization.Water, Color.LightBlue },
+            { Civilization.Darkness, Color.LightGray },
+            { Civilization.Fire, Color.Red },
+            { Civilization.Nature, Color.LightGreen },
         };
     }
 }

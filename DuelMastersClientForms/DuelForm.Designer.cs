@@ -34,7 +34,6 @@ namespace DuelMastersClientForms
             this.OpponentHand = new System.Windows.Forms.FlowLayoutPanel();
             this.PlayerBattleZone = new System.Windows.Forms.FlowLayoutPanel();
             this.OpponentBattleZone = new System.Windows.Forms.FlowLayoutPanel();
-            this.CreateHandCardButton = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.OutputTextBox = new System.Windows.Forms.TextBox();
@@ -98,16 +97,6 @@ namespace DuelMastersClientForms
             this.OpponentBattleZone.Size = new System.Drawing.Size(673, 127);
             this.OpponentBattleZone.TabIndex = 4;
             // 
-            // CreateHandCardButton
-            // 
-            this.CreateHandCardButton.Location = new System.Drawing.Point(82, 498);
-            this.CreateHandCardButton.Name = "CreateHandCardButton";
-            this.CreateHandCardButton.Size = new System.Drawing.Size(157, 23);
-            this.CreateHandCardButton.TabIndex = 5;
-            this.CreateHandCardButton.Text = "Create hand card";
-            this.CreateHandCardButton.UseVisualStyleBackColor = true;
-            this.CreateHandCardButton.Click += new System.EventHandler(this.CreateHandCardButton_Click);
-            // 
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Controls.Add(this.OpponentHand);
@@ -169,7 +158,6 @@ namespace DuelMastersClientForms
             this.Controls.Add(this.InputTextBox);
             this.Controls.Add(this.OutputTextBox);
             this.Controls.Add(this.flowLayoutPanel1);
-            this.Controls.Add(this.CreateHandCardButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "DuelForm";
             this.Text = "Duel";
@@ -187,7 +175,6 @@ namespace DuelMastersClientForms
         private System.Windows.Forms.FlowLayoutPanel OpponentHand;
         private System.Windows.Forms.FlowLayoutPanel PlayerBattleZone;
         private System.Windows.Forms.FlowLayoutPanel OpponentBattleZone;
-        private System.Windows.Forms.Button CreateHandCardButton;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TextBox OutputTextBox;
