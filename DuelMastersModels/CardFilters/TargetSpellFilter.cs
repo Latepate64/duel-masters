@@ -1,4 +1,4 @@
-﻿using DuelMastersModels.Cards;
+﻿using DuelMastersInterfaceModels.Cards;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -13,7 +13,7 @@ namespace DuelMastersModels.CardFilters
             Spell = spell;
         }
 
-        internal override ReadOnlyCollection<ISpell> FilteredSpells => new ReadOnlyCollection<ISpell>(new List<ISpell>() { Spell });
+        internal override ReadOnlyCollection<ISpell> FilteredSpells => new ReadOnlyCollection<ISpell>(new List<ISpell> { Spell });
     }
 }
 

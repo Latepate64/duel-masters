@@ -1,18 +1,18 @@
-﻿using DuelMastersModels.Cards;
+﻿using DuelMastersInterfaceModels.Cards;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace DuelMastersModels.CardFilters
 {
-    internal class TargetCreatureFilter<TCreature> : CreatureFilter<TCreature> where TCreature : ICreature
+    internal class TargetCreatureFilter : CreatureFilter
     {
-        internal TCreature Creature { get; private set; }
+        internal ICreature Creature { get; private set; }
 
-        internal TargetCreatureFilter(TCreature creature)
+        internal TargetCreatureFilter(ICreature creature)
         {
             Creature = creature;
         }
 
-        internal override IEnumerable<TCreature> FilteredCreatures => new ReadOnlyCollection<TCreature>(new List<TCreature>() { Creature });
+        internal override IEnumerable<ICreature> FilteredCreatures => new ReadOnlyCollection<ICreature>(new List<ICreature> { Creature });
     }
 }

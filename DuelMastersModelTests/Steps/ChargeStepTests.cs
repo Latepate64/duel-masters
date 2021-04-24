@@ -1,4 +1,5 @@
-﻿using DuelMastersInterfaceModels.Choices;
+﻿using DuelMastersInterfaceModels.Cards;
+using DuelMastersInterfaceModels.Choices;
 using DuelMastersModels;
 using DuelMastersModels.Cards;
 using DuelMastersModels.Steps;

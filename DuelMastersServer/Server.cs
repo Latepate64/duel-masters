@@ -13,6 +13,7 @@ using DuelMastersModels.Zones;
 using DuelMastersModels.Cards.Creatures;
 using DuelMastersModels.Cards;
 using DuelMastersModels.Managers;
+using DuelMastersInterfaceModels.Cards;
 
 namespace DuelMastersServer
 {

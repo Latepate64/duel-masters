@@ -1,10 +1,10 @@
-﻿using DuelMastersModels.Cards;
+﻿using DuelMastersInterfaceModels.Cards;
 using System.Collections.Generic;
 
 namespace DuelMastersModels.CardFilters
 {
-    internal abstract class CreatureFilter<TCreature> : CardFilter where TCreature : ICreature
+    internal abstract class CreatureFilter : CardFilter
     {
-        internal abstract IEnumerable<TCreature> FilteredCreatures { get; }
+        internal abstract IEnumerable<ICreature> FilteredCreatures { get; }
     }
 }

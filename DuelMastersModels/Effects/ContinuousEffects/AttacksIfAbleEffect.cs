@@ -1,11 +1,11 @@
-﻿using DuelMastersModels.CardFilters;
-using DuelMastersModels.Cards;
+﻿using DuelMastersInterfaceModels.Cards;
+using DuelMastersModels.CardFilters;
 using DuelMastersModels.Effects.Periods;
 
 namespace DuelMastersModels.Effects.ContinuousEffects
 {
-    internal class AttacksIfAbleEffect : CreatureContinuousEffect<ICreature>
+    internal class AttacksIfAbleEffect : CreatureContinuousEffect
     {
-        internal AttacksIfAbleEffect(Period period, CreatureFilter<ICreature> creatureFilter) : base(period, creatureFilter) { }
+        internal AttacksIfAbleEffect(Period period, CreatureFilter creatureFilter) : base(period, creatureFilter) { }
     }
 }

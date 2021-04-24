@@ -1,4 +1,4 @@
-﻿using DuelMastersModels.Cards;
+﻿using DuelMastersInterfaceModels.Cards;
 using DuelMastersModels.Effects.OneShotEffects;
 
 namespace DuelMastersModels.Abilities.TriggeredAbilities

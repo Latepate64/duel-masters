@@ -1,5 +1,4 @@
 ﻿using DuelMastersModels.Abilities.StaticAbilities;
-using DuelMastersModels.Cards;
 using DuelMastersModels.Effects.ContinuousEffects;
 using DuelMastersModels.Managers;
 using DuelMastersInterfaceModels.Choices;

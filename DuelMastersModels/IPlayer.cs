@@ -1,10 +1,10 @@
 ﻿using DuelMastersModels.Abilities.StaticAbilities;
-using DuelMastersModels.Cards;
 using DuelMastersModels.Effects.ContinuousEffects;
 using DuelMastersInterfaceModels.Choices;
 using DuelMastersModels.Zones;
 using System.Collections.Generic;
 using DuelMastersModels.Managers;
+using DuelMastersInterfaceModels.Cards;
 
 namespace DuelMastersModels
 {

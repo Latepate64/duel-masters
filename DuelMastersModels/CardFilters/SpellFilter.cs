@@ -1,4 +1,4 @@
-﻿using DuelMastersModels.Cards;
+﻿using DuelMastersInterfaceModels.Cards;
 using System.Collections.ObjectModel;
 
 namespace DuelMastersModels.CardFilters

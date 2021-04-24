@@ -1,4 +1,4 @@
-﻿using DuelMastersModels.Cards;
+﻿using DuelMastersInterfaceModels.Cards;
 
 namespace DuelMastersModels.Abilities
 {

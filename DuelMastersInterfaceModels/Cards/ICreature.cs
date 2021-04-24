@@ -1,12 +1,7 @@
-﻿using DuelMastersInterfaceModels.Cards;
-using DuelMastersModels.Abilities.TriggeredAbilities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace DuelMastersModels.Cards
+namespace DuelMastersInterfaceModels.Cards
 {
-    /// <summary>
-    /// Interface for Duel Masters creatures.
-    /// </summary>
     public interface ICreature : ICard
     {
         /// <summary>
@@ -19,7 +14,6 @@ namespace DuelMastersModels.Cards
         /// </summary>
         IEnumerable<Race> Races { get; }
 
-        ICollection<ITriggeredAbility> TriggerAbilities { get; }
         bool SummoningSickness { get; }
     }
 }

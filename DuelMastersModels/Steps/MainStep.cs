@@ -1,7 +1,7 @@
-﻿using DuelMastersModels.Cards;
-using DuelMastersInterfaceModels.Choices;
+﻿using DuelMastersInterfaceModels.Choices;
 using System.Collections.Generic;
 using System.Linq;
+using DuelMastersInterfaceModels.Cards;
 
 namespace DuelMastersModels.Steps
 {

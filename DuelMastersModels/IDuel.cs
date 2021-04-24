@@ -1,9 +1,10 @@
 ﻿using DuelMastersModels.Abilities;
-using DuelMastersModels.Cards;
 using DuelMastersInterfaceModels.Choices;
 using DuelMastersModels.Effects.ContinuousEffects;
 using DuelMastersModels.Zones;
 using System.Collections.Generic;
+using DuelMastersInterfaceModels.Cards;
+using DuelMastersModels.Cards;
 
 namespace DuelMastersModels
 {
@@ -73,18 +74,13 @@ namespace DuelMastersModels
         IChoice PutFromShieldZoneToHand(IPlayer player, ICard card, bool canUseShieldTrigger);
         IChoice PutFromShieldZoneToHand(IPlayer player, IEnumerable<ICard> cards, bool canUseShieldTrigger);
         IChoice PutTheTopCardOfYourDeckIntoYourManaZone(IPlayer player);
-        IChoice ReturnFromBattleZoneToHand(ICreature creature);
-        IChoice PutFromBattleZoneIntoOwnersManazone(ICreature creature);
-        IChoice PutFromManaZoneIntoTheBattleZone(ICreature creature);
         IChoice AddTheTopCardOfYourDeckToYourShieldsFaceDown(IPlayer player);
         void End(IPlayer winner);
         void EndDuelInDraw();
-        void Battle(ICreature attackingCreature, ICreature defendingCreature);
         void UseCard(IPlayer player, ICard card);
-        void AddFromYourHandToYourShieldsFaceDown(ICard card);
         void EndContinuousEffects<T>();
         void AddContinuousEffect(IContinuousEffect continuousEffect);
-        IEnumerable<ICreature> GetCreaturesThatCanBlock(ICreature attackingCreature);
+        IEnumerable<ICreature> GetCreaturesThatCanBlock(Creature attackingCreature);
         IEnumerable<ICreature> GetCreaturesThatCanAttack(IPlayer player);
         IEnumerable<ICreature> GetCreaturesThatCanBeAttacked(IPlayer player);
         bool CanAttackOpponent(ICreature creature);

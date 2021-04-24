@@ -151,7 +151,7 @@ namespace DuelMastersModels
         /// </summary>
         /// <param name="attackingCreature">Creature which initiated the attack.</param>
         /// <param name="defendingCreature">Creature which the attack was directed at.</param>
-        public void Battle(ICreature attackingCreature, ICreature defendingCreature)
+        public void Battle(Creature attackingCreature, Creature defendingCreature)
         {
             int attackingCreaturePower = GetPower(attackingCreature);
             int defendingCreaturePower = GetPower(defendingCreature);
@@ -190,16 +190,6 @@ namespace DuelMastersModels
             {
                 throw new InvalidOperationException();
             }
-        }
-
-        /// <summary>
-        /// Player adds a card from their hand to their shields face down.
-        /// </summary>
-        /// <param name="card"></param>
-        public void AddFromYourHandToYourShieldsFaceDown(ICard card)
-        {
-            card.Owner.Hand.Remove(card);
-            card.Owner.ShieldZone.Add(card);
         }
 
         public void EndContinuousEffects<T>()
@@ -254,7 +244,7 @@ namespace DuelMastersModels
         #endregion bool
 
         #region ReadOnlyCreatureCollection
-        public IEnumerable<ICreature> GetCreaturesThatCanBlock(ICreature attackingCreature)
+        public IEnumerable<ICreature> GetCreaturesThatCanBlock(Creature attackingCreature)
         {
             return new ReadOnlyCollection<ICreature>(GetAllBlockersPlayerHasInTheBattleZone(attackingCreature.Owner.Opponent).Where(c => !c.Tapped).ToList());
             //TODO: consider situations where abilities of attacking creature matter etc.
@@ -317,27 +307,6 @@ namespace DuelMastersModels
         public IChoice PutTheTopCardOfYourDeckIntoYourManaZone(IPlayer player)
         {
             player.ManaZone.Add(player.RemoveTopCardOfDeck());
-            return null;
-        }
-
-        public IChoice ReturnFromBattleZoneToHand(ICreature creature)
-        {
-            BattleZone.Remove(creature);
-            creature.Owner.Hand.Add(creature);
-            return null;
-        }
-
-        public IChoice PutFromBattleZoneIntoOwnersManazone(ICreature creature)
-        {
-            BattleZone.Remove(creature);
-            creature.Owner.ManaZone.Add(creature);
-            return null;
-        }
-
-        public IChoice PutFromManaZoneIntoTheBattleZone(ICreature creature)
-        {
-            creature.Owner.ManaZone.Remove(creature);
-            BattleZone.Add(creature);
             return null;
         }
 

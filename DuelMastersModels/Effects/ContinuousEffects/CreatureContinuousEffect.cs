@@ -3,11 +3,11 @@ using DuelMastersModels.Effects.Periods;
 
 namespace DuelMastersModels.Effects.ContinuousEffects
 {
-    internal abstract class CreatureContinuousEffect<TCreature> : ContinuousEffect where TCreature : Cards.ICreature
+    internal abstract class CreatureContinuousEffect : ContinuousEffect
     {
-        internal CreatureFilter<TCreature> CreatureFilter { get; private set; }
+        internal CreatureFilter CreatureFilter { get; private set; }
 
-        protected CreatureContinuousEffect(Period period, CreatureFilter<TCreature> creatureFilter) : base(period)
+        protected CreatureContinuousEffect(Period period, CreatureFilter creatureFilter) : base(period)
         {
             CreatureFilter = creatureFilter;
         }

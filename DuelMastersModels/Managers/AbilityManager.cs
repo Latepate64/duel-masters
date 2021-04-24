@@ -1,8 +1,8 @@
-﻿using DuelMastersInterfaceModels.Choices;
+﻿using DuelMastersInterfaceModels.Cards;
+using DuelMastersInterfaceModels.Choices;
 using DuelMastersModels.Abilities;
 using DuelMastersModels.Abilities.StaticAbilities;
 using DuelMastersModels.Abilities.TriggeredAbilities;
-using DuelMastersModels.Cards;
 using DuelMastersModels.Effects.ContinuousEffects;
 using DuelMastersModels.Zones;
 using System.Collections.Generic;
@@ -35,7 +35,7 @@ namespace DuelMastersModels.Managers
 
         public ICollection<IContinuousEffect> GetContinuousEffectsGeneratedByCard(ICard card, IPlayer player, BattleZone battleZone)
         {
-            List<IContinuousEffect> continuousEffects = new List<IContinuousEffect>();
+            List<IContinuousEffect> continuousEffects = new();
             foreach (IStaticAbility staticAbility in GetStaticAbilities().Where(a => a.Source == card))
             {
                 continuousEffects.AddRange(player.GetContinuousEffectsGeneratedByStaticAbility(card, staticAbility, battleZone));

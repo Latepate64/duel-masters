@@ -1,4 +1,4 @@
-﻿using DuelMastersModels.Cards;
+﻿using DuelMastersInterfaceModels.Cards;
 using DuelMastersInterfaceModels.Choices;
 using System;
 using System.Linq;

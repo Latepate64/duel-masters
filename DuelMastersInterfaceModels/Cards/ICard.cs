@@ -1,19 +1,13 @@
-﻿using DuelMastersInterfaceModels.Cards;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace DuelMastersModels.Cards
+namespace DuelMastersInterfaceModels.Cards
 {
-    /// <summary>
-    /// Interface for Duel Masters cards.
-    /// </summary>
     public interface ICard
     {
         /// <summary>
         /// An unique identifier for the card during a duel.
         /// </summary>
         int GameID { get; }
-
-        IPlayer Owner { get; set; }
 
         /// <summary>
         /// Civilizations of the card.

@@ -1,9 +1,9 @@
 ﻿using DuelMastersModels.Abilities;
-using DuelMastersModels.Cards;
 using DuelMastersInterfaceModels.Choices;
 using DuelMastersModels.Effects.ContinuousEffects;
 using DuelMastersModels.Zones;
 using System.Collections.Generic;
+using DuelMastersInterfaceModels.Cards;
 
 namespace DuelMastersModels.Managers
 {
@@ -14,7 +14,6 @@ namespace DuelMastersModels.Managers
 
         PlayerActionWithEndInformation ContinueResolution(IDuel duel);
         ICollection<IContinuousEffect> GetContinuousEffectsGeneratedByCard(ICard card, IPlayer player, BattleZone battleZone);
-        int GetSpellAbilityCount(ISpell spell);
         void RemovePendingAbility(INonStaticAbility ability);
         void SetAbilityBeingResolved(INonStaticAbility ability);
         void StartResolvingSpellAbility(ISpell spell);

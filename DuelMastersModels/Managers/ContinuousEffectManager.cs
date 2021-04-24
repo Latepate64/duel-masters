@@ -1,4 +1,4 @@
-﻿using DuelMastersModels.Cards;
+﻿using DuelMastersInterfaceModels.Cards;
 using DuelMastersModels.Effects.ContinuousEffects;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
