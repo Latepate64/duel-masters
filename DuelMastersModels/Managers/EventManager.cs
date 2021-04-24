@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DuelMastersModels.Managers
 {
-    public class EventManager : IEventManager
+    public class EventManager
     {
         public Queue<DuelEvent> Events { get; set; } = new Queue<DuelEvent>();
         public Queue<DuelEvent> NewEvents { get; set; } = new Queue<DuelEvent>();

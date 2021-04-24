@@ -5,6 +5,6 @@
     /// </summary>
     public abstract class OneShotEffect : Effect
     {
-        internal abstract DuelMastersInterfaceModels.Choices.IChoice Apply(IDuel duel, IPlayer player);
+        internal abstract DuelMastersInterfaceModels.Choices.IChoice Apply(Duel duel, Player player);
     }
 }

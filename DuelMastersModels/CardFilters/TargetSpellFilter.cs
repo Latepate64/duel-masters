@@ -1,4 +1,4 @@
-﻿using DuelMastersInterfaceModels.Cards;
+﻿using DuelMastersModels.Cards;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -6,14 +6,14 @@ namespace DuelMastersModels.CardFilters
 {
     internal class TargetSpellFilter : SpellFilter
     {
-        internal ISpell Spell { get; private set; }
+        internal Spell Spell { get; private set; }
 
-        internal TargetSpellFilter(ISpell spell)
+        internal TargetSpellFilter(Spell spell)
         {
             Spell = spell;
         }
 
-        internal override ReadOnlyCollection<ISpell> FilteredSpells => new ReadOnlyCollection<ISpell>(new List<ISpell> { Spell });
+        internal override ReadOnlyCollection<Spell> FilteredSpells => new(new List<Spell> { Spell });
     }
 }
 

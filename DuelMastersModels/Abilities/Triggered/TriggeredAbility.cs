@@ -1,4 +1,4 @@
-﻿using DuelMastersInterfaceModels.Cards;
+﻿using DuelMastersModels.Cards;
 using DuelMastersModels.Effects.OneShotEffects;
 
 namespace DuelMastersModels.Abilities.TriggeredAbilities
@@ -6,7 +6,7 @@ namespace DuelMastersModels.Abilities.TriggeredAbilities
     /// <summary>
     /// 603.1. Triggered abilities have a trigger condition and an effect. They are written as “[When/Whenever/At] [trigger condition or event], [effect]. [Instructions (if any).]”
     /// </summary>
-    public class TriggeredAbility : NonStaticAbility, ITriggeredAbility
+    public class TriggeredAbility : NonStaticAbility
     {
         public TriggerCondition TriggerCondition { get; set; }
 
@@ -23,7 +23,7 @@ namespace DuelMastersModels.Abilities.TriggeredAbilities
         /// <param name="controller"></param>
         /// <param name="source"></param>
         /// <returns></returns>
-        public TriggeredAbility CreatePendingTriggeredAbility(IPlayer controller, ICard source)
+        public TriggeredAbility CreatePendingTriggeredAbility(Player controller, Card source)
         {
             return new TriggeredAbility(TriggerCondition, Effects) { Controller = controller, Source = source };
             /*

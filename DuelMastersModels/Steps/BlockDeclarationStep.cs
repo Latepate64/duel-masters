@@ -1,15 +1,15 @@
-﻿using DuelMastersInterfaceModels.Cards;
-using DuelMastersInterfaceModels.Choices;
+﻿using DuelMastersInterfaceModels.Choices;
+using DuelMastersModels.Cards;
 
 namespace DuelMastersModels.Steps
 {
     public class BlockDeclarationStep : TurnBasedActionStep
     {
-        internal ICreature AttackingCreature { get; private set; }
-        internal ICreature AttackedCreature { get; private set; }
-        internal ICreature BlockingCreature { get; set; }
+        internal Creature AttackingCreature { get; private set; }
+        internal Creature AttackedCreature { get; private set; }
+        internal Creature BlockingCreature { get; set; }
 
-        public BlockDeclarationStep(IPlayer activePlayer, ICreature attackingCreature, ICreature attackedCreature) : base(activePlayer)
+        public BlockDeclarationStep(Player activePlayer, Creature attackingCreature, Creature attackedCreature) : base(activePlayer)
         {
             AttackingCreature = attackingCreature;
             AttackedCreature = attackedCreature;
@@ -29,7 +29,7 @@ namespace DuelMastersModels.Steps
             }
         }
 
-        public override IStep GetNextStep()
+        public override Step GetNextStep()
         {
             if (BlockingCreature != null)
             {
@@ -45,7 +45,7 @@ namespace DuelMastersModels.Steps
             }
         }
 
-        //public IChoice PerformTurnBasedActions(IDuel duel)
+        //public IChoice PerformTurnBasedActions(Duel duel)
         //{
         //    //IEnumerable<IBattleZoneCreature> creatures = duel.GetCreaturesThatCanBlock(AttackingCreature);
         //    throw new System.NotImplementedException();

@@ -1,5 +1,5 @@
-﻿using DuelMastersInterfaceModels.Cards;
-using DuelMastersInterfaceModels.Choices;
+﻿using DuelMastersInterfaceModels.Choices;
+using DuelMastersModels.Cards;
 using System;
 using System.Linq;
 
@@ -10,13 +10,13 @@ namespace DuelMastersModels.Steps
     /// </summary>
     public class ChargeStep : PriorityStep
     {
-        public ICard ChargedCard { get; set; }
+        public Card ChargedCard { get; set; }
 
-        public ChargeStep(IPlayer player) : base(player)
+        public ChargeStep(Player player) : base(player)
         {
         }
 
-        public IChoice ChargeMana(ICard card)
+        public IChoice ChargeMana(Card card)
         {
             if (ChargedCard != null)
             {
@@ -31,7 +31,7 @@ namespace DuelMastersModels.Steps
             return Proceed();
         }
 
-        public override IStep GetNextStep()
+        public override Step GetNextStep()
         {
             return new MainStep(ActivePlayer);
         }

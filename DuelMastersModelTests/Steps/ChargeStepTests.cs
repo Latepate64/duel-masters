@@ -1,5 +1,4 @@
-﻿using DuelMastersInterfaceModels.Cards;
-using DuelMastersInterfaceModels.Choices;
+﻿using DuelMastersInterfaceModels.Choices;
 using DuelMastersModels;
 using DuelMastersModels.Cards;
 using DuelMastersModels.Steps;
@@ -14,23 +13,23 @@ namespace DuelMastersModelTests.Steps
         [Fact]
         public void ChargeMana_ManaNotChargedBefore_ReturnNull()
         {
-            ChargeStep step = new ChargeStep(Mock.Of<IPlayer>());
-            IChoice choice = step.ChargeMana(Mock.Of<ICard>());
+            ChargeStep step = new(Mock.Of<Player>());
+            IChoice choice = step.ChargeMana(Mock.Of<Card>());
             Assert.Null(choice);
         }
 
         [Fact]
         public void GetNextStep_ReturnMainStep()
         {
-            ChargeStep step = new ChargeStep(Mock.Of<IPlayer>());
-            IStep nextStep = step.GetNextStep();
+            ChargeStep step = new(Mock.Of<Player>());
+            Step nextStep = step.GetNextStep();
             _ = Assert.IsType<MainStep>(nextStep);
         }
 
         [Fact]
         public void PerformPriorityAction_ChargedCardNull_ReturnPriorityActionChoice()
         {
-            Mock<IPlayer> player = new Mock<IPlayer>();
+            Mock<Player> player = new();
             _ = player.SetupGet(x => x.Hand).Returns(Mock.Of<Hand>());
             ChargeStep step = new(player.Object);
 
@@ -42,7 +41,7 @@ namespace DuelMastersModelTests.Steps
         [Fact]
         public void PerformPriorityAction_ChargedCardNotNull_ReturnNull()
         {
-            ChargeStep step = new(Mock.Of<IPlayer>()) { ChargedCard = Mock.Of<ICard>() };
+            ChargeStep step = new(Mock.Of<Player>()) { ChargedCard = Mock.Of<Card>() };
             Assert.Null(step.PerformPriorityAction());
         }
     }

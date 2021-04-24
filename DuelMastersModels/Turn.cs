@@ -9,28 +9,28 @@ using System.Linq;
 
 namespace DuelMastersModels
 {
-    public class Turn : ITurn
+    public class Turn
     {
         #region Properties
         /// <summary>
         /// The player whose turn it is.
         /// </summary>
-        public IPlayer ActivePlayer { get; }
+        public Player ActivePlayer { get; }
 
         /// <summary>
         /// The opponent of the active player.
         /// </summary>
-        public IPlayer NonActivePlayer { get; }
+        public Player NonActivePlayer { get; }
 
         /// <summary>
         /// The step that is currently being processed.
         /// </summary>
-        public IStep CurrentStep => Steps.Last();
+        public Step CurrentStep => Steps.Last();
 
         /// <summary>
         /// All the steps in the turn that have been or are processed, in order.
         /// </summary>
-        internal ICollection<IStep> Steps { get; } = new Collection<IStep>();
+        internal ICollection<Step> Steps { get; } = new Collection<Step>();
 
         /// <summary>
         /// The number of the turn.
@@ -38,7 +38,7 @@ namespace DuelMastersModels
         internal int Number { get; private set; }
         #endregion Properties
 
-        public Turn(IPlayer activePlayer, int number)
+        public Turn(Player activePlayer, int number)
         {
             ActivePlayer = activePlayer;
             NonActivePlayer = activePlayer.Opponent;
@@ -61,7 +61,7 @@ namespace DuelMastersModels
 
         public IChoice ChangeAndStartStep()
         {
-            IStep nextStep = CurrentStep.GetNextStep();
+            Step nextStep = CurrentStep.GetNextStep();
             if (nextStep != null)
             {
                 Steps.Add(nextStep);

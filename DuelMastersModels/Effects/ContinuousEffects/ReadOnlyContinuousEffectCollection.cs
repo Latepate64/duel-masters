@@ -4,14 +4,14 @@ using System.Linq;
 
 namespace DuelMastersModels.Effects.ContinuousEffects
 {
-    public class ReadOnlyContinuousEffectCollection : ReadOnlyCollection<IContinuousEffect>
+    public class ReadOnlyContinuousEffectCollection : ReadOnlyCollection<ContinuousEffect>
     {
-        internal ReadOnlyContinuousEffectCollection() : base(new List<IContinuousEffect>())
+        internal ReadOnlyContinuousEffectCollection() : base(new List<ContinuousEffect>())
         {
         }
 
-        internal ReadOnlyContinuousEffectCollection(IEnumerable<IContinuousEffect> continuousEffects) : base(continuousEffects.ToList()) { }
+        internal ReadOnlyContinuousEffectCollection(IEnumerable<ContinuousEffect> continuousEffects) : base(continuousEffects.ToList()) { }
 
-        internal ReadOnlyContinuousEffectCollection(IContinuousEffect continuousEffect) : base(new List<IContinuousEffect>() { continuousEffect }) { }
+        internal ReadOnlyContinuousEffectCollection(ContinuousEffect continuousEffect) : base(new List<ContinuousEffect>() { continuousEffect }) { }
     }
 }

@@ -1,8 +1,8 @@
-﻿using DuelMastersInterfaceModels.Cards;
-using DuelMastersInterfaceModels.Choices;
+﻿using DuelMastersInterfaceModels.Choices;
 using DuelMastersModels.Abilities;
 using DuelMastersModels.Abilities.StaticAbilities;
 using DuelMastersModels.Abilities.TriggeredAbilities;
+using DuelMastersModels.Cards;
 using DuelMastersModels.Effects.ContinuousEffects;
 using DuelMastersModels.Zones;
 using System.Collections.Generic;
@@ -11,68 +11,68 @@ using System.Linq;
 
 namespace DuelMastersModels.Managers
 {
-    public class AbilityManager : IAbilityManager
+    public class AbilityManager
     {
         #region Public
         public bool IsAbilityBeingResolved => _abilityBeingResolved != null;
 
         public bool IsAbilityBeingResolvedSpellAbility => _abilityBeingResolved is SpellAbility;
 
-        public void TriggerWhenYouPutThisCreatureIntoTheBattleZoneAbilities(ICreature creature)
+        public void TriggerWhenYouPutThisCreatureIntoTheBattleZoneAbilities(Creature creature)
         {
             TriggerTriggerAbilities<WhenYouPutThisCreatureIntoTheBattleZone>(creature);
         }
 
-        public void TriggerWheneverAnotherCreatureIsPutIntoTheBattleZoneAbilities(IEnumerable<ICreature> creatures)
+        public void TriggerWheneverAnotherCreatureIsPutIntoTheBattleZoneAbilities(IEnumerable<Creature> creatures)
         {
             TriggerTriggerAbilities<WheneverAnotherCreatureIsPutIntoTheBattleZone>(creatures);
         }
 
-        public void TriggerWheneverAPlayerCastsASpellAbilities(IEnumerable<ICreature> creatures)
+        public void TriggerWheneverAPlayerCastsASpellAbilities(IEnumerable<Creature> creatures)
         {
             TriggerTriggerAbilities<WheneverAPlayerCastsASpell>(creatures);
         }
 
-        public ICollection<IContinuousEffect> GetContinuousEffectsGeneratedByCard(ICard card, IPlayer player, BattleZone battleZone)
+        public ICollection<ContinuousEffect> GetContinuousEffectsGeneratedByCard(Card card, Player player, BattleZone battleZone)
         {
-            List<IContinuousEffect> continuousEffects = new();
-            foreach (IStaticAbility staticAbility in GetStaticAbilities().Where(a => a.Source == card))
+            List<ContinuousEffect> continuousEffects = new();
+            foreach (StaticAbility staticAbility in GetStaticAbilities().Where(a => a.Source == card))
             {
                 continuousEffects.AddRange(player.GetContinuousEffectsGeneratedByStaticAbility(card, staticAbility, battleZone));
             }
             return continuousEffects;
         }
 
-        public PlayerActionWithEndInformation ContinueResolution(IDuel duel)
+        public PlayerActionWithEndInformation ContinueResolution(Duel duel)
         {
             return _abilityBeingResolved.ContinueResolution(duel);
         }
 
-        public void SetAbilityBeingResolved(INonStaticAbility ability)
+        public void SetAbilityBeingResolved(NonStaticAbility ability)
         {
             _abilityBeingResolved = ability;
         }
 
-        public void StartResolvingSpellAbility(ISpell spell)
+        public void StartResolvingSpellAbility(Spell spell)
         {
             //TODO: spell may have more than one spell ability.
             SpellAbility spellAbility = GetSpellAbilities().First(a => a.Source == spell);
             SetAbilityBeingResolved(spellAbility);
         }
 
-        public int GetSpellAbilityCount(ISpell spell)
+        public int GetSpellAbilityCount(Spell spell)
         {
             return GetSpellAbilities().Count(a => a.Source == spell);
         }
 
-        public void RemovePendingAbility(INonStaticAbility ability)
+        public void RemovePendingAbility(NonStaticAbility ability)
         {
             _ = _pendingAbilities.Remove(ability);
         }
 
-        public SelectAbilityToResolve TryGetSelectAbilityToResolve(IPlayer player)
+        public SelectAbilityToResolve TryGetSelectAbilityToResolve(Player player)
         {
-            ReadOnlyCollection<INonStaticAbility> pendingAbilities = GetPendingAbilitiesForPlayer(player);
+            ReadOnlyCollection<NonStaticAbility> pendingAbilities = GetPendingAbilitiesForPlayer(player);
             return pendingAbilities.Count > 0 ? new SelectAbilityToResolve(player.ID/*, pendingAbilities*/) : null;
         }
         #endregion Public
@@ -86,21 +86,21 @@ namespace DuelMastersModels.Managers
         /// <summary>
         /// Non-static abilities that are waiting to be resolved.
         /// </summary>
-        private readonly Collection<INonStaticAbility> _pendingAbilities = new Collection<INonStaticAbility>();
+        private readonly Collection<NonStaticAbility> _pendingAbilities = new Collection<NonStaticAbility>();
 
         /// <summary>
         /// A non-static ability that is currently being resolved.
         /// </summary>
-        private INonStaticAbility _abilityBeingResolved;
+        private NonStaticAbility _abilityBeingResolved;
 
-        private ReadOnlyCollection<ITriggeredAbility> GetTriggerAbilities()
+        private ReadOnlyCollection<TriggeredAbility> GetTriggerAbilities()
         {
-            return new ReadOnlyTriggeredAbilityCollection(_abilities.Where(a => a is ITriggeredAbility).Cast<ITriggeredAbility>());
+            return new ReadOnlyTriggeredAbilityCollection(_abilities.Where(a => a is TriggeredAbility).Cast<TriggeredAbility>());
         }
 
-        private ReadOnlyCollection<ITriggeredAbility> GetTriggerAbilities<T>(ICard card)
+        private ReadOnlyCollection<TriggeredAbility> GetTriggerAbilities<T>(Card card)
         {
-            return new ReadOnlyCollection<ITriggeredAbility>(GetTriggerAbilities().Where(ability => ability.Source == card && ability.TriggerCondition is T).ToList());
+            return new ReadOnlyCollection<TriggeredAbility>(GetTriggerAbilities().Where(ability => ability.Source == card && ability.TriggerCondition is T).ToList());
         }
 
         /// <summary>
@@ -109,12 +109,12 @@ namespace DuelMastersModels.Managers
         /// <param name="ability"></param>
         /// <param name="controller"></param>
         /// <param name="source"></param>
-        private void TriggerTriggeredAbility(ITriggeredAbility ability, IPlayer controller, ICard source)
+        private void TriggerTriggeredAbility(TriggeredAbility ability, Player controller, Card source)
         {
             _pendingAbilities.Add(ability.CreatePendingTriggeredAbility(controller, source));
         }
 
-        private void TriggerTriggerAbilities<T>(ICreature card)
+        private void TriggerTriggerAbilities<T>(Creature card)
         {
             foreach (TriggeredAbility ability in GetTriggerAbilities<T>(card))
             {
@@ -122,9 +122,9 @@ namespace DuelMastersModels.Managers
             }
         }
 
-        private void TriggerTriggerAbilities<T>(IEnumerable<ICreature> creatures)
+        private void TriggerTriggerAbilities<T>(IEnumerable<Creature> creatures)
         {
-            foreach (ICreature creature in creatures)
+            foreach (Creature creature in creatures)
             {
                 TriggerTriggerAbilities<T>(creature);
             }
@@ -132,7 +132,7 @@ namespace DuelMastersModels.Managers
 
         private ReadOnlyStaticAbilityCollection GetStaticAbilities()
         {
-            return new ReadOnlyStaticAbilityCollection(_abilities.Where(a => a is IStaticAbility).Cast<IStaticAbility>());
+            return new ReadOnlyStaticAbilityCollection(_abilities.Where(a => a is StaticAbility).Cast<StaticAbility>());
         }
 
         private ReadOnlySpellAbilityCollection GetSpellAbilities()
@@ -143,9 +143,9 @@ namespace DuelMastersModels.Managers
         /// <summary>
         /// Non-static abilities controlled by a player that are waiting to be resolved.
         /// </summary>
-        private ReadOnlyCollection<INonStaticAbility> GetPendingAbilitiesForPlayer(IPlayer player)
+        private ReadOnlyCollection<NonStaticAbility> GetPendingAbilitiesForPlayer(Player player)
         {
-            return new ReadOnlyCollection<INonStaticAbility>(_pendingAbilities.Where(a => a.Controller == player).ToList());
+            return new ReadOnlyCollection<NonStaticAbility>(_pendingAbilities.Where(a => a.Controller == player).ToList());
         }
         #endregion Private
     }

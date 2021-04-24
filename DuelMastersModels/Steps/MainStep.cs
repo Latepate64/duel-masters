@@ -1,7 +1,7 @@
 ﻿using DuelMastersInterfaceModels.Choices;
 using System.Collections.Generic;
 using System.Linq;
-using DuelMastersInterfaceModels.Cards;
+using DuelMastersModels.Cards;
 
 namespace DuelMastersModels.Steps
 {
@@ -17,9 +17,9 @@ namespace DuelMastersModels.Steps
     /// </summary>
     public class MainStep : PriorityStep
     {
-        internal ICard CardToBeUsed { get; set; }
+        internal Card CardToBeUsed { get; set; }
 
-        public MainStep(IPlayer player) : base(player)
+        public MainStep(Player player) : base(player)
         {
         }
 
@@ -36,14 +36,14 @@ namespace DuelMastersModels.Steps
             {
                 return null;
             }
-            //IEnumerable<ICard> usableCards = MainStep.GetUsableCards(ActivePlayer.Hand.Cards, ActivePlayer.ManaZone.UntappedCards);
+            //IEnumerable<Card> usableCards = MainStep.GetUsableCards(ActivePlayer.Hand.Cards, ActivePlayer.ManaZone.UntappedCards);
             //return new PriorityActionChoice(ActivePlayer, ActivePlayer.Hand.Cards, usableCards, duel.GetCreaturesThatCanAttack(ActivePlayer));
         }
 
         //TODO
-        //public override IChoice PlayerActionRequired(IDuel duel)
+        //public override IChoice PlayerActionRequired(Duel duel)
         //{
-        //    //IEnumerable<ICard> usableCards = GetUsableCards(ActivePlayer.Hand.Cards, ActivePlayer.ManaZone.UntappedCards);
+        //    //IEnumerable<Card> usableCards = GetUsableCards(ActivePlayer.Hand.Cards, ActivePlayer.ManaZone.UntappedCards);
         //    throw new System.NotImplementedException();
         //    //return State == MainStepState.Use && usableCards.Any()
         //    //    ? new UseCard(ActivePlayer, usableCards)
@@ -53,12 +53,12 @@ namespace DuelMastersModels.Steps
         /// <summary>
         /// Returns the cards that can be used.
         /// </summary>
-        public static IEnumerable<ICard> GetUsableCards(IEnumerable<ICard> handCards, IEnumerable<ICard> manaCards)
+        public static IEnumerable<Card> GetUsableCards(IEnumerable<Card> handCards, IEnumerable<Card> manaCards)
         {
             return handCards.Where(handCard => Duel.CanBeUsed(handCard, manaCards));
         }
 
-        public override IStep GetNextStep()
+        public override Step GetNextStep()
         {
             return new AttackDeclarationStep(ActivePlayer);
         }

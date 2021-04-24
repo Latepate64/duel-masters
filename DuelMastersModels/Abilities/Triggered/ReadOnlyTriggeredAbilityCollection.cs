@@ -4,8 +4,8 @@ using System.Linq;
 
 namespace DuelMastersModels.Abilities.TriggeredAbilities
 {
-    internal class ReadOnlyTriggeredAbilityCollection : ReadOnlyCollection<ITriggeredAbility>
+    internal class ReadOnlyTriggeredAbilityCollection : ReadOnlyCollection<TriggeredAbility>
     {
-        internal ReadOnlyTriggeredAbilityCollection(IEnumerable<ITriggeredAbility> abilities) : base(abilities.ToList()) { }
+        internal ReadOnlyTriggeredAbilityCollection(IEnumerable<TriggeredAbility> abilities) : base(abilities.ToList()) { }
     }
 }

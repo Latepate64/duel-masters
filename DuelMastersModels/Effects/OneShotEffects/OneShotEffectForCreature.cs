@@ -1,12 +1,12 @@
-﻿using DuelMastersInterfaceModels.Cards;
+﻿using DuelMastersModels.Cards;
 
 namespace DuelMastersModels.Effects.OneShotEffects
 {
     internal abstract class OneShotEffectForCreature : OneShotEffect
     {
-        internal ICreature Creature { get; private set; }
+        internal Creature Creature { get; private set; }
 
-        protected OneShotEffectForCreature(ICreature creature)
+        protected OneShotEffectForCreature(Creature creature)
         {
             Creature = creature;
         }

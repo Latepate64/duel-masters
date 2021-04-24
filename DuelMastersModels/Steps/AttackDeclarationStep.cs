@@ -1,14 +1,14 @@
-﻿using DuelMastersInterfaceModels.Cards;
-using DuelMastersInterfaceModels.Choices;
+﻿using DuelMastersInterfaceModels.Choices;
+using DuelMastersModels.Cards;
 
 namespace DuelMastersModels.Steps
 {
     public class AttackDeclarationStep : TurnBasedActionStep
     {
-        internal ICreature AttackingCreature { get; set; }
-        internal ICreature AttackedCreature { get; set; }
+        internal Creature AttackingCreature { get; set; }
+        internal Creature AttackedCreature { get; set; }
 
-        public AttackDeclarationStep(IPlayer activePlayer) : base(activePlayer)
+        public AttackDeclarationStep(Player activePlayer) : base(activePlayer)
         {
         }
 
@@ -26,7 +26,7 @@ namespace DuelMastersModels.Steps
             }
         }
 
-        public override IStep GetNextStep()
+        public override Step GetNextStep()
         {
             if (AttackingCreature != null)
             {
@@ -39,21 +39,21 @@ namespace DuelMastersModels.Steps
             }
         }
 
-        public IChoice DeclareAttackOnCreature(ICreature attacker, ICreature target)
+        public IChoice DeclareAttackOnCreature(Creature attacker, Creature target)
         {
             AttackingCreature = attacker;
             AttackedCreature = target;
             return Proceed();
         }
 
-        public IChoice DeclareAttackOnOpponent(ICreature attacker)
+        public IChoice DeclareAttackOnOpponent(Creature attacker)
         {
             AttackingCreature = attacker;
             return Proceed();
         }
 
         //TODO
-        //public override IChoice PlayerActionRequired(IDuel duel)
+        //public override IChoice PlayerActionRequired(Duel duel)
         //{
         //    if (AttackingCreature != null && !TargetOfAttackDeclared)
         //    {
@@ -67,7 +67,7 @@ namespace DuelMastersModels.Steps
         //    }
         //}
 
-        //public IChoice PerformTurnBasedActions(IDuel duel)
+        //public IChoice PerformTurnBasedActions(Duel duel)
         //{
         //    //IEnumerable<IBattleZoneCreature> creatures = duel.GetCreaturesThatCanAttack(ActivePlayer);
         //    throw new System.NotImplementedException();

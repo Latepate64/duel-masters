@@ -8,13 +8,14 @@ using System.Collections.Generic;
 using System.Linq;
 using DuelMastersInterfaceModels.Events;
 using DuelMastersInterfaceModels.Cards;
+using DuelMastersModels.Cards;
 
 namespace DuelMastersModels
 {
     /// <summary>
     /// Players are the two people that are participating in the duel. The player during the current turn is known as the "active player" and the other player is known as the "non-active player".
     /// </summary>
-    public class Player : IPlayer
+    public class Player
     {
         public int ID { get; set; }
 
@@ -48,13 +49,13 @@ namespace DuelMastersModels
         /// </summary>
         public ShieldZone ShieldZone { get; private set; } = new ShieldZone();
 
-        public IEnumerable<ICard> ShieldTriggersToUse => _shieldTriggerManager.ShieldTriggersToUse;
+        public IEnumerable<Card> ShieldTriggersToUse => _shieldTriggerManager.ShieldTriggersToUse;
 
-        public IEnumerable<ICard> CardsInNonsharedZones
+        public IEnumerable<Card> CardsInNonsharedZones
         {
             get
             {
-                List<ICard> cards = new();
+                List<Card> cards = new();
                 cards.AddRange(Deck.Cards);
                 cards.AddRange(Graveyard.Cards);
                 cards.AddRange(Hand.Cards);
@@ -64,7 +65,7 @@ namespace DuelMastersModels
             }
         }
 
-        public IPlayer Opponent { get; set; }
+        public Player Opponent { get; set; }
 
         public EventManager EventManager { get; set; }
 
@@ -77,12 +78,12 @@ namespace DuelMastersModels
             EventManager?.Raise(new ShuffleDeckEvent { PlayerID = ID });
         }
 
-        public void AddShieldTriggerToUse(ICard card)
+        public void AddShieldTriggerToUse(Card card)
         {
             _shieldTriggerManager.AddShieldTriggerToUse(card);
         }
 
-        public IChoice Use(ICard card, IEnumerable<ICard> manaCards)
+        public IChoice Use(Card card, IEnumerable<Card> manaCards)
         {
             if (card == null)
             {
@@ -96,24 +97,24 @@ namespace DuelMastersModels
             throw new NotImplementedException("Consider mana payment");
         }
 
-        public void RemoveShieldTriggerToUse(ICard card)
+        public void RemoveShieldTriggerToUse(Card card)
         {
             _shieldTriggerManager.RemoveShieldTriggerToUse(card);
         }
 
-        public ReadOnlyContinuousEffectCollection GetContinuousEffectsGeneratedByStaticAbility(ICard card, IStaticAbility staticAbility, BattleZone battleZone)
+        public ReadOnlyContinuousEffectCollection GetContinuousEffectsGeneratedByStaticAbility(Card card, StaticAbility staticAbility, BattleZone battleZone)
         {
             if (staticAbility is StaticAbilityForCreature staticAbilityForCreature)
             {
                 return staticAbilityForCreature.EffectActivityCondition == EffectActivityConditionForCreature.Anywhere ||
-                    (staticAbilityForCreature.EffectActivityCondition == EffectActivityConditionForCreature.WhileThisCreatureIsInTheBattleZone && card is ICreature creature && battleZone.Cards.Contains(card)) ||
-                    (staticAbilityForCreature.EffectActivityCondition == EffectActivityConditionForCreature.WhileThisCreatureIsInYourHand && card is ICreature creature2 && Hand.Cards.Contains(creature2))
+                    (staticAbilityForCreature.EffectActivityCondition == EffectActivityConditionForCreature.WhileThisCreatureIsInTheBattleZone && card is Creature creature && battleZone.Cards.Contains(card)) ||
+                    (staticAbilityForCreature.EffectActivityCondition == EffectActivityConditionForCreature.WhileThisCreatureIsInYourHand && card is Creature creature2 && Hand.Cards.Contains(creature2))
                     ? staticAbilityForCreature.ContinuousEffects
                     : new ReadOnlyContinuousEffectCollection();
             }
             else if (staticAbility is StaticAbilityForSpell staticAbilityForSpell)
             {
-                return staticAbilityForSpell.EffectActivityCondition == StaticAbilityForSpellActivityCondition.WhileThisSpellIsInYourHand && card is ISpell handSpell && Hand.Cards.Contains(handSpell)
+                return staticAbilityForSpell.EffectActivityCondition == StaticAbilityForSpellActivityCondition.WhileThisSpellIsInYourHand && card is Spell handSpell && Hand.Cards.Contains(handSpell)
                     ? staticAbilityForSpell.ContinuousEffects
                     : new ReadOnlyContinuousEffectCollection();
             }
@@ -123,7 +124,7 @@ namespace DuelMastersModels
             }
         }
 
-        public void PutFromBattleZoneIntoGraveyard(ICard card, BattleZone battleZone)
+        public void PutFromBattleZoneIntoGraveyard(Card card, BattleZone battleZone)
         {
             battleZone.Remove(card);
             Graveyard.Add(card);
@@ -133,7 +134,7 @@ namespace DuelMastersModels
         /// Player puts target card from their hand into their mana zone.
         /// </summary>
         /// <param name="card"></param>
-        public void PutFromHandIntoManaZone(ICard card)
+        public void PutFromHandIntoManaZone(Card card)
         {
             Hand.Remove(card);
             ManaZone.Add(card);
@@ -154,7 +155,7 @@ namespace DuelMastersModels
         /// <summary>
         /// Removes the top card from a player's deck and returns it.
         /// </summary>
-        public ICard RemoveTopCardOfDeck()
+        public Card RemoveTopCardOfDeck()
         {
             return Deck.RemoveAndGetTopCard();
         }
@@ -166,10 +167,10 @@ namespace DuelMastersModels
         {
             for (int i = 0; i < amount; ++i)
             {
-                ICard card = RemoveTopCardOfDeck();
+                Card card = RemoveTopCardOfDeck();
                 Hand.Add(card);
 
-                if (card is ICreature creature)
+                if (card is Creature creature)
                 {
                     EventManager?.Raise(new DrawCardEvent { PlayerID = ID, Card = new CreatureWrapper { Civilizations = creature.Civilizations.ToList(), Cost = creature.Cost, GameID = creature.GameID, CardID = creature.CardID, Power = creature.Power, Races = creature.Races.ToList() } });
                 }

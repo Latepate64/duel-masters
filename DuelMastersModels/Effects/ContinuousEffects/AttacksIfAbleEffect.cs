@@ -1,5 +1,4 @@
-﻿using DuelMastersInterfaceModels.Cards;
-using DuelMastersModels.CardFilters;
+﻿using DuelMastersModels.CardFilters;
 using DuelMastersModels.Effects.Periods;
 
 namespace DuelMastersModels.Effects.ContinuousEffects

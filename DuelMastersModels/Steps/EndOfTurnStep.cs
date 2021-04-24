@@ -5,11 +5,11 @@
     /// </summary>
     public class EndOfTurnStep : Step
     {
-        public EndOfTurnStep(IPlayer player) : base(player)
+        public EndOfTurnStep(Player player) : base(player)
         {
         }
 
-        public override IStep GetNextStep()
+        public override Step GetNextStep()
         {
             return null;
         }

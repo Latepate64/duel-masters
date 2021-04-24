@@ -26,14 +26,14 @@ namespace DuelMastersModelTests
         [Fact]
         public void Start_StartingPlayerOpponentNull_ThrowNullReferenceException()
         {
-            _ = Assert.Throws<NullReferenceException>(() => new Duel { StartingPlayer = Mock.Of<IPlayer>() }.Start());
+            _ = Assert.Throws<NullReferenceException>(() => new Duel { StartingPlayer = Mock.Of<Player>() }.Start());
         }
 
         [Fact]
         public void Start_StartingPlayerWithoutHandAndOpponentGiven_ThrowNullReferenceException()
         {
-            Mock<IPlayer> player = new Mock<IPlayer>();
-            _ = player.SetupGet(x => x.Opponent).Returns(Mock.Of<IPlayer>());
+            Mock<Player> player = new();
+            _ = player.SetupGet(x => x.Opponent).Returns(Mock.Of<Player>());
 
             _ = Assert.Throws<NullReferenceException>(() => new Duel { StartingPlayer = player.Object }.Start());
         }
@@ -41,8 +41,8 @@ namespace DuelMastersModelTests
         [Fact]
         public void Start_StartingPlayerWithHandAndOpponentGiven_ReturnPriorityActionChoice()
         {
-            Mock<IPlayer> player = new();
-            _ = player.SetupGet(x => x.Opponent).Returns(Mock.Of<IPlayer>());
+            Mock<Player> player = new();
+            _ = player.SetupGet(x => x.Opponent).Returns(Mock.Of<Player>());
             _ = player.SetupGet(x => x.Hand).Returns(Mock.Of<Hand>());
 
             IChoice choice = new Duel { StartingPlayer = player.Object }.Start();

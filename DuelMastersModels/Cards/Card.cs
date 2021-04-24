@@ -7,14 +7,14 @@ namespace DuelMastersModels.Cards
     /// <summary>
     /// Represent a Duel Masters card.
     /// </summary>
-    public abstract class Card : ICard
+    public abstract class Card
     {
         /// <summary>
         /// An unique identifier for the card during a duel.
         /// </summary>
         public int GameID { get; }
 
-        public IPlayer Owner { get; set; }
+        public Player Owner { get; set; }
 
         /// <summary>
         /// Civilizations of the card.

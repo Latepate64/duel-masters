@@ -2,16 +2,25 @@
 
 namespace DuelMastersModels.Steps
 {
-    public abstract class Step : IStep
+    public enum StepState
+    {
+        NotStarted,
+        TurnBasedAction,
+        ResolveAbilities,
+        PriorityAction,
+        Over,
+    }
+
+    public abstract class Step
     {
         /// <summary>
         /// The player whose turn it is.
         /// </summary>
-        public IPlayer ActivePlayer { get; }
+        public Player ActivePlayer { get; }
 
         public StepState State { get; set; } = StepState.NotStarted;
 
-        protected Step(IPlayer activePlayer)
+        protected Step(Player activePlayer)
         {
             ActivePlayer = activePlayer;
         }
@@ -56,7 +65,7 @@ namespace DuelMastersModels.Steps
             return null;
         }
 
-        public abstract IStep GetNextStep();
+        public abstract Step GetNextStep();
 
         private IChoice TryToResolveAbility()
         {

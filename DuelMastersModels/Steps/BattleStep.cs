@@ -1,4 +1,4 @@
-﻿using DuelMastersInterfaceModels.Cards;
+﻿using DuelMastersModels.Cards;
 
 namespace DuelMastersModels.Steps
 {
@@ -7,16 +7,16 @@ namespace DuelMastersModels.Steps
     /// </summary>
     public class BattleStep : Step
     {
-        internal ICreature AttackingCreature { get; private set; }
-        internal ICreature TargetCreature { get; private set; }
+        internal Creature AttackingCreature { get; private set; }
+        internal Creature TargetCreature { get; private set; }
 
-        public BattleStep(IPlayer activePlayer, ICreature attackingCreature, ICreature targetCreature) : base(activePlayer)
+        public BattleStep(Player activePlayer, Creature attackingCreature, Creature targetCreature) : base(activePlayer)
         {
             AttackingCreature = attackingCreature;
             TargetCreature = targetCreature;
         }
 
-        public override IStep GetNextStep()
+        public override Step GetNextStep()
         {
             return new EndOfAttackStep(ActivePlayer);
             //AttackDeclarationStep lastAttackDeclaration = Steps.Where(step => step is AttackDeclarationStep).Cast<AttackDeclarationStep>().Last();
@@ -28,7 +28,7 @@ namespace DuelMastersModels.Steps
         }
 
         //TODO
-        //public override IChoice PlayerActionRequired(IDuel duel)
+        //public override IChoice PlayerActionRequired(Duel duel)
         //{
         //    if (duel == null)
         //    {

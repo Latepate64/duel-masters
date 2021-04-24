@@ -4,7 +4,7 @@ namespace DuelMastersModels.Steps
 {
     public abstract class TurnBasedActionStep : Step, ITurnBasedActionStep
     {
-        protected TurnBasedActionStep(IPlayer activePlayer) : base(activePlayer)
+        protected TurnBasedActionStep(Player activePlayer) : base(activePlayer)
         {
         }
 

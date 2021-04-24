@@ -1,25 +1,25 @@
-﻿using DuelMastersInterfaceModels.Cards;
+﻿using DuelMastersModels.Cards;
 
 namespace DuelMastersModels.Steps
 {
     public class DirectAttackStep : Step
     {
-        internal ICreature AttackingCreature { get; private set; }
+        internal Creature AttackingCreature { get; private set; }
         //private bool _breakingDone;
         //public ReadOnlyCardCollection BrokenShields { get; private set; }
 
-        public DirectAttackStep(IPlayer activePlayer, ICreature attackingCreature) : base(activePlayer)
+        public DirectAttackStep(Player activePlayer, Creature attackingCreature) : base(activePlayer)
         {
             AttackingCreature = attackingCreature;
         }
 
-        public override IStep GetNextStep()
+        public override Step GetNextStep()
         {
             return new EndOfAttackStep(ActivePlayer);
         }
 
         //TODO
-        //public IChoice PlayerActionRequired(IDuel duel)
+        //public IChoice PlayerActionRequired(Duel duel)
         //{
         //    if (DirectAttack && !_breakingDone)
         //    {
@@ -28,7 +28,7 @@ namespace DuelMastersModels.Steps
         //        {
         //            throw new InvalidOperationException();
         //        }
-        //        IPlayer opponent = ActivePlayer.Opponent;
+        //        Player opponent = ActivePlayer.Opponent;
         //        if (opponent.ShieldZone.Cards.Any())
         //        {
         //            //TODO: consider multibreaker

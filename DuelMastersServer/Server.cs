@@ -5,15 +5,14 @@ using System.Net.Sockets;
 using System;
 using System.Net;
 using System.Threading.Tasks;
-using System.Text;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.IO;
 using DuelMastersModels.Zones;
 using DuelMastersModels.Cards.Creatures;
-using DuelMastersModels.Cards;
 using DuelMastersModels.Managers;
 using DuelMastersInterfaceModels.Cards;
+using DuelMastersModels.Cards;
 
 namespace DuelMastersServer
 {
@@ -21,7 +20,7 @@ namespace DuelMastersServer
     {
         internal DuelStartMode DuelStartMode { get; set; }
         internal TcpClient TCPClient { get; set; }
-        internal IPlayer Player { get; set; }
+        internal Player Player { get; set; }
         internal string Name => Player.Name;
 
         internal void Send(string msg)
@@ -227,8 +226,8 @@ namespace DuelMastersServer
             _duel.Player2.EventManager = eventManager;
             _duel.Player1.Opponent = _duel.Player2;
             _duel.Player2.Opponent = _duel.Player1;
-            List<ICard> cards1 = new();
-            List<ICard> cards2 = new();
+            List<Card> cards1 = new();
+            List<Card> cards2 = new();
             for (int i = 0; i < 40; ++i)
             {
                 cards1.Add(new BurningMane());

@@ -5,7 +5,7 @@ namespace DuelMastersModels.Cards
     /// <summary>
     /// Spell is a card type.
     /// </summary>
-    public abstract class Spell : Card, ISpell
+    public abstract class Spell : Card
     {
         /// <summary>
         /// Creates a spell.

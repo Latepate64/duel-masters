@@ -1,6 +1,4 @@
-﻿using DuelMastersInterfaceModels.Cards;
-
-namespace DuelMastersModels.Effects.ContinuousEffects
+﻿namespace DuelMastersModels.Effects.ContinuousEffects
 {
     internal class BlockerEffect : CreatureContinuousEffect
     {

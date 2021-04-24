@@ -8,7 +8,7 @@ namespace DuelMastersModels.Cards
     /// <summary>
     /// Creature is a card type.
     /// </summary>
-    public abstract class Creature : Card, ICreature
+    public abstract class Creature : Card
     {
         /// <summary>
         /// The base power of creature. Use Duel's method GetPower(creature) in order to get the actual power of a creature.
@@ -20,7 +20,7 @@ namespace DuelMastersModels.Cards
         /// </summary>
         public IEnumerable<Race> Races { get; } = new Collection<Race>();
 
-        public ICollection<ITriggeredAbility> TriggerAbilities { get; }
+        public ICollection<TriggeredAbility> TriggerAbilities { get; }
         public bool SummoningSickness { get; } = true;
 
         /// <summary>

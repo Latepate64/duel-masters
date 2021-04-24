@@ -8,13 +8,13 @@ namespace DuelMastersModels.Steps
     /// </summary>
     public class StartOfTurnStep : TurnBasedActionStep
     {
-        public StartOfTurnStep(IPlayer player, bool skipDrawStep, BattleZone battleZone) : base(player)
+        public StartOfTurnStep(Player player, bool skipDrawStep, BattleZone battleZone) : base(player)
         {
             _skipDrawStep = skipDrawStep;
             _battleZone = battleZone;
         }
 
-        public override IStep GetNextStep()
+        public override Step GetNextStep()
         {
             // 500.6. The player who plays first skips the draw step of their first turn.
             if (_skipDrawStep)

@@ -1,6 +1,4 @@
-﻿using DuelMastersInterfaceModels.Events;
-using DuelMastersModels;
-using DuelMastersModels.Managers;
+﻿using DuelMastersModels;
 using DuelMastersModels.Zones;
 using Moq;
 using System;

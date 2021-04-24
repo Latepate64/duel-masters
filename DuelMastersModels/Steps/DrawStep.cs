@@ -7,11 +7,11 @@ namespace DuelMastersModels.Steps
     /// </summary>
     public class DrawStep : TurnBasedActionStep
     {
-        public DrawStep(IPlayer player) : base(player)
+        public DrawStep(Player player) : base(player)
         {
         }
 
-        public override IStep GetNextStep()
+        public override Step GetNextStep()
         {
             return new ChargeStep(ActivePlayer);
         }

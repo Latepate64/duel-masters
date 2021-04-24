@@ -1,4 +1,4 @@
-﻿using DuelMastersInterfaceModels.Cards;
+﻿using DuelMastersModels.Cards;
 
 namespace DuelMastersModels.Zones
 {
@@ -10,12 +10,12 @@ namespace DuelMastersModels.Zones
         internal override bool Public { get; } = true;
         internal override bool Ordered { get; } = false;
 
-        public override void Add(ICard card)
+        public override void Add(Card card)
         {
             _cards.Add(card);
         }
 
-        public override void Remove(ICard card)
+        public override void Remove(Card card)
         {
             _ = _cards.Remove(card);
         }
