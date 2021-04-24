@@ -39,6 +39,7 @@ namespace DuelMastersClientForms
             this.OutputTextBox = new System.Windows.Forms.TextBox();
             this.InputTextBox = new System.Windows.Forms.TextBox();
             this.SendButton = new System.Windows.Forms.Button();
+            this.PlayerManaZone = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.OpponentPictureBox)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -149,11 +150,21 @@ namespace DuelMastersClientForms
             this.SendButton.UseVisualStyleBackColor = true;
             this.SendButton.Click += new System.EventHandler(this.SendButton_Click);
             // 
+            // PlayerManaZone
+            // 
+            this.PlayerManaZone.Location = new System.Drawing.Point(13, 538);
+            this.PlayerManaZone.Name = "PlayerManaZone";
+            this.PlayerManaZone.Size = new System.Drawing.Size(278, 131);
+            this.PlayerManaZone.TabIndex = 9;
+            this.PlayerManaZone.Text = "Mana Zone";
+            this.PlayerManaZone.UseVisualStyleBackColor = true;
+            // 
             // DuelForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.PlayerManaZone);
             this.Controls.Add(this.SendButton);
             this.Controls.Add(this.InputTextBox);
             this.Controls.Add(this.OutputTextBox);
@@ -180,5 +191,6 @@ namespace DuelMastersClientForms
         private System.Windows.Forms.TextBox OutputTextBox;
         private System.Windows.Forms.TextBox InputTextBox;
         private System.Windows.Forms.Button SendButton;
+        private System.Windows.Forms.Button PlayerManaZone;
     }
 }

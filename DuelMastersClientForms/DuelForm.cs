@@ -22,13 +22,13 @@ namespace DuelMastersClientForms
             FormClosed += Form1_FormClosed;
             OutputTextBox.AppendText($"Welcome! Type connect HOST PORT and click send button. (eg. connect {DefaultHost} {DefaultPort})");
             InputTextBox.AppendText($"connect {DefaultHost} {DefaultPort}");
+
+            // TODO: Debugging
+            AddControl(PlayerHand, new CreatureView(new CreatureWrapper { CardID = CardIdentifier.AquaHulcus, Civilizations = new List<Civilization> { Civilization.Water}, Cost = 3, Power = 2000, Races = new List<Race> { Race.LiquidPeople } }));
         }
 
         private const int DefaultPort = 80;
         private const string DefaultHost = "127.0.0.1";
-        private const int CardWidth = 222;
-        private const int CardHeight = 307;
-        private const double CardScale = 0.395;
 
         private delegate void SafeCallDelegate(string text);
         private delegate void ControlDelegate(Control control, Control parent);
@@ -52,34 +52,9 @@ namespace DuelMastersClientForms
             }
         }
 
-        private static FlowLayoutPanel CreateCreature(CreatureWrapper creature)
-        {
-            Label cost = new() { Text = creature.Cost.ToString() };
-            Label name = new() { Text = _cardNames[creature.CardID] };
-            Label race = new() { Text = GetRaceText(creature.Races) };
-            Label power = new() { Text = creature.Power.ToString() };
-            //TODO: Consider multiple civilizations
-            FlowLayoutPanel card = new() { BackColor = GetCivilizationColor(creature.Civilizations[0]), Height = (int)(CardScale * CardHeight), Width = (int)(CardScale * CardWidth) };
-            card.Controls.Add(cost);
-            card.Controls.Add(name);
-            card.Controls.Add(race);
-            card.Controls.Add(power);
-            return card;
-        }
-
         private static FlowLayoutPanel CreateCardBack()
         {
-            return new FlowLayoutPanel() { BackColor = Color.DarkBlue, Height = (int)(CardScale * CardHeight), Width = (int)(CardScale * CardWidth) };
-        }
-
-        private static string GetRaceText(IEnumerable<Race> races)
-        {
-            return string.Join(" / ", races.Select(r => _races[r]));
-        }
-
-        private static Color GetCivilizationColor(Civilization civilization)
-        {
-            return _civilizationColors[civilization];
+            return new FlowLayoutPanel() { BackColor = Color.DarkBlue, Height = (int)(CreatureView.CardScale * CreatureView.CardHeight), Width = (int)(CreatureView.CardScale * CreatureView.CardWidth) };
         }
 
         private static byte[] Serialize(InterfaceDataWrapper wrapper)
@@ -197,12 +172,12 @@ namespace DuelMastersClientForms
             }
             else if (wrapper.DrawCardEvent != null)
             {
-                string cardName = wrapper.DrawCardEvent.Card != null ? _cardNames[wrapper.DrawCardEvent.Card.CardID] : "a card";
+                string cardName = wrapper.DrawCardEvent.Card != null ? CreatureView.CardNames[wrapper.DrawCardEvent.Card.CardID] : "a card";
                 WriteNewLine($"{GetPlayer(wrapper.DrawCardEvent.PlayerID).Name} drew {cardName}.");
                 if (wrapper.DrawCardEvent.Card != null)
                 {
                     //TODO: Consider card may not be creature.
-                    AddControl(PlayerHand, CreateCreature(wrapper.DrawCardEvent.Card as CreatureWrapper));
+                    AddControl(PlayerHand, new CreatureView(wrapper.DrawCardEvent.Card as CreatureWrapper));
                 }
                 else
                 {
@@ -298,26 +273,5 @@ namespace DuelMastersClientForms
             Task receive = new(() => ReceiveMessages());
             receive.Start();
         }
-
-        private static readonly Dictionary<CardIdentifier, string> _cardNames = new()
-        {
-            { CardIdentifier.AquaHulcus, "Aqua Hulcus" },
-            { CardIdentifier.BurningMane, "Burning Mane" },
-        };
-
-        private static readonly Dictionary<Race, string> _races = new()
-        {
-            { Race.BeastFolk, "Beast Folk" },
-            { Race.LiquidPeople, "Liquid People" },
-        };
-
-        private static readonly Dictionary<Civilization, Color> _civilizationColors = new()
-        {
-            { Civilization.Light, Color.LightYellow },
-            { Civilization.Water, Color.LightBlue },
-            { Civilization.Darkness, Color.LightGray },
-            { Civilization.Fire, Color.Red },
-            { Civilization.Nature, Color.LightGreen },
-        };
     }
 }
