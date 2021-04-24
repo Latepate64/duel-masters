@@ -23,6 +23,6 @@ namespace DuelMastersModels
         IStep CurrentStep { get; }
 
         IChoice ChangeAndStartStep();
-        IChoice Start(IBattleZone battleZone, EventManager eventManager);
+        IChoice Start(BattleZone battleZone, EventManager eventManager);
     }
 }

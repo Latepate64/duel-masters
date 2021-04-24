@@ -6,18 +6,18 @@ namespace DuelMastersModels.Managers
 {
     internal class ShieldTriggerManager
     {
-        internal IEnumerable<IHandCard> ShieldTriggersToUse => new ReadOnlyCollection<IHandCard>(_shieldTriggersToUse);
+        internal IEnumerable<ICard> ShieldTriggersToUse => new ReadOnlyCollection<ICard>(_shieldTriggersToUse);
 
-        internal void AddShieldTriggerToUse(IHandCard card)
+        internal void AddShieldTriggerToUse(ICard card)
         {
             _shieldTriggersToUse.Add(card);
         }
 
-        internal void RemoveShieldTriggerToUse(IHandCard card)
+        internal void RemoveShieldTriggerToUse(ICard card)
         {
             _ = _shieldTriggersToUse.Remove(card);
         }
 
-        private readonly Collection<IHandCard> _shieldTriggersToUse = new Collection<IHandCard>();
+        private readonly Collection<ICard> _shieldTriggersToUse = new Collection<ICard>();
     }
 }

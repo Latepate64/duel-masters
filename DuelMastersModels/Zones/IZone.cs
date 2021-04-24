@@ -3,18 +3,18 @@ using System.Collections.Generic;
 
 namespace DuelMastersModels.Zones
 {
-    public interface IZone<TCard> where TCard : ICard
+    public interface IZone
     {
-        IEnumerable<TCard> Cards { get; }
+        IEnumerable<ICard> Cards { get; }
 
         ///<summary>
         /// Adds a card to the zone.
         ///</summary>
-        void Add(TCard card);
+        void Add(ICard card);
 
         ///<summary>
         /// Removes a card from the zone.
         ///</summary>
-        void Remove(TCard card);
+        void Remove(ICard card);
     }
 }

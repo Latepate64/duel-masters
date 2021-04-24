@@ -1,5 +1,4 @@
 ﻿using DuelMastersModels.Cards;
-using DuelMastersModels.Factories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +8,7 @@ namespace DuelMastersModels.Zones
     /// <summary>
     /// When a game begins, each player’s deck becomes their deck.
     /// </summary>
-    public class Deck : Zone<IDeckCard>, IDeck
+    public class Deck : Zone
     {
         internal override bool Public { get; } = false;
         internal override bool Ordered { get; } = true;
@@ -18,16 +17,16 @@ namespace DuelMastersModels.Zones
         {
             foreach (ICard card in cards)
             {
-                _cards.Add(CardFactory.GenerateDeckCard(card));
+                _cards.Add(card);
             }
         }
 
-        public override void Add(IDeckCard card)
+        public override void Add(ICard card)
         {
             _cards.Add(card);
         }
 
-        public override void Remove(IDeckCard card)
+        public override void Remove(ICard card)
         {
             _ = _cards.Remove(card);
         }
@@ -43,7 +42,7 @@ namespace DuelMastersModels.Zones
             {
                 n--;
                 int k = random.Next(n + 1);
-                IDeckCard value = _cards[k];
+                ICard value = _cards[k];
                 _cards[k] = _cards[n];
                 _cards[n] = value;
             }
@@ -64,7 +63,7 @@ namespace DuelMastersModels.Zones
         {
             if (Cards.Any())
             {
-                IDeckCard topCard = Cards.Last();
+                ICard topCard = Cards.Last();
                 if (remove)
                 {
                     Remove(topCard);

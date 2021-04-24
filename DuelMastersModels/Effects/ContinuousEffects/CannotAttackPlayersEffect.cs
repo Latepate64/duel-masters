@@ -2,8 +2,8 @@
 
 namespace DuelMastersModels.Effects.ContinuousEffects
 {
-    internal class CannotAttackPlayersEffect : CreatureContinuousEffect<IBattleZoneCreature>
+    internal class CannotAttackPlayersEffect : CreatureContinuousEffect<ICreature>
     {
-        internal CannotAttackPlayersEffect(Periods.Period period, CardFilters.CreatureFilter<IBattleZoneCreature> creatureFilter) : base(period, creatureFilter) { }
+        internal CannotAttackPlayersEffect(Periods.Period period, CardFilters.CreatureFilter<ICreature> creatureFilter) : base(period, creatureFilter) { }
     }
 }

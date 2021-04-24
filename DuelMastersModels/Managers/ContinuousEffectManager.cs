@@ -36,18 +36,18 @@ namespace DuelMastersModels.Managers
             */
         }
 
-        public IEnumerable<IBattleZoneCreature> GetAllBlockersPlayerHasInTheBattleZone(IPlayer player)
+        public IEnumerable<ICreature> GetAllBlockersPlayerHasInTheBattleZone(IPlayer player)
         {
-            List<IBattleZoneCreature> blockers = new List<IBattleZoneCreature>();
+            List<ICreature> blockers = new();
             IEnumerable<BlockerEffect> blockerEffects = GetContinuousEffects<BlockerEffect>();
-            foreach (IBattleZoneCreature creature in Duel.BattleZone.Creatures)
+            foreach (ICreature creature in Duel.BattleZone.Creatures)
             {
                 blockers.AddRange(blockerEffects.Where(blockerEffect => blockerEffect.CreatureFilter.FilteredCreatures.Contains(creature)).Select(blockerEffect => creature));
             }
-            return new ReadOnlyCollection<IBattleZoneCreature>(blockers);
+            return new ReadOnlyCollection<ICreature>(blockers);
         }
 
-        public bool HasSpeedAttacker(IBattleZoneCreature creature)
+        public bool HasSpeedAttacker(ICreature creature)
         {
             return GetContinuousEffects<SpeedAttackerEffect>().Any(e => e.CreatureFilter.FilteredCreatures.Contains(creature));
         }
@@ -64,7 +64,7 @@ namespace DuelMastersModels.Managers
             return false;
         }
 
-        public bool HasShieldTrigger(IHandCreature creature)
+        public bool HasShieldTrigger(ICreature creature)
         {
             foreach (CreatureShieldTriggerEffect creatureContinuousEffect in GetContinuousEffects().OfType<CreatureShieldTriggerEffect>())
             {
@@ -76,24 +76,24 @@ namespace DuelMastersModels.Managers
             return false;
         }
 
-        public int GetPower(IBattleZoneCreature creature)
+        public int GetPower(ICreature creature)
         {
             return creature.Power + GetContinuousEffects<PowerEffect>().Where(e => e.CreatureFilter.FilteredCreatures.Contains(creature)).Sum(e => e.Power);
         }
 
-        public IEnumerable<IBattleZoneCreature> GetCreaturesThatCannotAttack(IPlayer player)
+        public IEnumerable<ICreature> GetCreaturesThatCannotAttack(IPlayer player)
         {
-            return new ReadOnlyCollection<IBattleZoneCreature>(GetContinuousEffects<CannotAttackPlayersEffect>().SelectMany(e => e.CreatureFilter.FilteredCreatures).Distinct().Where(c => !Duel.GetCreaturesThatCanBeAttacked(player).Any()).ToList());
+            return new ReadOnlyCollection<ICreature>(GetContinuousEffects<CannotAttackPlayersEffect>().SelectMany(e => e.CreatureFilter.FilteredCreatures).Distinct().Where(c => !Duel.GetCreaturesThatCanBeAttacked(player).Any()).ToList());
         }
 
-        public bool AttacksIfAble(IBattleZoneCreature creature)
+        public bool AttacksIfAble(ICreature creature)
         {
             return GetContinuousEffects<AttacksIfAbleEffect>().Any(e => e.CreatureFilter.FilteredCreatures.Contains(creature));
         }
 
-        public IEnumerable<IBattleZoneCreature> GetCreaturesThatCannotAttackPlayers()
+        public IEnumerable<ICreature> GetCreaturesThatCannotAttackPlayers()
         {
-            return new ReadOnlyCollection<IBattleZoneCreature>(GetContinuousEffects<CannotAttackPlayersEffect>().SelectMany(e => e.CreatureFilter.FilteredCreatures).Distinct().ToList());
+            return new ReadOnlyCollection<ICreature>(GetContinuousEffects<CannotAttackPlayersEffect>().SelectMany(e => e.CreatureFilter.FilteredCreatures).Distinct().ToList());
         }
 
         /// <summary>

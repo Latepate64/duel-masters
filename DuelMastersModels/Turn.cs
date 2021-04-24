@@ -45,7 +45,7 @@ namespace DuelMastersModels
             Number = number;
         }
 
-        public IChoice Start(IBattleZone battleZone, EventManager eventManager)
+        public IChoice Start(BattleZone battleZone, EventManager eventManager)
         {
             if (!Steps.Any())
             {

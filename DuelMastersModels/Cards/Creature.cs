@@ -21,6 +21,7 @@ namespace DuelMastersModels.Cards
         public IEnumerable<Race> Races { get; } = new Collection<Race>();
 
         public ICollection<ITriggeredAbility> TriggerAbilities { get; }
+        public bool SummoningSickness { get; } = true;
 
         /// <summary>
         /// Creates a creature.

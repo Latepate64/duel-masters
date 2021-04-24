@@ -1,7 +1,6 @@
 ﻿using DuelMastersModels.Abilities.StaticAbilities;
 using DuelMastersModels.Cards;
 using DuelMastersModels.Effects.ContinuousEffects;
-using DuelMastersModels.Factories;
 using DuelMastersModels.Managers;
 using DuelMastersInterfaceModels.Choices;
 using DuelMastersModels.Zones;
@@ -28,35 +27,35 @@ namespace DuelMastersModels
         /// <summary>
         /// When a game begins, each player’s deck becomes their deck.
         /// </summary>
-        public IDeck Deck { get; set; }
+        public Deck Deck { get; set; }
 
         /// <summary>
         /// A player’s graveyard is their discard pile. Discarded cards, destroyed creatures and spells cast are put in their owner's graveyard.
         /// </summary>
-        public IGraveyard Graveyard { get; private set; } = new Graveyard();
+        public Graveyard Graveyard { get; private set; } = new Graveyard();
 
         /// <summary>
         /// The hand is where a player holds cards that have been drawn. Cards can be put into a player’s hand by other effects as well. At the beginning of the game, each player draws five cards.
         /// </summary>
-        public IHand Hand { get; private set; } = new Hand();
+        public Hand Hand { get; private set; } = new Hand();
 
         /// <summary>
         /// The mana zone is where cards are put in order to produce mana for using other cards. All cards are put into the mana zone upside down. However, multicolored cards are put into the mana zone tapped.
         /// </summary>
-        public IManaZone ManaZone { get; private set; } = new ManaZone();
+        public ManaZone ManaZone { get; private set; } = new ManaZone();
 
         /// <summary>
         /// At the beginning of the game, each player puts five shields into their shield zone. Castles are put into the shield zone to fortify a shield.
         /// </summary>
-        public IShieldZone ShieldZone { get; private set; } = new ShieldZone();
+        public ShieldZone ShieldZone { get; private set; } = new ShieldZone();
 
-        public IEnumerable<IHandCard> ShieldTriggersToUse => _shieldTriggerManager.ShieldTriggersToUse;
+        public IEnumerable<ICard> ShieldTriggersToUse => _shieldTriggerManager.ShieldTriggersToUse;
 
         public IEnumerable<ICard> CardsInNonsharedZones
         {
             get
             {
-                List<ICard> cards = new List<ICard>();
+                List<ICard> cards = new();
                 cards.AddRange(Deck.Cards);
                 cards.AddRange(Graveyard.Cards);
                 cards.AddRange(Hand.Cards);
@@ -79,12 +78,12 @@ namespace DuelMastersModels
             EventManager?.Raise(new ShuffleDeckEvent { PlayerID = ID });
         }
 
-        public void AddShieldTriggerToUse(IHandCard card)
+        public void AddShieldTriggerToUse(ICard card)
         {
             _shieldTriggerManager.AddShieldTriggerToUse(card);
         }
 
-        public IChoice Use(IHandCard card, IEnumerable<IManaZoneCard> manaCards)
+        public IChoice Use(ICard card, IEnumerable<ICard> manaCards)
         {
             if (card == null)
             {
@@ -98,24 +97,24 @@ namespace DuelMastersModels
             throw new NotImplementedException("Consider mana payment");
         }
 
-        public void RemoveShieldTriggerToUse(IHandCard card)
+        public void RemoveShieldTriggerToUse(ICard card)
         {
             _shieldTriggerManager.RemoveShieldTriggerToUse(card);
         }
 
-        public ReadOnlyContinuousEffectCollection GetContinuousEffectsGeneratedByStaticAbility(ICard card, IStaticAbility staticAbility, IBattleZone battleZone)
+        public ReadOnlyContinuousEffectCollection GetContinuousEffectsGeneratedByStaticAbility(ICard card, IStaticAbility staticAbility, BattleZone battleZone)
         {
             if (staticAbility is StaticAbilityForCreature staticAbilityForCreature)
             {
                 return staticAbilityForCreature.EffectActivityCondition == EffectActivityConditionForCreature.Anywhere ||
-                    (staticAbilityForCreature.EffectActivityCondition == EffectActivityConditionForCreature.WhileThisCreatureIsInTheBattleZone && card is IBattleZoneCard battleZoneCard && battleZone.Cards.Contains(battleZoneCard)) ||
-                    (staticAbilityForCreature.EffectActivityCondition == EffectActivityConditionForCreature.WhileThisCreatureIsInYourHand && card is IHandCreature handCreature && Hand.Cards.Contains(handCreature))
+                    (staticAbilityForCreature.EffectActivityCondition == EffectActivityConditionForCreature.WhileThisCreatureIsInTheBattleZone && card is ICreature creature && battleZone.Cards.Contains(card)) ||
+                    (staticAbilityForCreature.EffectActivityCondition == EffectActivityConditionForCreature.WhileThisCreatureIsInYourHand && card is ICreature creature2 && Hand.Cards.Contains(creature2))
                     ? staticAbilityForCreature.ContinuousEffects
                     : new ReadOnlyContinuousEffectCollection();
             }
             else if (staticAbility is StaticAbilityForSpell staticAbilityForSpell)
             {
-                return staticAbilityForSpell.EffectActivityCondition == StaticAbilityForSpellActivityCondition.WhileThisSpellIsInYourHand && card is IHandSpell handSpell && Hand.Cards.Contains(handSpell)
+                return staticAbilityForSpell.EffectActivityCondition == StaticAbilityForSpellActivityCondition.WhileThisSpellIsInYourHand && card is ISpell handSpell && Hand.Cards.Contains(handSpell)
                     ? staticAbilityForSpell.ContinuousEffects
                     : new ReadOnlyContinuousEffectCollection();
             }
@@ -125,20 +124,20 @@ namespace DuelMastersModels
             }
         }
 
-        public void PutFromBattleZoneIntoGraveyard(IBattleZoneCard card, IBattleZone battleZone)
+        public void PutFromBattleZoneIntoGraveyard(ICard card, BattleZone battleZone)
         {
             battleZone.Remove(card);
-            Graveyard.Add(CardFactory.GenerateGraveyardCard(card));
+            Graveyard.Add(card);
         }
 
         /// <summary>
         /// Player puts target card from their hand into their mana zone.
         /// </summary>
         /// <param name="card"></param>
-        public void PutFromHandIntoManaZone(IHandCard card)
+        public void PutFromHandIntoManaZone(ICard card)
         {
             Hand.Remove(card);
-            ManaZone.Add(CardFactory.GenerateManaZoneCard(card));
+            ManaZone.Add(card);
         }
 
         ///<summary>
@@ -148,7 +147,7 @@ namespace DuelMastersModels
         {
             for (int i = 0; i < amount; ++i)
             {
-                ShieldZone.Add(CardFactory.GenerateShieldZoneCard(RemoveTopCardOfDeck(), false));
+                ShieldZone.Add(RemoveTopCardOfDeck());
                 EventManager?.Raise(new DeckTopCardToShieldEvent { PlayerID = ID });
             }
         }
@@ -168,11 +167,10 @@ namespace DuelMastersModels
         {
             for (int i = 0; i < amount; ++i)
             {
-                ICard drawnCard = RemoveTopCardOfDeck();
-                IHandCard handCard = CardFactory.GenerateHandCard(drawnCard);
-                Hand.Add(handCard);
+                ICard card = RemoveTopCardOfDeck();
+                Hand.Add(card);
 
-                if (handCard is IHandCreature creature)
+                if (card is ICreature creature)
                 {
                     EventManager?.Raise(new DrawCardEvent { PlayerID = ID, Card = new CreatureWrapper { Civilizations = creature.Civilizations.ToList(), Cost = creature.Cost, GameID = creature.GameID, CardID = creature.CardID, Power = creature.Power, Races = creature.Races.ToList() } });
                 }
@@ -187,7 +185,7 @@ namespace DuelMastersModels
             }
         }
 
-        public IChoice UntapCardsInBattleZoneAndManaZone(IBattleZone battleZone)
+        public IChoice UntapCardsInBattleZoneAndManaZone(BattleZone battleZone)
         {
             battleZone.UntapCards();
             ManaZone.UntapCards();

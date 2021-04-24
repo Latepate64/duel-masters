@@ -23,46 +23,46 @@ namespace DuelMastersModels
         /// <summary>
         /// When a game begins, each player’s deck becomes their deck.
         /// </summary>
-        IDeck Deck { get; set; }
+        Deck Deck { get; set; }
 
         /// <summary>
         /// A player’s graveyard is their discard pile. Discarded cards, destroyed creatures and spells cast are put in their owner's graveyard.
         /// </summary>
-        IGraveyard Graveyard { get; }
+        Graveyard Graveyard { get; }
 
         /// <summary>
         /// The hand is where a player holds cards that have been drawn. Cards can be put into a player’s hand by other effects as well. At the beginning of the game, each player draws five cards.
         /// </summary>
-        IHand Hand { get; }
+        Hand Hand { get; }
 
         /// <summary>
         /// The mana zone is where cards are put in order to produce mana for using other cards. All cards are put into the mana zone upside down. However, multicolored cards are put into the mana zone tapped.
         /// </summary>
-        IManaZone ManaZone { get; }
+        ManaZone ManaZone { get; }
 
         /// <summary>
         /// At the beginning of the game, each player puts five shields into their shield zone. Castles are put into the shield zone to fortify a shield.
         /// </summary>
-        IShieldZone ShieldZone { get; }
+        ShieldZone ShieldZone { get; }
 
         IEnumerable<ICard> CardsInNonsharedZones { get; }
 
-        IEnumerable<IHandCard> ShieldTriggersToUse { get; }
+        IEnumerable<ICard> ShieldTriggersToUse { get; }
 
         IPlayer Opponent { get; set; }
 
         EventManager EventManager { get; set; }
 
-        void AddShieldTriggerToUse(IHandCard card);
+        void AddShieldTriggerToUse(ICard card);
         void DrawCards(int amount);
-        ReadOnlyContinuousEffectCollection GetContinuousEffectsGeneratedByStaticAbility(ICard card, IStaticAbility staticAbility, IBattleZone battleZone);
-        void PutFromBattleZoneIntoGraveyard(IBattleZoneCard card, IBattleZone battleZone);
-        void PutFromHandIntoManaZone(IHandCard card);
+        ReadOnlyContinuousEffectCollection GetContinuousEffectsGeneratedByStaticAbility(ICard card, IStaticAbility staticAbility, BattleZone battleZone);
+        void PutFromBattleZoneIntoGraveyard(ICard card, BattleZone battleZone);
+        void PutFromHandIntoManaZone(ICard card);
         void PutFromTopOfDeckIntoShieldZone(int amount);
-        void RemoveShieldTriggerToUse(IHandCard card);
+        void RemoveShieldTriggerToUse(ICard card);
         ICard RemoveTopCardOfDeck();
         void ShuffleDeck();
-        IChoice UntapCardsInBattleZoneAndManaZone(IBattleZone battleZone);
-        IChoice Use(IHandCard card, IEnumerable<IManaZoneCard> manaCards);
+        IChoice UntapCardsInBattleZoneAndManaZone(BattleZone battleZone);
+        IChoice Use(ICard card, IEnumerable<ICard> manaCards);
     }
 }

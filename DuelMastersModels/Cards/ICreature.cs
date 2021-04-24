@@ -20,5 +20,6 @@ namespace DuelMastersModels.Cards
         IEnumerable<Race> Races { get; }
 
         ICollection<ITriggeredAbility> TriggerAbilities { get; }
+        bool SummoningSickness { get; }
     }
 }

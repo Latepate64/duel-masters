@@ -36,14 +36,14 @@ namespace DuelMastersModels.Steps
             {
                 return null;
             }
-            //IEnumerable<IHandCard> usableCards = MainStep.GetUsableCards(ActivePlayer.Hand.Cards, ActivePlayer.ManaZone.UntappedCards);
+            //IEnumerable<ICard> usableCards = MainStep.GetUsableCards(ActivePlayer.Hand.Cards, ActivePlayer.ManaZone.UntappedCards);
             //return new PriorityActionChoice(ActivePlayer, ActivePlayer.Hand.Cards, usableCards, duel.GetCreaturesThatCanAttack(ActivePlayer));
         }
 
         //TODO
         //public override IChoice PlayerActionRequired(IDuel duel)
         //{
-        //    //IEnumerable<IHandCard> usableCards = GetUsableCards(ActivePlayer.Hand.Cards, ActivePlayer.ManaZone.UntappedCards);
+        //    //IEnumerable<ICard> usableCards = GetUsableCards(ActivePlayer.Hand.Cards, ActivePlayer.ManaZone.UntappedCards);
         //    throw new System.NotImplementedException();
         //    //return State == MainStepState.Use && usableCards.Any()
         //    //    ? new UseCard(ActivePlayer, usableCards)
@@ -53,7 +53,7 @@ namespace DuelMastersModels.Steps
         /// <summary>
         /// Returns the cards that can be used.
         /// </summary>
-        public static IEnumerable<IHandCard> GetUsableCards(IEnumerable<IHandCard> handCards, IEnumerable<IManaZoneCard> manaCards)
+        public static IEnumerable<ICard> GetUsableCards(IEnumerable<ICard> handCards, IEnumerable<ICard> manaCards)
         {
             return handCards.Where(handCard => Duel.CanBeUsed(handCard, manaCards));
         }

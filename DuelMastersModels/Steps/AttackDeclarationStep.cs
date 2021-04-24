@@ -5,8 +5,8 @@ namespace DuelMastersModels.Steps
 {
     public class AttackDeclarationStep : TurnBasedActionStep
     {
-        internal IBattleZoneCreature AttackingCreature { get; set; }
-        internal IBattleZoneCreature AttackedCreature { get; set; }
+        internal ICreature AttackingCreature { get; set; }
+        internal ICreature AttackedCreature { get; set; }
 
         public AttackDeclarationStep(IPlayer activePlayer) : base(activePlayer)
         {
@@ -39,14 +39,14 @@ namespace DuelMastersModels.Steps
             }
         }
 
-        public IChoice DeclareAttackOnCreature(IBattleZoneCreature attacker, IBattleZoneCreature target)
+        public IChoice DeclareAttackOnCreature(ICreature attacker, ICreature target)
         {
             AttackingCreature = attacker;
             AttackedCreature = target;
             return Proceed();
         }
 
-        public IChoice DeclareAttackOnOpponent(IBattleZoneCreature attacker)
+        public IChoice DeclareAttackOnOpponent(ICreature attacker)
         {
             AttackingCreature = attacker;
             return Proceed();

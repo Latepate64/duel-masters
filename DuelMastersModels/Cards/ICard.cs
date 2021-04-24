@@ -26,5 +26,7 @@ namespace DuelMastersModels.Cards
         int Cost { get; }
 
         CardIdentifier CardID { get; }
+
+        bool Tapped { get; set; }
     }
 }

@@ -5,11 +5,11 @@ namespace DuelMastersModels.Steps
 {
     public class BlockDeclarationStep : TurnBasedActionStep
     {
-        internal IBattleZoneCreature AttackingCreature { get; private set; }
-        internal IBattleZoneCreature AttackedCreature { get; private set; }
-        internal IBattleZoneCreature BlockingCreature { get; set; }
+        internal ICreature AttackingCreature { get; private set; }
+        internal ICreature AttackedCreature { get; private set; }
+        internal ICreature BlockingCreature { get; set; }
 
-        public BlockDeclarationStep(IPlayer activePlayer, IBattleZoneCreature attackingCreature, IBattleZoneCreature attackedCreature) : base(activePlayer)
+        public BlockDeclarationStep(IPlayer activePlayer, ICreature attackingCreature, ICreature attackedCreature) : base(activePlayer)
         {
             AttackingCreature = attackingCreature;
             AttackedCreature = attackedCreature;

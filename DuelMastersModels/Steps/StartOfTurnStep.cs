@@ -8,7 +8,7 @@ namespace DuelMastersModels.Steps
     /// </summary>
     public class StartOfTurnStep : TurnBasedActionStep
     {
-        public StartOfTurnStep(IPlayer player, bool skipDrawStep, IBattleZone battleZone) : base(player)
+        public StartOfTurnStep(IPlayer player, bool skipDrawStep, BattleZone battleZone) : base(player)
         {
             _skipDrawStep = skipDrawStep;
             _battleZone = battleZone;
@@ -37,6 +37,6 @@ namespace DuelMastersModels.Steps
         }
 
         private readonly bool _skipDrawStep;
-        private readonly IBattleZone _battleZone;
+        private readonly BattleZone _battleZone;
     }
 }

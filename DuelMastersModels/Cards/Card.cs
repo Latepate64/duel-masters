@@ -28,6 +28,8 @@ namespace DuelMastersModels.Cards
         /// </summary>
         public int Cost { get; private set; }
 
+        public bool Tapped { get; set; }
+
         /// <summary>
         /// Creates a card.
         /// </summary>

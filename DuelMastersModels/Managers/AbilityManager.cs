@@ -18,22 +18,22 @@ namespace DuelMastersModels.Managers
 
         public bool IsAbilityBeingResolvedSpellAbility => _abilityBeingResolved is SpellAbility;
 
-        public void TriggerWhenYouPutThisCreatureIntoTheBattleZoneAbilities(IBattleZoneCreature creature)
+        public void TriggerWhenYouPutThisCreatureIntoTheBattleZoneAbilities(ICreature creature)
         {
             TriggerTriggerAbilities<WhenYouPutThisCreatureIntoTheBattleZone>(creature);
         }
 
-        public void TriggerWheneverAnotherCreatureIsPutIntoTheBattleZoneAbilities(IEnumerable<IBattleZoneCreature> creatures)
+        public void TriggerWheneverAnotherCreatureIsPutIntoTheBattleZoneAbilities(IEnumerable<ICreature> creatures)
         {
             TriggerTriggerAbilities<WheneverAnotherCreatureIsPutIntoTheBattleZone>(creatures);
         }
 
-        public void TriggerWheneverAPlayerCastsASpellAbilities(IEnumerable<IBattleZoneCreature> creatures)
+        public void TriggerWheneverAPlayerCastsASpellAbilities(IEnumerable<ICreature> creatures)
         {
             TriggerTriggerAbilities<WheneverAPlayerCastsASpell>(creatures);
         }
 
-        public ICollection<IContinuousEffect> GetContinuousEffectsGeneratedByCard(ICard card, IPlayer player, IBattleZone battleZone)
+        public ICollection<IContinuousEffect> GetContinuousEffectsGeneratedByCard(ICard card, IPlayer player, BattleZone battleZone)
         {
             List<IContinuousEffect> continuousEffects = new List<IContinuousEffect>();
             foreach (IStaticAbility staticAbility in GetStaticAbilities().Where(a => a.Source == card))
@@ -114,7 +114,7 @@ namespace DuelMastersModels.Managers
             _pendingAbilities.Add(ability.CreatePendingTriggeredAbility(controller, source));
         }
 
-        private void TriggerTriggerAbilities<T>(IBattleZoneCreature card)
+        private void TriggerTriggerAbilities<T>(ICreature card)
         {
             foreach (TriggeredAbility ability in GetTriggerAbilities<T>(card))
             {
@@ -122,9 +122,9 @@ namespace DuelMastersModels.Managers
             }
         }
 
-        private void TriggerTriggerAbilities<T>(IEnumerable<IBattleZoneCreature> creatures)
+        private void TriggerTriggerAbilities<T>(IEnumerable<ICreature> creatures)
         {
-            foreach (IBattleZoneCreature creature in creatures)
+            foreach (ICreature creature in creatures)
             {
                 TriggerTriggerAbilities<T>(creature);
             }

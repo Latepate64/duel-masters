@@ -4,8 +4,8 @@ using DuelMastersModels.Effects.Periods;
 
 namespace DuelMastersModels.Effects.ContinuousEffects
 {
-    internal class SpeedAttackerEffect : CreatureContinuousEffect<IBattleZoneCreature>
+    internal class SpeedAttackerEffect : CreatureContinuousEffect<ICreature>
     {
-        internal SpeedAttackerEffect(Period period, CreatureFilter<IBattleZoneCreature> creatureFilter) : base(period, creatureFilter) { }
+        internal SpeedAttackerEffect(Period period, CreatureFilter<ICreature> creatureFilter) : base(period, creatureFilter) { }
     }
 }

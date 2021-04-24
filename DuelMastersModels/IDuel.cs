@@ -60,7 +60,7 @@ namespace DuelMastersModels
         /// <summary>
         /// Battle Zone is the main place of the game. Creatures, Cross Gears, Weapons, Fortresses, Beats and Fields are put into the battle zone, but no mana, shields, castles nor spells may be put into the battle zone.
         /// </summary>
-        IBattleZone BattleZone { get; }
+        BattleZone BattleZone { get; }
 
         /// <summary>
         /// Starts the duel.
@@ -68,31 +68,31 @@ namespace DuelMastersModels
         /// <returns></returns>
         IChoice Start();
 
-        int GetPower(IBattleZoneCreature creature);
+        int GetPower(ICreature creature);
         IChoice DrawCard(IPlayer player);
-        IChoice PutFromShieldZoneToHand(IPlayer player, IShieldZoneCard card, bool canUseShieldTrigger);
-        IChoice PutFromShieldZoneToHand(IPlayer player, IEnumerable<IShieldZoneCard> cards, bool canUseShieldTrigger);
+        IChoice PutFromShieldZoneToHand(IPlayer player, ICard card, bool canUseShieldTrigger);
+        IChoice PutFromShieldZoneToHand(IPlayer player, IEnumerable<ICard> cards, bool canUseShieldTrigger);
         IChoice PutTheTopCardOfYourDeckIntoYourManaZone(IPlayer player);
-        IChoice ReturnFromBattleZoneToHand(IBattleZoneCreature creature);
-        IChoice PutFromBattleZoneIntoOwnersManazone(IBattleZoneCreature creature);
-        IChoice PutFromManaZoneIntoTheBattleZone(IManaZoneCreature creature);
+        IChoice ReturnFromBattleZoneToHand(ICreature creature);
+        IChoice PutFromBattleZoneIntoOwnersManazone(ICreature creature);
+        IChoice PutFromManaZoneIntoTheBattleZone(ICreature creature);
         IChoice AddTheTopCardOfYourDeckToYourShieldsFaceDown(IPlayer player);
         void End(IPlayer winner);
         void EndDuelInDraw();
-        void Battle(IBattleZoneCreature attackingCreature, IBattleZoneCreature defendingCreature);
+        void Battle(ICreature attackingCreature, ICreature defendingCreature);
         void UseCard(IPlayer player, ICard card);
-        void AddFromYourHandToYourShieldsFaceDown(IHandCard card);
+        void AddFromYourHandToYourShieldsFaceDown(ICard card);
         void EndContinuousEffects<T>();
         void AddContinuousEffect(IContinuousEffect continuousEffect);
-        IEnumerable<IBattleZoneCreature> GetCreaturesThatCanBlock(IBattleZoneCreature attackingCreature);
-        IEnumerable<IBattleZoneCreature> GetCreaturesThatCanAttack(IPlayer player);
-        IEnumerable<IBattleZoneCreature> GetCreaturesThatCanBeAttacked(IPlayer player);
-        bool CanAttackOpponent(IBattleZoneCreature creature);
-        bool AttacksIfAble(IBattleZoneCreature creature);
+        IEnumerable<ICreature> GetCreaturesThatCanBlock(ICreature attackingCreature);
+        IEnumerable<ICreature> GetCreaturesThatCanAttack(IPlayer player);
+        IEnumerable<ICreature> GetCreaturesThatCanBeAttacked(IPlayer player);
+        bool CanAttackOpponent(ICreature creature);
+        bool AttacksIfAble(ICreature creature);
         IEnumerable<ICard> GetAllCards();
         void SetPendingAbilityToBeResolved(INonStaticAbility ability);
-        void TriggerWhenYouPutThisCreatureIntoTheBattleZoneAbilities(IBattleZoneCreature creature);
-        void TriggerWheneverAnotherCreatureIsPutIntoTheBattleZoneAbilities(IBattleZoneCreature excludedCreature);
+        void TriggerWhenYouPutThisCreatureIntoTheBattleZoneAbilities(ICreature creature);
+        void TriggerWheneverAnotherCreatureIsPutIntoTheBattleZoneAbilities(ICreature excludedCreature);
         IChoice StartNewTurn(IPlayer activePlayer);
     }
 }

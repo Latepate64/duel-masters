@@ -14,7 +14,7 @@ namespace DuelMastersModelTests.Steps
         public void ChargeMana_ManaNotChargedBefore_ReturnNull()
         {
             ChargeStep step = new ChargeStep(Mock.Of<IPlayer>());
-            IChoice choice = step.ChargeMana(Mock.Of<IHandCard>());
+            IChoice choice = step.ChargeMana(Mock.Of<ICard>());
             Assert.Null(choice);
         }
 
@@ -30,8 +30,8 @@ namespace DuelMastersModelTests.Steps
         public void PerformPriorityAction_ChargedCardNull_ReturnPriorityActionChoice()
         {
             Mock<IPlayer> player = new Mock<IPlayer>();
-            _ = player.SetupGet(x => x.Hand).Returns(Mock.Of<IHand>());
-            ChargeStep step = new ChargeStep(player.Object);
+            _ = player.SetupGet(x => x.Hand).Returns(Mock.Of<Hand>());
+            ChargeStep step = new(player.Object);
 
             IChoice choice = step.PerformPriorityAction();
 
@@ -41,7 +41,7 @@ namespace DuelMastersModelTests.Steps
         [Fact]
         public void PerformPriorityAction_ChargedCardNotNull_ReturnNull()
         {
-            ChargeStep step = new ChargeStep(Mock.Of<IPlayer>()) { ChargedCard = Mock.Of<IHandCard>() };
+            ChargeStep step = new(Mock.Of<IPlayer>()) { ChargedCard = Mock.Of<ICard>() };
             Assert.Null(step.PerformPriorityAction());
         }
     }

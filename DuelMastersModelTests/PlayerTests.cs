@@ -19,7 +19,7 @@ namespace DuelMastersModelTests
         [Fact]
         public void ShuffleDeck_DeckNotNull_ShuffleCalledOnce()
         {
-            Mock<IDeck> deck = new();
+            Mock<Deck> deck = new();
             Player player = new() { Deck = deck.Object };
             player.ShuffleDeck();
             deck.Verify(x => x.Shuffle(), Times.Once);

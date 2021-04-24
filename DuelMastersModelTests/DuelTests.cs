@@ -41,9 +41,9 @@ namespace DuelMastersModelTests
         [Fact]
         public void Start_StartingPlayerWithHandAndOpponentGiven_ReturnPriorityActionChoice()
         {
-            Mock<IPlayer> player = new Mock<IPlayer>();
+            Mock<IPlayer> player = new();
             _ = player.SetupGet(x => x.Opponent).Returns(Mock.Of<IPlayer>());
-            _ = player.SetupGet(x => x.Hand).Returns(Mock.Of<IHand>());
+            _ = player.SetupGet(x => x.Hand).Returns(Mock.Of<Hand>());
 
             IChoice choice = new Duel { StartingPlayer = player.Object }.Start();
 
